@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Indicators\IIndicator.cs" />
     <Compile Include="Indicators\IIndicatorResult.cs" />
-    <Compile Include="ISymbol.cs" />
+    <Compile Include="ITradeSymbol.cs" />
     <Compile Include="ITrade.cs" />
     <Compile Include="ITradeTick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

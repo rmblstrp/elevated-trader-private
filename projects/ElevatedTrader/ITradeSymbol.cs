@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ISymbol
+	public interface ITradeSymbol
 	{
 		string Symbol
 		{

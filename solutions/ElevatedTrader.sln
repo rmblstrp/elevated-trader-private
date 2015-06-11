@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader", "..\projects\ElevatedTrader\ElevatedTrader.csproj", "{18A39E37-5244-418F-9FD9-B1D024E15421}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.Windows.Forms", "..\projects\ElevatedTrader.Windows.Forms\ElevatedTrader.Windows.Forms.csproj", "{0595CB18-0992-45D0-A45F-12516C23C558}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

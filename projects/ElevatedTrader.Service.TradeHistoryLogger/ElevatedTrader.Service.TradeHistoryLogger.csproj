@@ -39,6 +39,9 @@
     <Reference Include="dxf_native">
       <HintPath>..\..\.libraries\dxf_native.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\solutions\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,6 +51,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="Topshelf">
       <HintPath>..\..\solutions\packages\Topshelf.3.2.0\lib\net40-full\Topshelf.dll</HintPath>
+    </Reference>
+    <Reference Include="Topshelf.NLog">
+      <HintPath>..\..\solutions\packages\Topshelf.NLog.3.2.0\lib\net40-full\Topshelf.NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

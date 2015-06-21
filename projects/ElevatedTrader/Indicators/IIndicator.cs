@@ -9,9 +9,9 @@ namespace ElevatedTrader.Indicators
 {
 	public interface IIndicator
 	{
-		IIndicatorResult Result { get; set; }
+		List<IIndicatorResult> Results { get; set; }
 
-		void Calculate(IEnumerable<ITradePeriod> periods);
+		void Calculate(IEnumerable<ITradePeriod> periods, bool finalize = false);
 
 		void Configure(ExpandoObject configuration);
 	}

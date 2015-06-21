@@ -11,19 +11,16 @@ namespace ElevatedTrader
 		string Symbol
 		{
 			get;
-			private set;
 		}
 
 		double TickRate
 		{
 			get;
-			private set;
 		}
 
 		double TickValue
 		{
 			get;
-			private set;
 		}
 	}
 }

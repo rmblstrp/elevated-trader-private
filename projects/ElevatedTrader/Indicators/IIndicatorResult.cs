@@ -11,13 +11,11 @@ namespace ElevatedTrader.Indicators
 		bool SignalIndicated
 		{
 			get;
-			private set;
 		}
 
 		TrendDirection Direction
 		{
 			get;
-			private set;
 		}
 	}
 }

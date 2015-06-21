@@ -19,7 +19,5 @@ namespace ElevatedTrader
 		double Close { get; set; }
 
 		void AddTick(ITradeTick tick);
-
-		double Average { get; set; }
 	}
 }

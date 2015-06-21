@@ -11,19 +11,16 @@ namespace ElevatedTrader
 		TradeType Type
 		{
 			get;
-			private set;
 		}
 
 		int Quantity
 		{
 			get;
-			private set;
 		}
 
 		double Price
 		{
 			get;
-			set;
 		}
 	}
 }

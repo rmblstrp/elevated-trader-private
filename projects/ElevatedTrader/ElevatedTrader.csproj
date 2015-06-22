@@ -49,6 +49,8 @@
     <Compile Include="ITradeSymbol.cs" />
     <Compile Include="ITrade.cs" />
     <Compile Include="ITradeTick.cs" />
+    <Compile Include="ITradingSession.cs" />
+    <Compile Include="ITradingStrategy.cs" />
     <Compile Include="PriceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TradeType.cs" />

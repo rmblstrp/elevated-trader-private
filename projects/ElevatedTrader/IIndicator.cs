@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Dynamic;
 
-namespace ElevatedTrader.Indicators
+namespace ElevatedTrader
 {
 	public interface IIndicator
 	{

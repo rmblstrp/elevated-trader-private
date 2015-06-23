@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Indicators\IIndicator.cs" />
-    <Compile Include="Indicators\IIndicatorResult.cs" />
-    <Compile Include="Indicators\IIndicatorSettings.cs" />
+    <Compile Include="IIndicator.cs" />
+    <Compile Include="IIndicatorResult.cs" />
+    <Compile Include="IIndicatorSettings.cs" />
     <Compile Include="ITradePeriod.cs" />
     <Compile Include="ITradeSymbol.cs" />
     <Compile Include="ITrade.cs" />
@@ -60,6 +60,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

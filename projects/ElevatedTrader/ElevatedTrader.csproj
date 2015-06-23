@@ -54,6 +54,7 @@
     <Compile Include="ITradingStrategy.cs" />
     <Compile Include="PriceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TradePosition.cs" />
     <Compile Include="TradeType.cs" />
     <Compile Include="TrendDirection.cs" />
   </ItemGroup>

@@ -11,8 +11,10 @@ namespace ElevatedTrader
 	{
 		List<IIndicatorResult> Results { get; set; }
 
-		void Calculate(IEnumerable<ITradePeriod> periods, bool finalize = false);
+		void Calculate(IEnumerable<ITradePeriod> periods);
 
 		void Configure(ExpandoObject configuration);
+
+		void FinalizeResult();
 	}
 }

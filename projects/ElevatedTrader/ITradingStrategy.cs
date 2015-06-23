@@ -8,6 +8,12 @@ namespace ElevatedTrader
 {
 	public interface ITradingStrategy
 	{
-		void Tick(ITradePeriod period, bool finalize = false);
+		IList<IIndicator> Indicators { get; }
+
+		object Settings { get; set; }
+
+		void AddPeriod();
+
+		void Tick(ITradePeriod period);
 	}
 }

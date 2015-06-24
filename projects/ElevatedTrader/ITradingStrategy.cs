@@ -12,8 +12,8 @@ namespace ElevatedTrader
 
 		object Settings { get; set; }
 
-		void AddPeriod();
+		void FinalizePeriod();
 
-		void Tick(ITradePeriod period);
+		IStrategyResult Execute(ITradePeriod period);
 	}
 }

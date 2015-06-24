@@ -8,7 +8,8 @@ namespace ElevatedTrader
 {
 	public enum TradeType
 	{
-		Long,
-		Short
+		Buy,
+		Sell,
+		Reverse
 	}
 }

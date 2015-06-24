@@ -8,15 +8,17 @@ namespace ElevatedTrader
 {
 	public interface ITradingSession
 	{
-		TradePosition Position { get; set; }
+		int AggregateTickCount { get; set; }
+
+		int InitialQuantity { get; set; }
+
+		ITradingStrategy Strategy { get; set; }
 
 		ITradeSymbol Symbol { get; set; }
 
-		IEnumerable<ITrade> Trades { get; set; }		
+		int TradeQuantity { get; set; }
 
-		void ExecuteBuy(int quantity = 1);
-		void ExecuteSell(int quantity = 1);
-		void ReversePosition();
+		IEnumerable<ITrade> Trades { get; set; }
 
 		void Tick(ITradeTick tick);
 	}

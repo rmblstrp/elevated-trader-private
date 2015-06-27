@@ -47,7 +47,7 @@
     <Compile Include="IIndicatorResult.cs" />
     <Compile Include="IIndicatorSettings.cs" />
     <Compile Include="ITradeTickAggregator.cs" />
-    <Compile Include="ITradePeriod.cs" />
+    <Compile Include="ITradingPeriod.cs" />
     <Compile Include="ITradeSymbol.cs" />
     <Compile Include="ITrade.cs" />
     <Compile Include="ITradeTick.cs" />

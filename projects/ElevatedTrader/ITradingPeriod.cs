@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradePeriod
+	public interface ITradingPeriod
 	{
 		int TickCount { get; set; }
 

@@ -8,7 +8,7 @@ namespace ElevatedTrader
 {
 	public interface ITradingStrategy
 	{
-		Dictionary<int, ITradePeriod> Periods { get; }
+		Dictionary<int, ITradingPeriod> Periods { get; }
 
 		ITradingSession Session { get; }
 

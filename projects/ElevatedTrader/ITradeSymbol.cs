@@ -11,16 +11,25 @@ namespace ElevatedTrader
 		string Symbol
 		{
 			get;
+			set;
 		}
 
 		double TickRate
 		{
 			get;
+			set;
 		}
 
 		double TickValue
 		{
 			get;
+			set;
+		}
+
+		int Slippage
+		{
+			get;
+			set;
 		}
 	}
 }

@@ -13,8 +13,6 @@ namespace ElevatedTrader
 
 		void Calculate(IEnumerable<ITradePeriod> periods);
 
-		void Configure(ExpandoObject configuration);
-
-		void FinalizeResult();
+		void NewPeriod();
 	}
 }

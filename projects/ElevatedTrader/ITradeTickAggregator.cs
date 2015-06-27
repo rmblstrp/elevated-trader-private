@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradingStrategy
+	public interface ITradeTickAggregator
 	{
 		Dictionary<int, ITradePeriod> Periods { get; }
 
-		ITradingSession Session { get; }
+		void Add(ITradeTick tick, int size);
 
-		object Settings { get; }
-
-		void Tick(ITradeTick tick);
-
-		void Initialize(ITradeSymbol symbol);
+		event Action<int> BeforeNewPeriod;
 	}
 }

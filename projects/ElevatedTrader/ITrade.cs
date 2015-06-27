@@ -23,6 +23,6 @@ namespace ElevatedTrader
 			get;
 		}
 
-		IDictionary<int, int> PeriodIndicies { get; }
+		IDictionary<int, int> Indicies { get; }
 	}
 }

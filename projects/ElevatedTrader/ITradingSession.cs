@@ -12,8 +12,10 @@ namespace ElevatedTrader
 
 		IEnumerable<ITrade> Trades { get; set; }
 
-		void ExecuteBuy();
-		void ExecuteSell();
-		void ExecuteReversal();
+		void ExecuteBuy(IDictionary<int, int> indicies);
+		void ExecuteSell(IDictionary<int, int> indicies);
+		void ExecuteReversal(IDictionary<int, int> indicies);
+
+		void Initialize(int quantity = 0, int sizing = 1);
 	}
 }

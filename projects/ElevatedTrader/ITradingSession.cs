@@ -10,12 +10,12 @@ namespace ElevatedTrader
 	{
 		ITradeSymbol Symbol { get; set; }
 
-		IEnumerable<ITrade> Trades { get; set; }
+		IList<ITrade> Trades { get; }
 
-		void ExecuteBuy(IDictionary<int, int> indicies);
-		void ExecuteSell(IDictionary<int, int> indicies);
-		void ExecuteReversal(IDictionary<int, int> indicies);
+		void Buy(ITradeTickAggregator ticks, int quantity = 1);
+		void Sell(ITradeTickAggregator ticks, int quantity = 1);
+		void Reverse(ITradeTickAggregator ticks);
 
-		void Initialize(int quantity = 0, int sizing = 1);
+		void Reset();
 	}
 }

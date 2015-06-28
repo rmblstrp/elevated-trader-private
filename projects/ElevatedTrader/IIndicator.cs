@@ -11,7 +11,7 @@ namespace ElevatedTrader
 	{
 		List<IIndicatorResult> Results { get; set; }
 
-		void Calculate(IEnumerable<ITradingPeriod> periods);
+		void Calculate(IList<ITradingPeriod> periods);
 
 		void NewPeriod();
 	}

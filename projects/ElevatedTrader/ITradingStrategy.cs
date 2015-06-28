@@ -14,8 +14,10 @@ namespace ElevatedTrader
 
 		object Settings { get; }
 
+		ITradeSymbol Symbol { get; set; }
+
 		void Tick(ITradeTick tick);
 
-		void Initialize(ITradeSymbol symbol);
+		void Reset();
 	}
 }

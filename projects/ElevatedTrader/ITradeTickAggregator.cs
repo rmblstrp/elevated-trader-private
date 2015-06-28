@@ -8,12 +8,16 @@ namespace ElevatedTrader
 {
 	public interface ITradeTickAggregator
 	{
-		IDictionary<int, int> Indicies { get; }
+		IDictionary<int, int> Indexes { get; }
+
+		ITradeTick Last { get; }
 
 		IDictionary<int, ITradingPeriod> Periods { get; }
 
+		event Action<int> BeforeNewPeriod;
+
 		void Add(ITradeTick tick, int size);
 
-		event Action<int> BeforeNewPeriod;
+		void Reset();		
 	}
 }

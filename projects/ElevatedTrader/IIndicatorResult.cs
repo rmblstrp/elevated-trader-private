@@ -8,7 +8,7 @@ namespace ElevatedTrader
 {
 	public interface IIndicatorResult
 	{
-		bool SignalIndicated
+		bool Crossed
 		{
 			get;
 		}

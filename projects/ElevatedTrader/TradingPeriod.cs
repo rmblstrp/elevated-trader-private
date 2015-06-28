@@ -46,7 +46,19 @@ namespace ElevatedTrader
 
 		public void AddTick(ITradeTick tick)
 		{
-			throw new NotImplementedException();
+			if (TickCount == 0)
+			{
+				Open = High = Low = Close = tick.Last;
+			}
+			else
+			{
+				Close = tick.Last;
+				High = Math.Max(High, tick.Last);
+				Low = Math.Min(Low, tick.Last);
+			}
+
+			TickCount++;
+			Total += tick.Last;
 		}
 	}
 }

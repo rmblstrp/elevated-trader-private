@@ -41,7 +41,7 @@ namespace ElevatedTrader
 
 		public virtual void AddTick(ITradeTick tick)
 		{
-			ticks.Add(tick);
+			ticks.AddTick(tick);
 		}
 
 		public virtual void Reset()

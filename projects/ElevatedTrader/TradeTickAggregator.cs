@@ -9,39 +9,68 @@ namespace ElevatedTrader
 	public class TradeTickAggregator : ITradeTickAggregator
 	{
 		protected ITradeTick last;
-		protected Dictionary<int, ITradingPeriod> periods = new Dictionary<int, ITradingPeriod>();
+		protected Dictionary<int, IList<ITradingPeriod>> periods = new Dictionary<int, IList<ITradingPeriod>>();
 		protected List<int> sizes = new List<int>();
-
-		public IDictionary<int, int> Indexes
-		{
-			get { throw new NotImplementedException(); }
-		}
 
 		public ITradeTick Last
 		{
 			get { return last; }
 		}
 
-		public IDictionary<int, ITradingPeriod> Periods
+		public IDictionary<int, IList<ITradingPeriod>> Periods
 		{
 			get { return periods; }
 		}
 
-		public IList<int> Sizes
-		{
-			get { return sizes; }
-		}
-
 		public event Action<int> BeforeNewPeriod;
 
-		public void Add(ITradeTick tick)
+		public void AddSize(int size)
+		{
+			var list = new List<ITradingPeriod>();
+			periods.Add(size, list);
+			AddNewPeriod(size);
+		}
+
+		public void AddTick(ITradeTick tick)
 		{
 			last = tick;
+
+			foreach (var item in periods)
+			{
+				var period = item.Value[item.Value.Count - 1];
+
+				if (period.TickCount == item.Key)
+				{
+					AddNewPeriod(item.Key);
+				}
+			}
+		}
+
+		protected void AddNewPeriod(int key)
+		{
+			periods[key].Add(new TradingPeriod());
+		}
+
+		public IDictionary<int, int> Indexes()
+		{
+			var result = new Dictionary<int, int>();
+
+			foreach (var item in periods)
+			{
+				result.Add(item.Key, item.Value.Count - 1);
+			}
+
+			return result;
 		}
 
 		public void Reset()
 		{
 			periods.Clear();
+
+			for (int index = 0; index < sizes.Count; index++)
+			{
+				AddNewPeriod(sizes[index]);
+			}
 		}
 	}
 }

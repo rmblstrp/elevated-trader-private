@@ -35,5 +35,10 @@ namespace ElevatedTrader
 		{
 			throw new NotImplementedException();
 		}
+
+		public void Reset()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

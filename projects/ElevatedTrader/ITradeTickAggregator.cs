@@ -14,9 +14,11 @@ namespace ElevatedTrader
 
 		IDictionary<int, ITradingPeriod> Periods { get; }
 
+		IList<int> Sizes { get; }
+
 		event Action<int> BeforeNewPeriod;
 
-		void Add(ITradeTick tick, int size);
+		void Add(ITradeTick tick);
 
 		void Reset();		
 	}

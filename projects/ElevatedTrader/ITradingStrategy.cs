@@ -8,7 +8,7 @@ namespace ElevatedTrader
 {
 	public interface ITradingStrategy
 	{
-		Dictionary<int, ITradingPeriod> Periods { get; }
+		ITradeTickAggregator Ticks { get; }
 
 		ITradingSession Session { get; }
 
@@ -16,7 +16,7 @@ namespace ElevatedTrader
 
 		ITradeSymbol Symbol { get; set; }
 
-		void Tick(ITradeTick tick);
+		void AddTick(ITradeTick tick);
 
 		void Reset();
 	}

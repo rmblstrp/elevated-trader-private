@@ -8,17 +8,17 @@ namespace ElevatedTrader
 {
 	public interface ITradingPeriod
 	{
-		int TickCount { get; set; }
+		int TickCount { get; }
 
-		double Open { get; set; }
+		double Open { get; }
 
-		double High { get; set; }
+		double High { get; }
 
-		double Low { get; set; }
+		double Low { get; }
 
-		double Close { get; set; }
+		double Close { get; }
 
-		double Total { get; set; }
+		double Total { get; }
 
 		void AddTick(ITradeTick tick);		
 	}

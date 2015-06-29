@@ -60,5 +60,42 @@ namespace ElevatedTrader
 			TickCount++;
 			Total += tick.Last;
 		}
+
+		public double Value(PriceType type)
+		{
+			if (type == PriceType.Average)
+			{
+				return Total / TickCount;
+			}
+
+			var count = (double)0;
+			var sum = (double)0;
+
+			if ((type & PriceType.Open) == PriceType.Open)
+			{
+				count++;
+				sum += Open;
+			}
+
+			if ((type & PriceType.High) == PriceType.High)
+			{
+				count++;
+				sum += High;
+			}
+
+			if ((type & PriceType.Low) == PriceType.Low)
+			{
+				count++;
+				sum += Low;
+			}
+
+			if ((type & PriceType.Close) == PriceType.Close)
+			{
+				count++;
+				sum += Close;
+			}
+
+			return sum / count;
+		}
 	}
 }

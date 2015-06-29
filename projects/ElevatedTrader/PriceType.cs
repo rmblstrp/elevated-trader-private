@@ -9,6 +9,7 @@ namespace ElevatedTrader
 	[Flags]
 	public enum PriceType
 	{
+		Average			= 0x0000,
 		Open			= 0x0001,
 		High			= 0x0002,
 		Low				= 0x0004,

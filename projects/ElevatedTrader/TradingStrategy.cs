@@ -29,14 +29,8 @@ namespace ElevatedTrader
 
 		public virtual ITradeSymbol Symbol
 		{
-			get
-			{
-				return symbol;
-			}
-			set
-			{
-				session.Symbol = symbol = value;
-			}
+			get { return symbol; }
+			set { session.Symbol = symbol = value; }
 		}
 
 		public TradingStrategy()

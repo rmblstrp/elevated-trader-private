@@ -20,6 +20,8 @@ namespace ElevatedTrader
 
 		double Total { get; }
 
-		void AddTick(ITradeTick tick);		
+		void AddTick(ITradeTick tick);
+
+		double Value(PriceType type);
 	}
 }

@@ -36,11 +36,15 @@
     <Reference Include="CSScriptLibrary">
       <HintPath>..\..\solutions\packages\CS-Script.3.9.10.0\lib\net45\CSScriptLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\..\solutions\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.CSharp">
       <HintPath>..\..\solutions\packages\CS-Script.3.9.10.0\lib\net45\Mono.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,7 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Indicators\HullMovingAverage.cs" />
+    <Compile Include="Indicators\HullMovingAverage.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

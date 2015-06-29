@@ -9,7 +9,14 @@ public class HullStrategy : TradingStrategy
 {
 	public class StrategySettings
 	{
-		private int length = 8;
+		private int capacity = 1000000;
+		private int length = 8;		
+
+		public int Capcity
+		{
+			get { return capacity; }
+			set { capacity = value; }
+		}
 
 		public int Length
 		{

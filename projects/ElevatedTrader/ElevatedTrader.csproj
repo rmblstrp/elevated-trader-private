@@ -46,7 +46,7 @@
     <Compile Include="IIndicator.cs" />
     <Compile Include="IIndicatorResult.cs" />
     <Compile Include="IIndicatorSettings.cs" />
-    <Compile Include="ITradeTickAggregator.cs" />
+    <Compile Include="ITradingPeriodAggregator.cs" />
     <Compile Include="ITradingPeriod.cs" />
     <Compile Include="ITradeSymbol.cs" />
     <Compile Include="ITrade.cs" />
@@ -57,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trade.cs" />
     <Compile Include="TradeSymbol.cs" />
-    <Compile Include="TradeTickAggregator.cs" />
+    <Compile Include="TradingPeriodAggregator.cs" />
     <Compile Include="TradeType.cs" />
     <Compile Include="TradingPeriod.cs" />
     <Compile Include="TradingSession.cs" />

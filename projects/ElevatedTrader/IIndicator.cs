@@ -9,7 +9,7 @@ namespace ElevatedTrader
 {
 	public interface IIndicator
 	{
-		List<IIndicatorResult> Results { get; set; }
+		IList<IIndicatorResult> Results { get; }
 
 		void Calculate(IList<ITradingPeriod> periods);
 

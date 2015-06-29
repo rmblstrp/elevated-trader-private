@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradeTickAggregator
+	public interface ITradingPeriodAggregator
 	{
 		ITradeTick Last { get; }
 
@@ -14,7 +14,7 @@ namespace ElevatedTrader
 
 		event Action<int> BeforeNewPeriod;
 
-		void AddSize(int size);
+		void AddSize(int size, int capacity);
 
 		void AddTick(ITradeTick tick);
 

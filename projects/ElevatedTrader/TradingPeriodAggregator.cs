@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class TradeTickAggregator : ITradeTickAggregator
+	public class TradingPeriodAggregator : ITradingPeriodAggregator
 	{
 		protected ITradeTick last;
 		protected Dictionary<int, IList<ITradingPeriod>> periods = new Dictionary<int, IList<ITradingPeriod>>();
@@ -24,9 +24,9 @@ namespace ElevatedTrader
 
 		public event Action<int> BeforeNewPeriod;
 
-		public void AddSize(int size)
+		public void AddSize(int size, int capacity)
 		{
-			var list = new List<ITradingPeriod>();
+			var list = new List<ITradingPeriod>(capacity);
 			periods.Add(size, list);
 			AddNewPeriod(size);
 		}

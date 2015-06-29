@@ -16,9 +16,9 @@ namespace ElevatedTrader
 
 		IList<ITrade> Trades { get; }
 
-		void Buy(ITradeTickAggregator ticks, int quantity = 1);
-		void Sell(ITradeTickAggregator ticks, int quantity = 1);
-		void Reverse(ITradeTickAggregator ticks);
+		void Buy(ITradingPeriodAggregator ticks, int quantity = 1);
+		void Sell(ITradingPeriodAggregator ticks, int quantity = 1);
+		void Reverse(ITradingPeriodAggregator ticks);
 
 		void Reset();
 	}

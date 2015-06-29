@@ -33,17 +33,17 @@ namespace ElevatedTrader
 			get { return trades; }
 		}
 
-		public void Buy(ITradeTickAggregator ticks, int quantity = 1)
+		public void Buy(ITradingPeriodAggregator ticks, int quantity = 1)
 		{
 			AddTrade(TradeType.Buy, quantity, ticks);
 		}
 
-		public void Sell(ITradeTickAggregator ticks, int quantity = 1)
+		public void Sell(ITradingPeriodAggregator ticks, int quantity = 1)
 		{
 			AddTrade(TradeType.Sell, -quantity, ticks);
 		}
 
-		public void Reverse(ITradeTickAggregator ticks)
+		public void Reverse(ITradingPeriodAggregator ticks)
 		{
 			if (Position == 0)
 			{
@@ -60,7 +60,7 @@ namespace ElevatedTrader
 			trades.Clear();
 		}
 
-		protected void AddTrade(TradeType type, int quantity, ITradeTickAggregator ticks)
+		protected void AddTrade(TradeType type, int quantity, ITradingPeriodAggregator ticks)
 		{
 			var price =  type == TradeType.Buy ? ticks.Last.Ask : ticks.Last.Bid;
 			var open_cost = Symbol.HasOpenCost ? 1 : 0;

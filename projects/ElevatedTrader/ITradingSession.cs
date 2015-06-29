@@ -8,7 +8,11 @@ namespace ElevatedTrader
 {
 	public interface ITradingSession
 	{
+		double Equity { get; }
+
 		ITradeSymbol Symbol { get; set; }
+
+		int Position { get; }
 
 		IList<ITrade> Trades { get; }
 

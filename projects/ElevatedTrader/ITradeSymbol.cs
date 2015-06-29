@@ -26,6 +26,24 @@ namespace ElevatedTrader
 			set;
 		}
 
+		double OpenCost
+		{
+			get;
+			set;
+		}
+
+		double PerTradeCost
+		{
+			get;
+			set;
+		}
+
+		double PerQuanityCost
+		{
+			get;
+			set;
+		}
+
 		int Slippage
 		{
 			get;

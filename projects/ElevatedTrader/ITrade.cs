@@ -23,6 +23,16 @@ namespace ElevatedTrader
 			get;
 		}
 
+		double Equity
+		{
+			get;
+		}
+
+		double Profit
+		{
+			get;
+		}
+
 		IDictionary<int, int> Indexes { get; }
 	}
 }

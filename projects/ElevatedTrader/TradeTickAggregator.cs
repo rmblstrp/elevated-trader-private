@@ -41,6 +41,7 @@ namespace ElevatedTrader
 
 				if (period.TickCount == item.Key)
 				{
+					DoBeforeNewPeriod(item.Key);
 					AddNewPeriod(item.Key);
 				}
 			}
@@ -49,6 +50,14 @@ namespace ElevatedTrader
 		protected void AddNewPeriod(int key)
 		{
 			periods[key].Add(new TradingPeriod());
+		}
+
+		protected void DoBeforeNewPeriod(int size)
+		{
+			if (BeforeNewPeriod != null)
+			{
+				BeforeNewPeriod(size);
+			}
 		}
 
 		public IDictionary<int, int> Indexes()

@@ -45,7 +45,13 @@ namespace ElevatedTrader
 
 		public void Reverse(ITradeTickAggregator ticks)
 		{
-			AddTrade(TradeType.Reverse, Position * -2, ticks);
+			if (Position == 0)
+			{
+				throw new ArgumentOutOfRangeException("Only open positions may be reversed");
+			}
+
+			var type = Position > 0 ? TradeType.Sell : TradeType.Buy;
+			AddTrade(type, Position * -2, ticks);
 		}
 
 		public void Reset()
@@ -56,17 +62,13 @@ namespace ElevatedTrader
 
 		protected void AddTrade(TradeType type, int quantity, ITradeTickAggregator ticks)
 		{
-			var price = ticks.Last.Last;
+			var price =  type == TradeType.Buy ? ticks.Last.Ask : ticks.Last.Bid;
+			var open_cost = Symbol.HasOpenCost ? 1 : 0;
 
-			if (Position == 0 || trades.Count == 0)
+			if (Position == 0)
 			{
-				if (type == TradeType.Reverse)
-				{
-					throw new ArgumentOutOfRangeException("Only open positions may be reversed");
-				}
-
 				Position += quantity;
-				Equity += (price * Position * Symbol.OpenCost) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
+				Equity += (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
 
 				trades.Add(new Trade(type, quantity, price, Equity, 0, ticks.Indexes()));
 			}
@@ -74,13 +76,14 @@ namespace ElevatedTrader
 			var last = trades[trades.Count - 1];			
 			var price_difference = price - last.Price;
 			var tick_change = price_difference / Symbol.TickRate;
-			var value = tick_change * Symbol.TickValue;
-			var actual_type = quantity > 0 ? TradeType.Buy : TradeType.Sell;
+			var value = tick_change * Symbol.TickValue;			
 			var profit = (price * Position) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
 			
 			Position += quantity;
 
-			Equity += profit - (price * Position * Symbol.OpenCost) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
+			Equity += profit - (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
+
+			trades.Add(new Trade(type, quantity, price, Equity, profit, ticks.Indexes()));
 		}
 	}
 }

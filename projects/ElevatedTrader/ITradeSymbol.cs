@@ -26,7 +26,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		double OpenCost
+		bool HasOpenCost
 		{
 			get;
 			set;

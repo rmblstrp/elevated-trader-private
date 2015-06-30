@@ -8,6 +8,7 @@ namespace ElevatedTrader
 {
 	public enum TrendDirection
 	{
+		None,
 		Rising,
 		Falling,
 		Sideways

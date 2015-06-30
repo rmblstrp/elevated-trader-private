@@ -26,14 +26,14 @@ public class HullMovingAverage : IIndicator
 		get { return results; }
 	}
 
-	public HullMovingAverage()
+	public HullMovingAverage() : this(512)
 	{
-		results = new List<IIndicatorResult>();
 	}
 
 	public HullMovingAverage(int capacity)
 	{
 		results = new List<IIndicatorResult>(capacity);
+		NewPeriod();
 	}
 
 	public void Calculate(IList<ITradingPeriod> periods)
@@ -50,10 +50,32 @@ public class HullMovingAverage : IIndicator
 		}
 
 		var hma = MathHelper.HullMovingAverage(values);
+
+		var result = Results[Results.Count - 1];
+		result.Values.Clear();
+		result.Values.Add(hma);
+
+		if (Results.Count > 1)
+		{
+			var last = Results[Results.Count - 2];
+
+			if (hma == last.Values[0])
+			{
+				result.Direction = TrendDirection.Sideways;
+			}
+			else
+			{
+				result.Direction = hma > last.Values[0]
+					? TrendDirection.Rising 
+					: TrendDirection.Falling;
+			}
+
+			result.Signaled = last.Direction != TrendDirection.None && last.Direction != result.Direction;
+		}
 	}
 
 	public void NewPeriod()
 	{
-		throw new NotImplementedException();
+		Results.Add(new IndicatorResult());
 	}
 }

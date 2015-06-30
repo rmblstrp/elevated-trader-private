@@ -8,6 +8,8 @@ namespace ElevatedTrader
 {
 	public class TradingPeriod : ITradingPeriod
 	{
+		protected List<double> ticks;
+
 		public virtual int TickCount
 		{
 			get;
@@ -44,6 +46,20 @@ namespace ElevatedTrader
 			protected set;
 		}
 
+		public IList<double> Ticks
+		{
+			get { return ticks; }
+		}
+
+		public TradingPeriod() : this(1000)
+		{
+		}
+
+		public TradingPeriod(int capacity)
+		{
+			ticks = new List<double>(capacity);
+		}
+
 		public void AddTick(ITradeTick tick)
 		{
 			if (TickCount == 0)
@@ -59,6 +75,8 @@ namespace ElevatedTrader
 
 			TickCount++;
 			Total += tick.Last;
+
+			ticks.Add(tick.Last);
 		}
 
 		public double Value(PriceType type)

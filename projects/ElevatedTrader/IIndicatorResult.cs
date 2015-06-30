@@ -8,12 +8,17 @@ namespace ElevatedTrader
 {
 	public interface IIndicatorResult
 	{
-		bool Crossed
+		TrendDirection Direction
 		{
 			get;
 		}
 
-		TrendDirection Direction
+		bool Signaled
+		{
+			get;
+		}
+
+		IList<double> Values
 		{
 			get;
 		}

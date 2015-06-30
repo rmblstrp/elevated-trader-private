@@ -78,6 +78,10 @@ namespace ElevatedTrader
 			var tick_change = price_difference / Symbol.TickRate;
 			var value = tick_change * Symbol.TickValue;			
 			var profit = (price * Position) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
+
+			// position + quantity = a
+			// position - quantity = b
+			// a - b - position = ???
 			
 			Position += quantity;
 

@@ -23,5 +23,7 @@ namespace ElevatedTrader
 		void AddTick(ITradeTick tick);
 
 		double Value(PriceType type);
+
+		IList<double> Ticks { get; }
 	}
 }

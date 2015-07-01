@@ -36,6 +36,8 @@ namespace ElevatedTrader.Windows.Forms
 			}
 		}
 
+		private Dictionary<string, Type> strategies = new Dictionary<string, Type>();
+
 		private SessionSettings settings = new SessionSettings();
 		private FileSystemWatcher indicatorsWatcher;
 		private FileSystemWatcher strategiesWatcher;
@@ -105,6 +107,16 @@ namespace ElevatedTrader.Windows.Forms
 			}	
 
 			scripts_assembly = CSScript.LoadFiles(ListStrategyFiles().Union(ListIndicatorsFiles()).ToArray(), null, false, reference_assemblies);
+
+			var implements = typeof(ITradingStrategy);
+			var types = scripts_assembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
+
+			strategies.Clear();
+
+			foreach (var item in types)
+			{
+				strategies.Add(item.FullName, item);
+			}
 		}
 
 		private IEnumerable<string> ListIndicatorsFiles()

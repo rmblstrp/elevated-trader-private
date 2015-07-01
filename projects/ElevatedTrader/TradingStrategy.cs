@@ -9,12 +9,12 @@ namespace ElevatedTrader
 	public abstract class TradingStrategy : ITradingStrategy
 	{
 		protected ITradingSession session;
-		protected ITradingPeriodAggregator periods;
+		protected ITradingPeriodAggregator aggregator;
 		protected ITradeSymbol symbol;
 
-		public ITradingPeriodAggregator Ticks
+		public ITradingPeriodAggregator Periods
 		{
-			get { return ticks; }
+			get { return aggregator; }
 		}
 
 		public virtual ITradingSession Session
@@ -36,14 +36,14 @@ namespace ElevatedTrader
 		public TradingStrategy()
 		{
 			session = new TradingSession();
-			ticks = new TradingPeriodAggregator();
+			aggregator = new TradingPeriodAggregator();
 
-			ticks.BeforeNewPeriod += BeforeNewPeriod;
+			aggregator.BeforeNewPeriod += BeforeNewPeriod;
 		}
 
 		public virtual void AddTick(ITradeTick tick)
 		{
-			ticks.AddTick(tick);
+			aggregator.AddTick(tick);
 		}
 
 		protected virtual void BeforeNewPeriod(int size)
@@ -53,7 +53,7 @@ namespace ElevatedTrader
 		public virtual void Initialize()
 		{
 			session.Reset();
-			ticks.Reset();
+			aggregator.Reset();
 		}
 	}
 }

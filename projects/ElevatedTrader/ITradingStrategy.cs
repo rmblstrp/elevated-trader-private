@@ -8,7 +8,7 @@ namespace ElevatedTrader
 {
 	public interface ITradingStrategy
 	{
-		ITradingPeriodAggregator Ticks { get; }
+		ITradingPeriodAggregator Periods { get; }
 
 		ITradingSession Session { get; }
 

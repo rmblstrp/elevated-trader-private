@@ -27,7 +27,7 @@ public class HullStrategy : TradingStrategy
 			set { length = value; }
 		}
 
-		public int Ticks
+		public int PeriodTicks
 		{
 			get { return ticks; }
 			set { ticks = value; }
@@ -45,7 +45,7 @@ public class HullStrategy : TradingStrategy
 	{
 		base.AddTick(tick);
 
-		hma.Calculate(periods);
+		hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
 	}
 
 	protected override void BeforeNewPeriod(int size)
@@ -59,7 +59,7 @@ public class HullStrategy : TradingStrategy
 	{
 		base.Initialize();
 
-		periods.AddSize(settings.Ticks, settings.Capacity);
+		aggregator.AddSize(settings.PeriodTicks, settings.Capacity);
 		hma = new HullMovingAverage(settings.Capacity)
 		{
 			Length = settings.Length

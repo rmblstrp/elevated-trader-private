@@ -51,7 +51,7 @@ public class HullMovingAverage : IIndicator
 
 		var hma = MathHelper.HullMovingAverage(values);
 
-		var result = Results[Results.Count - 1];
+		var result = (IndicatorResult)Results[Results.Count - 1];
 		result.Values.Clear();
 		result.Values.Add(hma);
 

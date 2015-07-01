@@ -12,7 +12,7 @@ namespace ElevatedTrader
 		protected Dictionary<int, IList<ITradingPeriod>> periods = new Dictionary<int, IList<ITradingPeriod>>();
 		protected List<int> sizes = new List<int>();
 
-		public ITradeTick Last
+		public ITradeTick LastTick
 		{
 			get { return last; }
 		}
@@ -28,6 +28,7 @@ namespace ElevatedTrader
 		{
 			var list = new List<ITradingPeriod>(capacity);
 			periods.Add(size, list);
+			sizes.Add(size);
 			AddNewPeriod(size);
 		}
 
@@ -58,6 +59,13 @@ namespace ElevatedTrader
 			{
 				BeforeNewPeriod(size);
 			}
+		}
+
+		public ITradingPeriod CurrentPeriod(int size)
+		{
+			var item = periods[size];
+
+			return item[item.Count - 1];
 		}
 
 		public IDictionary<int, int> Indexes()

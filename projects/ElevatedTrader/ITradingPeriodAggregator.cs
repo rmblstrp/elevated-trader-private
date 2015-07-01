@@ -8,7 +8,7 @@ namespace ElevatedTrader
 {
 	public interface ITradingPeriodAggregator
 	{
-		ITradeTick Last { get; }
+		ITradeTick LastTick { get; }
 
 		IDictionary<int, IList<ITradingPeriod>> Periods { get; }
 
@@ -18,8 +18,10 @@ namespace ElevatedTrader
 
 		void AddTick(ITradeTick tick);
 
+		ITradingPeriod CurrentPeriod(int size);
+
 		IDictionary<int, int> Indexes();
 
-		void Reset();		
+		void Reset();
 	}
 }

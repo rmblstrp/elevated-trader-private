@@ -9,7 +9,7 @@ namespace ElevatedTrader
 	public abstract class TradingStrategy : ITradingStrategy
 	{
 		protected ITradingSession session;
-		protected ITradingPeriodAggregator ticks;
+		protected ITradingPeriodAggregator periods;
 		protected ITradeSymbol symbol;
 
 		public ITradingPeriodAggregator Ticks
@@ -50,7 +50,7 @@ namespace ElevatedTrader
 		{
 		}
 
-		public virtual void Reset()
+		public virtual void Initialize()
 		{
 			session.Reset();
 			ticks.Reset();

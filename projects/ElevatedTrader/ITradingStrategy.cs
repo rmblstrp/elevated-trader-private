@@ -18,6 +18,6 @@ namespace ElevatedTrader
 
 		void AddTick(ITradeTick tick);
 
-		void Reset();
+		void Initialize();
 	}
 }

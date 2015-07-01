@@ -68,11 +68,11 @@ namespace ElevatedTrader.Windows.Forms
 
 			indicatorsWatcher = new FileSystemWatcher(IndicatorsPath, ScriptFilter)
 			{
-				NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.LastWrite
+				NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
 			};
 			strategiesWatcher = new FileSystemWatcher(StrategiesPath, ScriptFilter)
 			{
-				NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.LastWrite
+				NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
 			};
 
 			indicatorsWatcher.Changed += indicatorsWatcher_Changed;
@@ -101,13 +101,10 @@ namespace ElevatedTrader.Windows.Forms
 
 		private void LoadScripts()
 		{
-			if (scripts_assembly != null)
-			{
-				new AsmHelper(scripts_assembly).Dispose();
-			}	
+			var files = ListStrategyFiles().Union(ListIndicatorsFiles()).ToArray();
 
-			scripts_assembly = CSScript.LoadFiles(ListStrategyFiles().Union(ListIndicatorsFiles()).ToArray(), null, false, reference_assemblies);
-
+			scripts_assembly = Assembly.LoadFile(CSScript.CompileFiles(files, reference_assemblies));
+			
 			var implements = typeof(ITradingStrategy);
 			var types = scripts_assembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
 
@@ -116,6 +113,7 @@ namespace ElevatedTrader.Windows.Forms
 			foreach (var item in types)
 			{
 				strategies.Add(item.FullName, item);
+				StrategiesMenuItem.Items.Add(item.Name);
 			}
 		}
 

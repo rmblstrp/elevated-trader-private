@@ -12,9 +12,15 @@ namespace ElevatedTrader.Windows.Forms
 {
 	public partial class MainForm : Form
 	{
+		private ITradingStrategy strategy = new HullStrategy();
+		private ITradeSymbol symbol = new TradeSymbol();
+
 		public MainForm()
 		{
 			InitializeComponent();
+
+			SymbolProperties.SelectedObject = symbol;
+			StrategySettings.SelectedObject = strategy.Settings;
 		}
 	}
 }

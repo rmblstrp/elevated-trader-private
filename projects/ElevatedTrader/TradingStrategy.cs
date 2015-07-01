@@ -27,6 +27,11 @@ namespace ElevatedTrader
 			get;
 		}
 
+		public abstract Type SettingsType
+		{
+			get;
+		}
+
 		public virtual ITradeSymbol Symbol
 		{
 			get { return symbol; }

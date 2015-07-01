@@ -41,6 +41,11 @@ public class HullStrategy : TradingStrategy
 		get { return settings; }
 	}
 
+	public override Type SettingsType
+	{
+		get { return typeof(StrategySettings); }
+	}
+
 	public override void AddTick(ITradeTick tick)
 	{
 		base.AddTick(tick);

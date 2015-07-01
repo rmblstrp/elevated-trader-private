@@ -39,8 +39,6 @@
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.StrategySettings = new System.Windows.Forms.PropertyGrid();
 			this.TradeResultGrid = new System.Windows.Forms.DataGridView();
 			this.iTradeBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,6 +48,10 @@
 			this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.StrategySettings = new System.Windows.Forms.PropertyGrid();
+			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -61,6 +63,8 @@
 			this.splitContainer2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).BeginInit();
+			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// MainMenu
@@ -123,30 +127,14 @@
 			// 
 			// splitContainer2.Panel1
 			// 
-			this.splitContainer2.Panel1.Controls.Add(this.SymbolProperties);
+			this.splitContainer2.Panel1.Controls.Add(this.groupBox1);
 			// 
 			// splitContainer2.Panel2
 			// 
-			this.splitContainer2.Panel2.Controls.Add(this.StrategySettings);
+			this.splitContainer2.Panel2.Controls.Add(this.groupBox2);
 			this.splitContainer2.Size = new System.Drawing.Size(292, 470);
 			this.splitContainer2.SplitterDistance = 186;
 			this.splitContainer2.TabIndex = 0;
-			// 
-			// SymbolProperties
-			// 
-			this.SymbolProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.SymbolProperties.Location = new System.Drawing.Point(0, 0);
-			this.SymbolProperties.Name = "SymbolProperties";
-			this.SymbolProperties.Size = new System.Drawing.Size(292, 186);
-			this.SymbolProperties.TabIndex = 0;
-			// 
-			// StrategySettings
-			// 
-			this.StrategySettings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.StrategySettings.Location = new System.Drawing.Point(0, 0);
-			this.StrategySettings.Name = "StrategySettings";
-			this.StrategySettings.Size = new System.Drawing.Size(292, 280);
-			this.StrategySettings.TabIndex = 0;
 			// 
 			// TradeResultGrid
 			// 
@@ -233,6 +221,50 @@
 			this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.runToolStripMenuItem.Text = "Run";
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.SymbolProperties);
+			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox1.Location = new System.Drawing.Point(0, 0);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(292, 186);
+			this.groupBox1.TabIndex = 0;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Symbol Properties";
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.StrategySettings);
+			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox2.Location = new System.Drawing.Point(0, 0);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(292, 280);
+			this.groupBox2.TabIndex = 0;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Strategy Settings";
+			// 
+			// StrategySettings
+			// 
+			this.StrategySettings.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.StrategySettings.HelpVisible = false;
+			this.StrategySettings.Location = new System.Drawing.Point(3, 16);
+			this.StrategySettings.Name = "StrategySettings";
+			this.StrategySettings.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+			this.StrategySettings.Size = new System.Drawing.Size(286, 261);
+			this.StrategySettings.TabIndex = 0;
+			this.StrategySettings.ToolbarVisible = false;
+			// 
+			// SymbolProperties
+			// 
+			this.SymbolProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.SymbolProperties.HelpVisible = false;
+			this.SymbolProperties.Location = new System.Drawing.Point(3, 16);
+			this.SymbolProperties.Name = "SymbolProperties";
+			this.SymbolProperties.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+			this.SymbolProperties.Size = new System.Drawing.Size(286, 167);
+			this.SymbolProperties.TabIndex = 0;
+			this.SymbolProperties.ToolbarVisible = false;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -242,6 +274,7 @@
 			this.Controls.Add(this.MainMenu);
 			this.MainMenuStrip = this.MainMenu;
 			this.Name = "MainForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Elevated Trader";
 			this.MainMenu.ResumeLayout(false);
 			this.MainMenu.PerformLayout();
@@ -255,6 +288,8 @@
 			this.splitContainer2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).EndInit();
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -268,8 +303,6 @@
 		private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.SplitContainer splitContainer2;
-		private System.Windows.Forms.PropertyGrid SymbolProperties;
-		private System.Windows.Forms.PropertyGrid StrategySettings;
 		private System.Windows.Forms.DataGridView TradeResultGrid;
 		private System.Windows.Forms.BindingSource iTradeBindingSource;
 		private System.Windows.Forms.DataGridViewTextBoxColumn typeDataGridViewTextBoxColumn;
@@ -279,6 +312,10 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn profitDataGridViewTextBoxColumn;
 		private System.Windows.Forms.ToolStripMenuItem simulationToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.GroupBox groupBox2;
+		public System.Windows.Forms.PropertyGrid SymbolProperties;
+		public System.Windows.Forms.PropertyGrid StrategySettings;
 	}
 }
 

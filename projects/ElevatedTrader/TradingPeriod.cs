@@ -9,6 +9,7 @@ namespace ElevatedTrader
 	public class TradingPeriod : ITradingPeriod
 	{
 		protected List<double> ticks;
+		protected List<double> changes;
 
 		public virtual int TickCount
 		{
@@ -58,6 +59,7 @@ namespace ElevatedTrader
 		public TradingPeriod(int capacity)
 		{
 			ticks = new List<double>(capacity);
+			changes = new List<double>(capacity);
 		}
 
 		public void AddTick(ITradeTick tick)
@@ -65,9 +67,11 @@ namespace ElevatedTrader
 			if (TickCount == 0)
 			{
 				Open = High = Low = Close = tick.Last;
+				changes.Add(0);
 			}
 			else
 			{
+				changes.Add(tick.Last - Close);
 				Close = tick.Last;
 				High = Math.Max(High, tick.Last);
 				Low = Math.Min(Low, tick.Last);

@@ -20,10 +20,14 @@ namespace ElevatedTrader
 
 		double Total { get; }
 
+		IList<double> Ticks { get; }
+
+		IList<double> Changes { get; }
+
+		double EfficiencyRatio { get; }
+
 		void AddTick(ITradeTick tick);
 
 		double Value(PriceType type);
-
-		IList<double> Ticks { get; }
 	}
 }

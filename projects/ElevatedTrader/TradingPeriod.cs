@@ -47,9 +47,22 @@ namespace ElevatedTrader
 			protected set;
 		}
 
+		public virtual double EfficiencyRatio
+		{
+			get
+			{
+				return Math.Abs(Close - Open) / changes.Sum(x => Math.Abs(x));
+			}
+		}
+
 		public IList<double> Ticks
 		{
 			get { return ticks; }
+		}
+
+		public IList<double> Changes
+		{
+			get { return changes; }
 		}
 
 		public TradingPeriod() : this(1000)

@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using CSScriptLibrary;
-
-namespace ElevatedTrader.Windows.Forms
+﻿namespace ElevatedTrader.Windows.Forms
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Data;
+	using System.Drawing;
+	using System.IO;
+	using System.Linq;
+	using System.Reflection;
+	using System.Text;
+	using System.Threading.Tasks;
+	using System.Windows.Forms;
+	using CSScriptLibrary;
+	using Newtonsoft.Json;
+
 	public partial class MainForm : Form
 	{
 		public class SolutionSettings
@@ -36,6 +37,9 @@ namespace ElevatedTrader.Windows.Forms
 			}
 		}
 
+		private BindingSource symbolsBindingSource = new BindingSource();
+		private List<TradeSymbol> symbols = new List<TradeSymbol>();
+
 		private Dictionary<string, Type> strategies = new Dictionary<string, Type>();
 
 		private SolutionSettings settings = new SolutionSettings();
@@ -43,10 +47,12 @@ namespace ElevatedTrader.Windows.Forms
 		private FileSystemWatcher strategiesWatcher;
 		private ITradingStrategy strategy;
 
+		const string SymbolsPath = @"symbols\";
 		const string IndicatorsPath = @"indicators\";
 		const string StrategiesPath = @"strategies\";
-		const string ScriptFilter = "*.cs";
 		const string ScriptsAssembly = "IndicatorStrategies";
+		const string ScriptsFilter = "*.cs";
+		const string SymbolsFilter = "*.json";
 
 
 		Assembly scripts_assembly = null;
@@ -67,11 +73,11 @@ namespace ElevatedTrader.Windows.Forms
 
 			LoadScripts();
 
-			indicatorsWatcher = new FileSystemWatcher(IndicatorsPath, ScriptFilter)
+			indicatorsWatcher = new FileSystemWatcher(IndicatorsPath, ScriptsFilter)
 			{
 				NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
 			};
-			strategiesWatcher = new FileSystemWatcher(StrategiesPath, ScriptFilter)
+			strategiesWatcher = new FileSystemWatcher(StrategiesPath, ScriptsFilter)
 			{
 				NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
 			};
@@ -88,6 +94,8 @@ namespace ElevatedTrader.Windows.Forms
 
 			indicatorsWatcher.EnableRaisingEvents = true;
 			strategiesWatcher.EnableRaisingEvents = true;
+
+			LoadSymbols();
 		}
 
 		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
@@ -105,7 +113,7 @@ namespace ElevatedTrader.Windows.Forms
 			var files = ListStrategyFiles().Union(ListIndicatorsFiles()).ToArray();
 
 			scripts_assembly = Assembly.LoadFile(CSScript.CompileFiles(files, reference_assemblies));
-			
+
 			var implements = typeof(ITradingStrategy);
 			var types = scripts_assembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
 
@@ -120,12 +128,12 @@ namespace ElevatedTrader.Windows.Forms
 
 		private IEnumerable<string> ListIndicatorsFiles()
 		{
-			return Directory.EnumerateFiles(IndicatorsPath, ScriptFilter, SearchOption.TopDirectoryOnly);
+			return Directory.EnumerateFiles(IndicatorsPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
 		}
 
 		private IEnumerable<string> ListStrategyFiles()
 		{
-			return Directory.EnumerateFiles(StrategiesPath, ScriptFilter, SearchOption.TopDirectoryOnly);
+			return Directory.EnumerateFiles(StrategiesPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
 		}
 
 		private void InitializeStrategy(string name)
@@ -140,9 +148,30 @@ namespace ElevatedTrader.Windows.Forms
 			StrategySettings.SelectedObject = strategy.Settings;
 		}
 
+		private void LoadSymbols()
+		{
+			var files = Directory.EnumerateFiles(SymbolsPath, SymbolsFilter, SearchOption.TopDirectoryOnly);
+
+			foreach (var file in files)
+			{
+				var item = JsonConvert.DeserializeObject<TradeSymbol>(File.ReadAllText(file));
+
+				symbols.Add(item);
+			}
+
+			symbols.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
+
+			SymbolComboBox.DataSource = symbols;
+		}
+
 		private void StrategiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			InitializeStrategy(StrategiesComboBox.Text);
+		}
+
+		private void SymbolComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			SymbolProperties.SelectedObject = symbols[SymbolComboBox.SelectedIndex];
 		}
 	}
 }

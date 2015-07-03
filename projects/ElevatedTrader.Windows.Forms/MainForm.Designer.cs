@@ -306,9 +306,9 @@
 			this.groupBox2.Controls.Add(this.StrategiesComboBox);
 			this.groupBox2.Controls.Add(this.StrategySettings);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox2.Location = new System.Drawing.Point(0, 176);
+			this.groupBox2.Location = new System.Drawing.Point(0, 200);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(245, 267);
+			this.groupBox2.Size = new System.Drawing.Size(245, 243);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Strategy";
@@ -334,7 +334,7 @@
 			this.StrategySettings.Location = new System.Drawing.Point(6, 46);
 			this.StrategySettings.Name = "StrategySettings";
 			this.StrategySettings.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-			this.StrategySettings.Size = new System.Drawing.Size(231, 215);
+			this.StrategySettings.Size = new System.Drawing.Size(231, 191);
 			this.StrategySettings.TabIndex = 0;
 			this.StrategySettings.ToolbarVisible = false;
 			// 
@@ -346,7 +346,7 @@
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(245, 176);
+			this.groupBox1.Size = new System.Drawing.Size(245, 200);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Symbol";
@@ -355,12 +355,14 @@
 			// 
 			this.SymbolComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.SymbolComboBox.DataSource = this.iTradeBindingSource;
 			this.SymbolComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.SymbolComboBox.FormattingEnabled = true;
 			this.SymbolComboBox.Location = new System.Drawing.Point(6, 20);
 			this.SymbolComboBox.Name = "SymbolComboBox";
 			this.SymbolComboBox.Size = new System.Drawing.Size(231, 21);
 			this.SymbolComboBox.TabIndex = 1;
+			this.SymbolComboBox.SelectedIndexChanged += new System.EventHandler(this.SymbolComboBox_SelectedIndexChanged);
 			// 
 			// SymbolProperties
 			// 
@@ -371,7 +373,7 @@
 			this.SymbolProperties.Location = new System.Drawing.Point(6, 47);
 			this.SymbolProperties.Name = "SymbolProperties";
 			this.SymbolProperties.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-			this.SymbolProperties.Size = new System.Drawing.Size(231, 123);
+			this.SymbolProperties.Size = new System.Drawing.Size(231, 147);
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 

@@ -45,6 +45,7 @@
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\solutions\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Mono.CSharp">
       <HintPath>..\..\solutions\packages\CS-Script.3.9.10.0\lib\net45\Mono.CSharp.dll</HintPath>
     </Reference>
@@ -103,6 +104,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Symbols\6a.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Symbols\es.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

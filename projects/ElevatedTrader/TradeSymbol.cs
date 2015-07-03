@@ -8,7 +8,15 @@ namespace ElevatedTrader
 {
 	public class TradeSymbol : ITradeSymbol
 	{
+		private string symbol;
+
 		public string Symbol
+		{
+			get { return symbol; }
+			set { symbol = value.ToUpper(); }
+		}
+
+		public string Description
 		{
 			get;
 			set;
@@ -38,7 +46,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		public double PerQuanityCost
+		public double PerQuantityCost
 		{
 			get;
 			set;
@@ -48,6 +56,11 @@ namespace ElevatedTrader
 		{
 			get;
 			set;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("{0} - {1}", Symbol, string.IsNullOrWhiteSpace(Description) ? "(no description)" : Description);
 		}
 	}
 }

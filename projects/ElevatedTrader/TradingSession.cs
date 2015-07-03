@@ -70,7 +70,7 @@ namespace ElevatedTrader
 			if (Position == 0)
 			{
 				Position += quantity;
-				Equity += (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
+				Equity += (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
 
 				trades.Add(new Trade(type, quantity, price, Equity, 0, ticks.Indexes()));
 			}
@@ -79,7 +79,7 @@ namespace ElevatedTrader
 			var price_difference = price - last.Price;
 			var tick_change = price_difference / Symbol.TickRate;
 			var value = tick_change * Symbol.TickValue;			
-			var profit = (price * Position) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
+			var profit = (price * Position) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
 
 			// position + quantity = a
 			// position - quantity = b
@@ -87,7 +87,7 @@ namespace ElevatedTrader
 			
 			Position += quantity;
 
-			Equity += profit - (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
+			Equity += profit - (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
 
 			var order = new Trade(type, quantity, price, Equity, profit, ticks.Indexes());
 

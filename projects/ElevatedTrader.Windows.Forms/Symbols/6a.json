@@ -1,0 +1,10 @@
+﻿{
+	"Symbol": "/6A",
+	"Description": "AUD/USD ETH",
+	"TickRate": 0.0001,
+	"TickValue": 10.00,
+	"HasOpenCost": false,
+	"PerTradeCost": 0,
+	"PerQuantityCost": 8,
+	"Slippage":  0
+}

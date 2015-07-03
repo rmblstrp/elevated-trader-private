@@ -14,6 +14,12 @@ namespace ElevatedTrader
 			set;
 		}
 
+		string Description
+		{
+			get;
+			set;
+		}
+
 		double TickRate
 		{
 			get;
@@ -38,7 +44,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		double PerQuanityCost
+		double PerQuantityCost
 		{
 			get;
 			set;

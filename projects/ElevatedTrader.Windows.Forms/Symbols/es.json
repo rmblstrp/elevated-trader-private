@@ -1,0 +1,10 @@
+﻿{
+	"Symbol": "/ES",
+	"Description": "S&P 500 E-Mini Future",
+	"TickRate": 0.25,
+	"TickValue": 12.50,
+	"HasOpenCost": false,
+	"PerTradeCost": 0,
+	"PerQuantityCost": 8,
+	"Slippage":  0
+}

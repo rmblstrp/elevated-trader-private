@@ -37,8 +37,11 @@
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MainMenu = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,11 +60,11 @@
 			this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.StrategiesComboBox = new System.Windows.Forms.ComboBox();
 			this.StrategySettings = new System.Windows.Forms.PropertyGrid();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.StrategiesComboBox = new System.Windows.Forms.ComboBox();
-			this.comboBox2 = new System.Windows.Forms.ComboBox();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).BeginInit();
 			this.panel1.SuspendLayout();
@@ -92,36 +95,57 @@
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem2,
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
+            this.toolStripMenuItem3,
             this.toolStripSeparator1,
             this.settingsToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
 			// 
+			// toolStripMenuItem4
+			// 
+			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(145, 22);
+			this.toolStripMenuItem4.Text = "New Solution";
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(145, 22);
+			this.toolStripMenuItem2.Text = "New Symbol";
+			// 
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.openToolStripMenuItem.Text = "Open";
 			// 
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
 			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.saveToolStripMenuItem.Text = "Save";
+			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(145, 22);
+			this.toolStripMenuItem3.Text = "Save Symbol";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(142, 6);
 			// 
 			// settingsToolStripMenuItem
 			// 
 			this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.settingsToolStripMenuItem.Text = "Settings";
 			// 
 			// toolStripMenuItem1
@@ -289,6 +313,18 @@
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Strategy";
 			// 
+			// StrategiesComboBox
+			// 
+			this.StrategiesComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.StrategiesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.StrategiesComboBox.FormattingEnabled = true;
+			this.StrategiesComboBox.Location = new System.Drawing.Point(6, 19);
+			this.StrategiesComboBox.Name = "StrategiesComboBox";
+			this.StrategiesComboBox.Size = new System.Drawing.Size(231, 21);
+			this.StrategiesComboBox.TabIndex = 1;
+			this.StrategiesComboBox.SelectedIndexChanged += new System.EventHandler(this.StrategiesComboBox_SelectedIndexChanged);
+			// 
 			// StrategySettings
 			// 
 			this.StrategySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -305,7 +341,7 @@
 			// groupBox1
 			// 
 			this.groupBox1.BackColor = System.Drawing.SystemColors.MenuBar;
-			this.groupBox1.Controls.Add(this.comboBox2);
+			this.groupBox1.Controls.Add(this.SymbolComboBox);
 			this.groupBox1.Controls.Add(this.SymbolProperties);
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
@@ -314,6 +350,17 @@
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Symbol";
+			// 
+			// SymbolComboBox
+			// 
+			this.SymbolComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.SymbolComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.SymbolComboBox.FormattingEnabled = true;
+			this.SymbolComboBox.Location = new System.Drawing.Point(6, 20);
+			this.SymbolComboBox.Name = "SymbolComboBox";
+			this.SymbolComboBox.Size = new System.Drawing.Size(231, 21);
+			this.SymbolComboBox.TabIndex = 1;
 			// 
 			// SymbolProperties
 			// 
@@ -327,29 +374,6 @@
 			this.SymbolProperties.Size = new System.Drawing.Size(231, 123);
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
-			// 
-			// StrategiesComboBox
-			// 
-			this.StrategiesComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.StrategiesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.StrategiesComboBox.FormattingEnabled = true;
-			this.StrategiesComboBox.Location = new System.Drawing.Point(6, 19);
-			this.StrategiesComboBox.Name = "StrategiesComboBox";
-			this.StrategiesComboBox.Size = new System.Drawing.Size(231, 21);
-			this.StrategiesComboBox.TabIndex = 1;
-			this.StrategiesComboBox.SelectedIndexChanged += new System.EventHandler(this.StrategiesComboBox_SelectedIndexChanged);
-			// 
-			// comboBox2
-			// 
-			this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox2.FormattingEnabled = true;
-			this.comboBox2.Location = new System.Drawing.Point(6, 20);
-			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(231, 21);
-			this.comboBox2.TabIndex = 1;
 			// 
 			// MainForm
 			// 
@@ -410,7 +434,10 @@
 		private System.Windows.Forms.GroupBox groupBox1;
 		public System.Windows.Forms.PropertyGrid SymbolProperties;
 		private System.Windows.Forms.ComboBox StrategiesComboBox;
-		private System.Windows.Forms.ComboBox comboBox2;
+		private System.Windows.Forms.ComboBox SymbolComboBox;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
 	}
 }
 

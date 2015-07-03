@@ -12,7 +12,7 @@ namespace ElevatedTrader
 		protected ITradingPeriodAggregator aggregator;
 		protected ITradeSymbol symbol;
 
-		public ITradingPeriodAggregator Periods
+		public ITradingPeriodAggregator Aggregator
 		{
 			get { return aggregator; }
 		}

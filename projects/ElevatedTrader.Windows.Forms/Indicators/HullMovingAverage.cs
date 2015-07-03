@@ -15,7 +15,7 @@ public class HullMovingAverage : IIndicator
 		set;
 	}
 
-	public PriceType PriceValue
+	public PeriodValueType PriceValue
 	{
 		get;
 		set;

@@ -33,17 +33,19 @@ namespace ElevatedTrader
 			get { return trades; }
 		}
 
-		public void Buy(ITradingPeriodAggregator ticks, int quantity = 1)
+		public event EventHandler<ITrade> Trade;
+
+		public void Buy(ITradingPeriodAggregator aggregator, int quantity = 1)
 		{
-			AddTrade(TradeType.Buy, quantity, ticks);
+			AddTrade(TradeType.Buy, quantity, aggregator);
 		}
 
-		public void Sell(ITradingPeriodAggregator ticks, int quantity = 1)
+		public void Sell(ITradingPeriodAggregator aggregator, int quantity = 1)
 		{
-			AddTrade(TradeType.Sell, -quantity, ticks);
+			AddTrade(TradeType.Sell, -quantity, aggregator);
 		}
 
-		public void Reverse(ITradingPeriodAggregator ticks)
+		public void Reverse(ITradingPeriodAggregator aggregator)
 		{
 			if (Position == 0)
 			{
@@ -51,7 +53,7 @@ namespace ElevatedTrader
 			}
 
 			var type = Position > 0 ? TradeType.Sell : TradeType.Buy;
-			AddTrade(type, Position * -2, ticks);
+			AddTrade(type, Position * -2, aggregator);
 		}
 
 		public void Reset()
@@ -87,7 +89,14 @@ namespace ElevatedTrader
 
 			Equity += profit - (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuanityCost) - Symbol.PerTradeCost;
 
-			trades.Add(new Trade(type, quantity, price, Equity, profit, ticks.Indexes()));
-		}
+			var order = new Trade(type, quantity, price, Equity, profit, ticks.Indexes());
+
+			trades.Add(order);
+
+			if (Trade != null)
+			{
+				Trade(this, order);
+			}
+		}		
 	}
 }

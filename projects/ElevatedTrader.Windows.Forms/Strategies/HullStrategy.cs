@@ -14,6 +14,7 @@ public class HullStrategy : TradingStrategy
 		private int capacity = 8192;
 		private int length = 8;
 		private int ticks = 610;
+		private PeriodValueType valueType = PeriodValueType.WeightedAverage;
 
 		public int Capacity
 		{
@@ -31,6 +32,12 @@ public class HullStrategy : TradingStrategy
 		{
 			get { return ticks; }
 			set { ticks = value; }
+		}
+
+		public PeriodValueType ValueType
+		{
+			get { return valueType; }
+			set { valueType = value; }
 		}
 	}
 
@@ -69,5 +76,29 @@ public class HullStrategy : TradingStrategy
 		{
 			Length = settings.Length
 		};
+	}
+
+	private void Buy()
+	{
+		if (session.Position == 0)
+		{
+			session.Buy(aggregator);
+		}
+		else
+		{
+			session.Reverse(aggregator);
+		}
+	}
+
+	private void Sell()
+	{
+		if (session.Position == 0)
+		{
+			session.Sell(aggregator);
+		}
+		else
+		{
+			session.Reverse(aggregator);
+		}
 	}
 }

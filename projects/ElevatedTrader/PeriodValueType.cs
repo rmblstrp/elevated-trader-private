@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ElevatedTrader
 {
 	[Flags]
-	public enum PriceType
+	public enum PeriodValueType
 	{
 		Average				= 0x0000,
 		Open				= 0x0001,

@@ -98,52 +98,52 @@ namespace ElevatedTrader
 			ticks.Add(tick.Last);
 		}
 
-		public double Value(PriceType type)
+		public double Value(PeriodValueType type)
 		{
 			switch (type)
 			{
-				case PriceType.Average:
+				case PeriodValueType.Average:
 					return Total / TickCount;
-				case PriceType.GeometricMean:
+				case PeriodValueType.GeometricMean:
 					return MathHelper.GeometricMean(ticks);
-				case PriceType.WeightedAverage:
+				case PeriodValueType.WeightedAverage:
 					return MathHelper.WeightedAverage(ticks);
-				case PriceType.HarmonicMean:
+				case PeriodValueType.HarmonicMean:
 					return MathHelper.HarmonicMean(ticks);
-				case PriceType.Median:
+				case PeriodValueType.Median:
 					return Statistics.Median(ticks);
-				case PriceType.Skewness:
+				case PeriodValueType.Skewness:
 					return Statistics.Skewness(ticks);
-				case PriceType.Variance:
+				case PeriodValueType.Variance:
 					return Statistics.Variance(ticks);
-				case PriceType.Kurtosis:
+				case PeriodValueType.Kurtosis:
 					return Statistics.Kurtosis(ticks);
-				case PriceType.StandardDeviation:
+				case PeriodValueType.StandardDeviation:
 					return Statistics.StandardDeviation(ticks);
 			}
 
 			var count = (double)0;
 			var sum = (double)0;
 
-			if ((type & PriceType.Open) == PriceType.Open)
+			if ((type & PeriodValueType.Open) == PeriodValueType.Open)
 			{
 				count++;
 				sum += Open;
 			}
 
-			if ((type & PriceType.High) == PriceType.High)
+			if ((type & PeriodValueType.High) == PeriodValueType.High)
 			{
 				count++;
 				sum += High;
 			}
 
-			if ((type & PriceType.Low) == PriceType.Low)
+			if ((type & PeriodValueType.Low) == PeriodValueType.Low)
 			{
 				count++;
 				sum += Low;
 			}
 
-			if ((type & PriceType.Close) == PriceType.Close)
+			if ((type & PeriodValueType.Close) == PeriodValueType.Close)
 			{
 				count++;
 				sum += Close;

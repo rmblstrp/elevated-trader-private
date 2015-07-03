@@ -61,7 +61,7 @@
     <Compile Include="ITradingSession.cs" />
     <Compile Include="ITradingStrategy.cs" />
     <Compile Include="MathHelper.cs" />
-    <Compile Include="PriceType.cs" />
+    <Compile Include="PeriodValueType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trade.cs" />
     <Compile Include="TradeSymbol.cs" />

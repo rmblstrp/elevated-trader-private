@@ -28,6 +28,6 @@ namespace ElevatedTrader
 
 		void AddTick(ITradeTick tick);
 
-		double Value(PriceType type);
+		double Value(PeriodValueType type);
 	}
 }

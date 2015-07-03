@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 	using System.Data;
 	using System.Drawing;
@@ -38,21 +39,24 @@
 		}
 
 		private BindingSource symbolsBindingSource = new BindingSource();
-		private List<TradeSymbol> symbols = new List<TradeSymbol>();
+		private BindingList<TradeSymbol> symbols = new BindingList<TradeSymbol>();
+		private TradeSymbol symbol;
 
-		private Dictionary<string, Type> strategies = new Dictionary<string, Type>();
+		private BindingSource strategyBindingSource = new BindingSource();
+		private BindingList<string> strategies = new BindingList<string>();
+		private ITradingStrategy strategy;
 
 		private SolutionSettings settings = new SolutionSettings();
 		private FileSystemWatcher indicatorsWatcher;
 		private FileSystemWatcher strategiesWatcher;
-		private ITradingStrategy strategy;
 
 		const string SymbolsPath = @"symbols\";
 		const string IndicatorsPath = @"indicators\";
 		const string StrategiesPath = @"strategies\";
 		const string ScriptsAssembly = "IndicatorStrategies";
 		const string ScriptsFilter = "*.cs";
-		const string SymbolsFilter = "*.json";
+		const string SymbolsExtension = ".json";
+		const string SymbolsFilter = "*" + SymbolsExtension;
 
 
 		Assembly scripts_assembly = null;
@@ -95,6 +99,9 @@
 			indicatorsWatcher.EnableRaisingEvents = true;
 			strategiesWatcher.EnableRaisingEvents = true;
 
+			strategyBindingSource.DataSource = strategies;
+			StrategiesComboBox.DataSource = strategyBindingSource;
+
 			LoadSymbols();
 		}
 
@@ -121,9 +128,10 @@
 
 			foreach (var item in types)
 			{
-				strategies.Add(item.FullName, item);
-				StrategiesComboBox.Items.Add(item.Name);
+				strategies.Add(item.FullName);
 			}
+
+			StrategiesComboBox.DataSource = strategies;
 		}
 
 		private IEnumerable<string> ListIndicatorsFiles()
@@ -159,9 +167,11 @@
 				symbols.Add(item);
 			}
 
-			symbols.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
+			symbolsBindingSource.DataSource = symbols;
 
-			SymbolComboBox.DataSource = symbols;
+			//symbols.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
+
+			SymbolComboBox.DataSource = symbolsBindingSource;
 		}
 
 		private void StrategiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -171,7 +181,26 @@
 
 		private void SymbolComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			SymbolProperties.SelectedObject = symbols[SymbolComboBox.SelectedIndex];
+			symbol = symbols[SymbolComboBox.SelectedIndex];
+			SymbolProperties.SelectedObject = symbol;
+		}
+
+		private void AddSymbolMenuItem_Click(object sender, EventArgs e)
+		{
+			var input = Microsoft.VisualBasic.Interaction.InputBox("Add a new ticker symbol", "New Symbol", string.Empty, -1, -1);
+
+			symbol = new TradeSymbol() { Symbol = input };
+			symbols.Add(symbol);
+
+			//symbols.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
+			SymbolComboBox.SelectedIndex = symbols.IndexOf(symbol);
+		}
+
+		private void SaveSymbolMenuItem_Click(object sender, EventArgs e)
+		{
+			var file = symbol.Symbol.Replace("/", string.Empty);
+
+			File.WriteAllText(SymbolsPath + file + SymbolsExtension, JsonConvert.SerializeObject(symbol));
 		}
 	}
 }

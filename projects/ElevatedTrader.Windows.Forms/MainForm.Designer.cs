@@ -38,15 +38,16 @@
 			this.MainMenu = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.symbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.AddSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.SaveSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.iTradeBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -85,7 +86,8 @@
 			this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.toolStripMenuItem1,
-            this.simulationToolStripMenuItem});
+            this.simulationToolStripMenuItem,
+            this.symbolsToolStripMenuItem});
 			this.MainMenu.Location = new System.Drawing.Point(0, 0);
 			this.MainMenu.Name = "MainMenu";
 			this.MainMenu.Size = new System.Drawing.Size(846, 24);
@@ -96,10 +98,8 @@
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem4,
-            this.toolStripMenuItem2,
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
-            this.toolStripMenuItem3,
             this.toolStripSeparator1,
             this.settingsToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -111,12 +111,6 @@
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
 			this.toolStripMenuItem4.Size = new System.Drawing.Size(145, 22);
 			this.toolStripMenuItem4.Text = "New Solution";
-			// 
-			// toolStripMenuItem2
-			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(145, 22);
-			this.toolStripMenuItem2.Text = "New Symbol";
 			// 
 			// openToolStripMenuItem
 			// 
@@ -130,12 +124,6 @@
 			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.saveToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.saveToolStripMenuItem.Text = "Save";
-			// 
-			// toolStripMenuItem3
-			// 
-			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(145, 22);
-			this.toolStripMenuItem3.Text = "Save Symbol";
 			// 
 			// toolStripSeparator1
 			// 
@@ -167,6 +155,31 @@
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
 			this.runToolStripMenuItem.Text = "Run";
+			// 
+			// symbolsToolStripMenuItem
+			// 
+			this.symbolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AddSymbolMenuItem,
+            this.SaveSymbolMenuItem});
+			this.symbolsToolStripMenuItem.Name = "symbolsToolStripMenuItem";
+			this.symbolsToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+			this.symbolsToolStripMenuItem.Text = "Symbols";
+			// 
+			// AddSymbolMenuItem
+			// 
+			this.AddSymbolMenuItem.Name = "AddSymbolMenuItem";
+			this.AddSymbolMenuItem.Size = new System.Drawing.Size(217, 22);
+			this.AddSymbolMenuItem.Text = "Add Symbol";
+			this.AddSymbolMenuItem.Click += new System.EventHandler(this.AddSymbolMenuItem_Click);
+			// 
+			// SaveSymbolMenuItem
+			// 
+			this.SaveSymbolMenuItem.Name = "SaveSymbolMenuItem";
+			this.SaveSymbolMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+			this.SaveSymbolMenuItem.Size = new System.Drawing.Size(217, 22);
+			this.SaveSymbolMenuItem.Text = "Save Selected";
+			this.SaveSymbolMenuItem.Click += new System.EventHandler(this.SaveSymbolMenuItem_Click);
 			// 
 			// iTradeBindingSource
 			// 
@@ -437,9 +450,10 @@
 		public System.Windows.Forms.PropertyGrid SymbolProperties;
 		private System.Windows.Forms.ComboBox StrategiesComboBox;
 		private System.Windows.Forms.ComboBox SymbolComboBox;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem symbolsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem AddSymbolMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem SaveSymbolMenuItem;
 	}
 }
 

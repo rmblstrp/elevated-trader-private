@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Filtering">
+      <HintPath>..\..\solutions\packages\MathNet.Filtering.0.2.0-alpha\lib\net40\MathNet.Filtering.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Filtering.Kalman">
+      <HintPath>..\..\solutions\packages\MathNet.Filtering.Kalman.0.2.0-alpha\lib\net40\MathNet.Filtering.Kalman.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\solutions\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>

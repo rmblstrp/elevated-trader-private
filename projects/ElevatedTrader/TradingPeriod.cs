@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.Statistics;
 
 namespace ElevatedTrader
 {
@@ -65,7 +66,8 @@ namespace ElevatedTrader
 			get { return changes; }
 		}
 
-		public TradingPeriod() : this(1000)
+		public TradingPeriod()
+			: this(1000)
 		{
 		}
 
@@ -98,9 +100,26 @@ namespace ElevatedTrader
 
 		public double Value(PriceType type)
 		{
-			if (type == PriceType.Average)
+			switch (type)
 			{
-				return Total / TickCount;
+				case PriceType.Average:
+					return Total / TickCount;
+				case PriceType.GeometricMean:
+					return MathHelper.GeometricMean(ticks);
+				case PriceType.WeightedAverage:
+					return MathHelper.WeightedAverage(ticks);
+				case PriceType.HarmonicMean:
+					return MathHelper.HarmonicMean(ticks);
+				case PriceType.Median:
+					return Statistics.Median(ticks);
+				case PriceType.Skewness:
+					return Statistics.Skewness(ticks);
+				case PriceType.Variance:
+					return Statistics.Variance(ticks);
+				case PriceType.Kurtosis:
+					return Statistics.Kurtosis(ticks);
+				case PriceType.StandardDeviation:
+					return Statistics.StandardDeviation(ticks);
 			}
 
 			var count = (double)0;

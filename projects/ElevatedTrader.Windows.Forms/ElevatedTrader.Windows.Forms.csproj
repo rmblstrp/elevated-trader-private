@@ -36,6 +36,12 @@
     <Reference Include="CSScriptLibrary">
       <HintPath>..\..\solutions\packages\CS-Script.3.9.10.0\lib\net45\CSScriptLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Filtering">
+      <HintPath>..\..\solutions\packages\MathNet.Filtering.0.2.0-alpha\lib\net40\MathNet.Filtering.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Filtering.Kalman">
+      <HintPath>..\..\solutions\packages\MathNet.Filtering.Kalman.0.2.0-alpha\lib\net40\MathNet.Filtering.Kalman.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\solutions\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>

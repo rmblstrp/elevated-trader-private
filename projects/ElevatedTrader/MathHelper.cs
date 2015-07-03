@@ -8,10 +8,22 @@ namespace ElevatedTrader
 {
 	public static class MathHelper
 	{
+		public static double GeometricMean(IList<double> values)
+		{
+			double mean = 1;
+
+			for (int index = 0; index < values.Count; index++)
+			{
+				mean *= values[index];
+			}
+
+			return Math.Pow(mean, 1 / values.Count);
+		}
+
 		public static double HullMovingAverage(IList<double> values)
 		{
 			var length = values.Count / 2;
-			var mid = (int)Math.Floor((double)length / 2);			
+			var mid = (int)Math.Floor((double)length / 2);
 			var sqrt = Math.Sqrt(length);
 			var difference = new List<double>(length);
 			var wma_mid = new List<double>(mid);
@@ -32,8 +44,8 @@ namespace ElevatedTrader
 					wma_mid.Add(values[index - length + x]);
 				}
 
-				var wma1 = WeightedMovingAverage(wma_mid) * 2;
-				var wma2 = WeightedMovingAverage(wma_full);
+				var wma1 = WeightedAverage(wma_mid) * 2;
+				var wma2 = WeightedAverage(wma_full);
 
 				difference.Add(wma1 - wma2);
 			}
@@ -45,10 +57,10 @@ namespace ElevatedTrader
 				hma.Add(difference[index]);
 			}
 
-			return WeightedMovingAverage(hma);
+			return WeightedAverage(hma);
 		}
 
-		public static double WeightedMovingAverage(IList<double> values)
+		public static double WeightedAverage(IList<double> values)
 		{
 			var count = values.Count();
 			double weighted = 0, sum = 0;
@@ -60,6 +72,18 @@ namespace ElevatedTrader
 			}
 
 			return weighted / sum;
+		}
+
+		public static double HarmonicMean(IList<double> values)
+		{
+			double sum = 0;
+
+			for (int index = 0; index < values.Count; index++)
+			{
+				sum += 1 / values[index];
+			}
+
+			return sum / values.Count;
 		}
 	}
 }

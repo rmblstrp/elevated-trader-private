@@ -15,7 +15,7 @@ namespace ElevatedTrader.Windows.Forms
 {
 	public partial class MainForm : Form
 	{
-		public class SessionSettings
+		public class SolutionSettings
 		{
 			public string Strategy
 			{
@@ -38,9 +38,10 @@ namespace ElevatedTrader.Windows.Forms
 
 		private Dictionary<string, Type> strategies = new Dictionary<string, Type>();
 
-		private SessionSettings settings = new SessionSettings();
+		private SolutionSettings settings = new SolutionSettings();
 		private FileSystemWatcher indicatorsWatcher;
 		private FileSystemWatcher strategiesWatcher;
+		private ITradingStrategy strategy;
 
 		const string IndicatorsPath = @"indicators\";
 		const string StrategiesPath = @"strategies\";
@@ -113,7 +114,7 @@ namespace ElevatedTrader.Windows.Forms
 			foreach (var item in types)
 			{
 				strategies.Add(item.FullName, item);
-				StrategiesMenuItem.Items.Add(item.Name);
+				StrategiesComboBox.Items.Add(item.Name);
 			}
 		}
 
@@ -125,6 +126,23 @@ namespace ElevatedTrader.Windows.Forms
 		private IEnumerable<string> ListStrategyFiles()
 		{
 			return Directory.EnumerateFiles(StrategiesPath, ScriptFilter, SearchOption.TopDirectoryOnly);
+		}
+
+		private void InitializeStrategy(string name)
+		{
+			if (strategy == null)
+			{
+				// should probably do other cleanup here;
+				strategy = null;
+			}
+
+			strategy = (ITradingStrategy)scripts_assembly.CreateInstance(name);
+			StrategySettings.SelectedObject = strategy.Settings;
+		}
+
+		private void StrategiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			InitializeStrategy(StrategiesComboBox.Text);
 		}
 	}
 }

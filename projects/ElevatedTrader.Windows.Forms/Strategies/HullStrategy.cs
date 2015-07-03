@@ -34,7 +34,7 @@ public class HullStrategy : TradingStrategy
 			set { ticks = value; }
 		}
 
-		public PeriodValueType ValueType
+		public PeriodValueType PeriodValue
 		{
 			get { return valueType; }
 			set { valueType = value; }

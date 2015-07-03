@@ -25,6 +25,6 @@ namespace ElevatedTrader
 		OHLC				= Open | High | Low | Close,
 		OpenClose			= Open | Close,
 		HighLow				= High | Low,
-		HighLowClose		= High | Low,
+		HighLowClose		= High | Low | Close,
 	}
 }

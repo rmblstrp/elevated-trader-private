@@ -25,18 +25,20 @@
 				set;
 			}
 
-			public object StrategySettings
+			public string Settings
 			{
 				get;
 				set;
 			}
 
-			public ITradeSymbol Symbol
+			public string Symbol
 			{
 				get;
 				set;
 			}
 		}
+
+		private string filename = null;
 
 		private BindingSource symbolsBindingSource = new BindingSource();
 		private BindingList<TradeSymbol> symbols = new BindingList<TradeSymbol>();
@@ -46,17 +48,24 @@
 		private BindingList<string> strategies = new BindingList<string>();
 		private ITradingStrategy strategy;
 
-		private SolutionSettings settings = new SolutionSettings();
+		private SolutionSettings solution = new SolutionSettings();
 		private FileSystemWatcher indicatorsWatcher;
 		private FileSystemWatcher strategiesWatcher;
+
+		private OpenFileDialog openDialog;
+		private SaveFileDialog saveDialog;
 
 		const string SymbolsPath = @"symbols\";
 		const string IndicatorsPath = @"indicators\";
 		const string StrategiesPath = @"strategies\";
-		const string ScriptsAssembly = "IndicatorStrategies";
+
 		const string ScriptsFilter = "*.cs";
+
 		const string SymbolsExtension = ".json";
 		const string SymbolsFilter = "*" + SymbolsExtension;
+
+		const string SolutionExtension = ".json";
+		const string SolutionFilter = "JSON Solution|*" + SolutionExtension;
 
 
 		Assembly scripts_assembly = null;
@@ -69,11 +78,6 @@
 		public MainForm()
 		{
 			InitializeComponent();
-
-
-
-			settings.Symbol = new TradeSymbol();
-			settings.Strategy = "HullStrategy.cs";
 
 			LoadScripts();
 
@@ -103,6 +107,22 @@
 			StrategiesComboBox.DataSource = strategyBindingSource;
 
 			LoadSymbols();
+
+			openDialog = new OpenFileDialog()
+			{
+				DefaultExt = SolutionExtension,
+				FileName = string.Empty,
+				Filter = SolutionFilter,
+				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+			};
+
+			saveDialog = new SaveFileDialog()
+			{
+				DefaultExt = SolutionExtension,
+				FileName = string.Empty,
+				Filter = SolutionFilter,
+				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+			};
 		}
 
 		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
@@ -154,6 +174,9 @@
 
 			strategy = (ITradingStrategy)scripts_assembly.CreateInstance(name);
 			StrategySettings.SelectedObject = strategy.Settings;
+
+			solution.Strategy = name;
+			solution.Settings = null;
 		}
 
 		private void LoadSymbols()
@@ -167,10 +190,8 @@
 				symbols.Add(item);
 			}
 
-			symbolsBindingSource.DataSource = symbols;
-
 			//symbols.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
-
+			symbolsBindingSource.DataSource = symbols;
 			SymbolComboBox.DataSource = symbolsBindingSource;
 		}
 
@@ -183,6 +204,8 @@
 		{
 			symbol = symbols[SymbolComboBox.SelectedIndex];
 			SymbolProperties.SelectedObject = symbol;
+
+			solution.Symbol = symbol.Symbol;
 		}
 
 		private void AddSymbolMenuItem_Click(object sender, EventArgs e)
@@ -201,6 +224,58 @@
 			var file = symbol.Symbol.Replace("/", string.Empty);
 
 			File.WriteAllText(SymbolsPath + file + SymbolsExtension, JsonConvert.SerializeObject(symbol));
+		}
+
+		private void SaveMenuItem_Click(object sender, EventArgs e)
+		{
+			SaveSolution();
+		}
+
+		private void SaveAsMenuItem_Click(object sender, EventArgs e)
+		{
+			SaveSolution(true);
+		}
+
+		private void SaveSolution(bool force = false)
+		{
+			if (force || string.IsNullOrWhiteSpace(filename))
+			{
+				if (saveDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+				filename = saveDialog.FileName;
+				openDialog.InitialDirectory = Path.GetDirectoryName(filename);
+			}
+
+			solution.Settings = JsonConvert.SerializeObject(strategy.Settings);
+
+			File.WriteAllText(filename, JsonConvert.SerializeObject(solution));
+		}
+
+		private void OpenMenuItem_Click(object sender, EventArgs e)
+		{
+			OpenSolution();
+		}
+
+		private void OpenSolution()
+		{
+			openDialog.FileName = string.Empty;
+
+			if (openDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+			var obj = JsonConvert.DeserializeObject<SolutionSettings>(File.ReadAllText(openDialog.FileName));
+
+			var index = strategies.IndexOf(obj.Strategy);
+
+			if (index < 0)
+			{
+				MessageBox.Show("The selected strategy is not currently available");
+				return;
+			}
+
+			StrategiesComboBox.SelectedIndex = index;
+
+			strategy.Settings = JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
+			solution = obj;
 		}
 	}
 }

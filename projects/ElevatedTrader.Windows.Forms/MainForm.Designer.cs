@@ -29,17 +29,18 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-			System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MainMenu = new System.Windows.Forms.MenuStrip();
-			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.NewSolutionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.OpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.SaveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.SaveAsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +85,7 @@
 			// 
 			this.MainMenu.BackColor = System.Drawing.SystemColors.MenuBar;
 			this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
+            this.FileMenuItem,
             this.toolStripMenuItem1,
             this.simulationToolStripMenuItem,
             this.symbolsToolStripMenuItem});
@@ -94,46 +95,56 @@
 			this.MainMenu.TabIndex = 0;
 			this.MainMenu.Text = "menuStrip1";
 			// 
-			// fileToolStripMenuItem
+			// FileMenuItem
 			// 
-			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem4,
-            this.openToolStripMenuItem,
-            this.saveToolStripMenuItem,
+			this.FileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.NewSolutionMenuItem,
+            this.OpenMenuItem,
+            this.SaveMenuItem,
+            this.SaveAsMenuItem,
             this.toolStripSeparator1,
             this.settingsToolStripMenuItem});
-			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-			this.fileToolStripMenuItem.Text = "File";
+			this.FileMenuItem.Name = "FileMenuItem";
+			this.FileMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.FileMenuItem.Text = "File";
 			// 
-			// toolStripMenuItem4
+			// NewSolutionMenuItem
 			// 
-			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(145, 22);
-			this.toolStripMenuItem4.Text = "New Solution";
+			this.NewSolutionMenuItem.Name = "NewSolutionMenuItem";
+			this.NewSolutionMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.NewSolutionMenuItem.Text = "New Solution";
 			// 
-			// openToolStripMenuItem
+			// OpenMenuItem
 			// 
-			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-			this.openToolStripMenuItem.Text = "Open";
+			this.OpenMenuItem.Name = "OpenMenuItem";
+			this.OpenMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.OpenMenuItem.Text = "Open...";
+			this.OpenMenuItem.Click += new System.EventHandler(this.OpenMenuItem_Click);
 			// 
-			// saveToolStripMenuItem
+			// SaveMenuItem
 			// 
-			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-			this.saveToolStripMenuItem.Text = "Save";
+			this.SaveMenuItem.Name = "SaveMenuItem";
+			this.SaveMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+			this.SaveMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.SaveMenuItem.Text = "Save";
+			this.SaveMenuItem.Click += new System.EventHandler(this.SaveMenuItem_Click);
+			// 
+			// SaveAsMenuItem
+			// 
+			this.SaveAsMenuItem.Name = "SaveAsMenuItem";
+			this.SaveAsMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.SaveAsMenuItem.Text = "Save As...";
+			this.SaveAsMenuItem.Click += new System.EventHandler(this.SaveAsMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(142, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// settingsToolStripMenuItem
 			// 
 			this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.settingsToolStripMenuItem.Text = "Settings";
 			// 
 			// toolStripMenuItem1
@@ -223,14 +234,14 @@
 			// 
 			// chart1
 			// 
-			chartArea1.Name = "ChartArea1";
-			this.chart1.ChartAreas.Add(chartArea1);
+			chartArea3.Name = "ChartArea1";
+			this.chart1.ChartAreas.Add(chartArea3);
 			this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chart1.Location = new System.Drawing.Point(0, 0);
 			this.chart1.Name = "chart1";
-			series1.ChartArea = "ChartArea1";
-			series1.Name = "Series1";
-			this.chart1.Series.Add(series1);
+			series3.ChartArea = "ChartArea1";
+			series3.Name = "Series1";
+			this.chart1.Series.Add(series3);
 			this.chart1.Size = new System.Drawing.Size(586, 223);
 			this.chart1.TabIndex = 3;
 			this.chart1.Text = "chart1";
@@ -265,9 +276,9 @@
 			// quantityDataGridViewTextBoxColumn
 			// 
 			this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-			dataGridViewCellStyle1.Format = "N0";
-			dataGridViewCellStyle1.NullValue = null;
-			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle9.Format = "N0";
+			dataGridViewCellStyle9.NullValue = null;
+			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle9;
 			this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
 			this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
 			this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
@@ -275,9 +286,9 @@
 			// priceDataGridViewTextBoxColumn
 			// 
 			this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
-			dataGridViewCellStyle2.Format = "C2";
-			dataGridViewCellStyle2.NullValue = null;
-			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle10.Format = "C2";
+			dataGridViewCellStyle10.NullValue = null;
+			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle10;
 			this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
 			this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
 			this.priceDataGridViewTextBoxColumn.ReadOnly = true;
@@ -285,9 +296,9 @@
 			// equityDataGridViewTextBoxColumn
 			// 
 			this.equityDataGridViewTextBoxColumn.DataPropertyName = "Equity";
-			dataGridViewCellStyle3.Format = "C2";
-			dataGridViewCellStyle3.NullValue = null;
-			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle11.Format = "C2";
+			dataGridViewCellStyle11.NullValue = null;
+			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle11;
 			this.equityDataGridViewTextBoxColumn.HeaderText = "Equity";
 			this.equityDataGridViewTextBoxColumn.Name = "equityDataGridViewTextBoxColumn";
 			this.equityDataGridViewTextBoxColumn.ReadOnly = true;
@@ -295,9 +306,9 @@
 			// profitDataGridViewTextBoxColumn
 			// 
 			this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-			dataGridViewCellStyle4.Format = "C2";
-			dataGridViewCellStyle4.NullValue = null;
-			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle12.Format = "C2";
+			dataGridViewCellStyle12.NullValue = null;
+			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle12;
 			this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
 			this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
 			this.profitDataGridViewTextBoxColumn.ReadOnly = true;
@@ -424,9 +435,9 @@
 		#endregion
 
 		private System.Windows.Forms.MenuStrip MainMenu;
-		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem FileMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem SaveMenuItem;
 		private System.Windows.Forms.BindingSource iTradeBindingSource;
 		private System.Windows.Forms.ToolStripMenuItem simulationToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
@@ -450,10 +461,11 @@
 		public System.Windows.Forms.PropertyGrid SymbolProperties;
 		private System.Windows.Forms.ComboBox StrategiesComboBox;
 		private System.Windows.Forms.ComboBox SymbolComboBox;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem NewSolutionMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem symbolsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem AddSymbolMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SaveSymbolMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem SaveAsMenuItem;
 	}
 }
 

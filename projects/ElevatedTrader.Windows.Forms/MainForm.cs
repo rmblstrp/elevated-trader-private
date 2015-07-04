@@ -48,10 +48,18 @@
 				set;
 			}
 		}
+
+		private enum ApplicationState
+		{
+			Idle,
+			Loading,
+			Running
+		}
 		#endregion
 
 		#region -- Private Fields --
 		private string filename = null;
+		private bool busy = false;
 		private ApplicationSettings application = new ApplicationSettings()
 		{
 			DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
@@ -311,9 +319,24 @@
 		}
 		#endregion
 
+		private void SetState(ApplicationState state)
+		{
+			StateStatusLabel.Text = state.ToString();
+		}
+
 		private async void LoadDataMenuItem_Click(object sender, EventArgs e)
 		{
+			if (busy) return;
+			busy = true;
+
+			SetState(ApplicationState.Loading);
 			await Task.Run(() => LoadTickData());
+			SetState(ApplicationState.Idle);
+		}
+
+		private void StopLoadingMenuItem_Click(object sender, EventArgs e)
+		{
+			busy = false;
 		}
 
 		public class OldDataFormat
@@ -361,19 +384,27 @@
 							{
 								this.Invoke(update_count, count);
 							}
+
+							if (!busy) break;
 						}
 
 						this.Invoke(update_count, count);
 					}
 				}
 
+				busy = false;
 				connection.Close();
 			}
 		}
 
 		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
 		{
+			if (busy) return;
+			busy = true;
+
+			SetState(ApplicationState.Running);
 			await Task.Run(() => RunSimulation());
+			SetState(ApplicationState.Idle);
 		}
 
 		private void RunSimulation()
@@ -395,9 +426,23 @@
 				{
 					this.Invoke(step);
 				}
+
+				if (!busy) break;
 			}
 
+			busy = false;
+
 			this.Invoke(set_value);
+		}
+
+		private void StopSimulationMenuItem_Click(object sender, EventArgs e)
+		{
+			busy = false;
+		}
+
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			busy = false;
 		}
 	}
 }

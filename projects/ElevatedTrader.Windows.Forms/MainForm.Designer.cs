@@ -29,12 +29,12 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-			System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MainMenu = new System.Windows.Forms.MenuStrip();
 			this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.NewSolutionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +71,10 @@
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
 			this.SimulationProgress = new System.Windows.Forms.ToolStripProgressBar();
+			this.StopLoadingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.StopSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.StateStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).BeginInit();
 			this.statusStrip1.SuspendLayout();
@@ -155,7 +159,8 @@
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.LoadDataMenuItem});
+            this.LoadDataMenuItem,
+            this.StopLoadingMenuItem});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(43, 20);
 			this.toolStripMenuItem1.Text = "Data";
@@ -163,14 +168,15 @@
 			// LoadDataMenuItem
 			// 
 			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
-			this.LoadDataMenuItem.Size = new System.Drawing.Size(100, 22);
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.LoadDataMenuItem.Text = "Load";
 			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
 			// 
 			// simulationToolStripMenuItem
 			// 
 			this.simulationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RunSimulationMenuItem});
+            this.RunSimulationMenuItem,
+            this.StopSimulationMenuItem});
 			this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
 			this.simulationToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
 			this.simulationToolStripMenuItem.Text = "Simulation";
@@ -178,6 +184,7 @@
 			// RunSimulationMenuItem
 			// 
 			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
+			this.RunSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
 			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.RunSimulationMenuItem.Text = "Run";
 			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulationMenuItem_Click);
@@ -215,6 +222,8 @@
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SimulationProgress,
+            this.toolStripStatusLabel2,
+            this.StateStatusLabel,
             this.toolStripStatusLabel1,
             this.TickCountStatusLabel});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 472);
@@ -265,14 +274,14 @@
 			// 
 			// chart1
 			// 
-			chartArea3.Name = "ChartArea1";
-			this.chart1.ChartAreas.Add(chartArea3);
+			chartArea2.Name = "ChartArea1";
+			this.chart1.ChartAreas.Add(chartArea2);
 			this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chart1.Location = new System.Drawing.Point(0, 0);
 			this.chart1.Name = "chart1";
-			series3.ChartArea = "ChartArea1";
-			series3.Name = "Series1";
-			this.chart1.Series.Add(series3);
+			series2.ChartArea = "ChartArea1";
+			series2.Name = "Series1";
+			this.chart1.Series.Add(series2);
 			this.chart1.Size = new System.Drawing.Size(586, 223);
 			this.chart1.TabIndex = 3;
 			this.chart1.Text = "chart1";
@@ -307,9 +316,9 @@
 			// quantityDataGridViewTextBoxColumn
 			// 
 			this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-			dataGridViewCellStyle9.Format = "N0";
-			dataGridViewCellStyle9.NullValue = null;
-			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle5.Format = "N0";
+			dataGridViewCellStyle5.NullValue = null;
+			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
 			this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
 			this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
 			this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
@@ -317,9 +326,9 @@
 			// priceDataGridViewTextBoxColumn
 			// 
 			this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
-			dataGridViewCellStyle10.Format = "C2";
-			dataGridViewCellStyle10.NullValue = null;
-			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle6.Format = "C2";
+			dataGridViewCellStyle6.NullValue = null;
+			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
 			this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
 			this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
 			this.priceDataGridViewTextBoxColumn.ReadOnly = true;
@@ -327,9 +336,9 @@
 			// equityDataGridViewTextBoxColumn
 			// 
 			this.equityDataGridViewTextBoxColumn.DataPropertyName = "Equity";
-			dataGridViewCellStyle11.Format = "C2";
-			dataGridViewCellStyle11.NullValue = null;
-			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle7.Format = "C2";
+			dataGridViewCellStyle7.NullValue = null;
+			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle7;
 			this.equityDataGridViewTextBoxColumn.HeaderText = "Equity";
 			this.equityDataGridViewTextBoxColumn.Name = "equityDataGridViewTextBoxColumn";
 			this.equityDataGridViewTextBoxColumn.ReadOnly = true;
@@ -337,9 +346,9 @@
 			// profitDataGridViewTextBoxColumn
 			// 
 			this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-			dataGridViewCellStyle12.Format = "C2";
-			dataGridViewCellStyle12.NullValue = null;
-			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle8.Format = "C2";
+			dataGridViewCellStyle8.NullValue = null;
+			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle8;
 			this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
 			this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
 			this.profitDataGridViewTextBoxColumn.ReadOnly = true;
@@ -438,6 +447,32 @@
 			this.SimulationProgress.Size = new System.Drawing.Size(100, 16);
 			this.SimulationProgress.Step = 100;
 			// 
+			// StopLoadingMenuItem
+			// 
+			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
+			this.StopLoadingMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.StopLoadingMenuItem.Text = "Stop";
+			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
+			// 
+			// StopSimulationMenuItem
+			// 
+			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
+			this.StopSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.StopSimulationMenuItem.Text = "Stop";
+			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulationMenuItem_Click);
+			// 
+			// toolStripStatusLabel2
+			// 
+			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+			this.toolStripStatusLabel2.Size = new System.Drawing.Size(36, 17);
+			this.toolStripStatusLabel2.Text = "State:";
+			// 
+			// StateStatusLabel
+			// 
+			this.StateStatusLabel.Name = "StateStatusLabel";
+			this.StateStatusLabel.Size = new System.Drawing.Size(26, 17);
+			this.StateStatusLabel.Text = "Idle";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -451,6 +486,7 @@
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Elevated Trader";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.MainMenu.ResumeLayout(false);
 			this.MainMenu.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).EndInit();
@@ -509,6 +545,10 @@
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripStatusLabel TickCountStatusLabel;
 		private System.Windows.Forms.ToolStripProgressBar SimulationProgress;
+		private System.Windows.Forms.ToolStripMenuItem StopLoadingMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem StopSimulationMenuItem;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+		private System.Windows.Forms.ToolStripStatusLabel StateStatusLabel;
 	}
 }
 

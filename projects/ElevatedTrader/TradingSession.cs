@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace ElevatedTrader
 {
 	public class TradingSession : ITradingSession
 	{		
-		protected List<ITrade> trades = new List<ITrade>();
+		protected BindingList<ITrade> trades = new BindingList<ITrade>();
 
 		public double Equity
 		{

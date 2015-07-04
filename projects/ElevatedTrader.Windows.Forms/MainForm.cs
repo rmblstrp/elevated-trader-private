@@ -88,6 +88,7 @@
 		};
 
 		private List<TradeTick> ticks = new List<TradeTick>(10000000);
+		private BindingList<ITrade> trades = new BindingList<ITrade>();
 		#endregion
 
 		#region -- Constants --
@@ -153,6 +154,8 @@
 				Filter = SolutionFilter,
 				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
 			};
+
+
 		}
 
 		#region -- Strategies --
@@ -197,8 +200,10 @@
 
 		private void InitializeStrategy(string name)
 		{
-			if (strategy == null)
+			if (strategy != null)
 			{
+				UnlinkSessionEvent();
+
 				// should probably do other cleanup here;
 				strategy = null;
 			}
@@ -319,6 +324,7 @@
 		}
 		#endregion
 
+		#region -- Simulation --
 		private void SetState(ApplicationState state)
 		{
 			StateStatusLabel.Text = state.ToString();
@@ -357,7 +363,7 @@
 
 				using (var command = connection.CreateCommand())
 				{
-					command.CommandText = "select json from quotedata where symbol = @symbol";
+					command.CommandText = "select top(250000) json from quotedata where symbol = @symbol";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
 
 					using (var reader = command.ExecuteReader())
@@ -443,6 +449,40 @@
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			busy = false;
+		}
+		#endregion
+
+		private bool session_ontrade = false;
+
+		private void LinkSession()
+		{
+			UnlinkSessionEvent();
+
+			if (strategy.Session.Trades is BindingList<ITrade>)
+			{
+				TradesBindingSource.DataSource = strategy.Session.Trades as BindingList<ITrade>;
+			}
+			else
+			{
+				trades.Clear();
+				TradesBindingSource.DataSource = trades;
+				strategy.Session.Trade += OnTrade;
+				session_ontrade = true;
+			}
+		}
+
+		private void UnlinkSessionEvent()
+		{
+			if (session_ontrade)
+			{
+				strategy.Session.Trade -= OnTrade;
+				session_ontrade = false;
+			}
+		}
+
+		private void OnTrade(object sender, ITrade trade)
+		{
+			trades.Add(trade);
 		}
 	}
 }

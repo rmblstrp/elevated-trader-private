@@ -45,13 +45,18 @@
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.LoadDataMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.StopLoadingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.RunSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.StopSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.symbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.iTradeBindingSource = new System.Windows.Forms.BindingSource(this.components);
+			this.TradesBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.SimulationProgress = new System.Windows.Forms.ToolStripProgressBar();
+			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.StateStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.TickCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -70,13 +75,8 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.SimulationProgress = new System.Windows.Forms.ToolStripProgressBar();
-			this.StopLoadingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.StopSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.StateStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.MainMenu.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).BeginInit();
 			this.statusStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -168,9 +168,16 @@
 			// LoadDataMenuItem
 			// 
 			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
-			this.LoadDataMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(100, 22);
 			this.LoadDataMenuItem.Text = "Load";
 			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
+			// 
+			// StopLoadingMenuItem
+			// 
+			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
+			this.StopLoadingMenuItem.Size = new System.Drawing.Size(100, 22);
+			this.StopLoadingMenuItem.Text = "Stop";
+			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
 			// 
 			// simulationToolStripMenuItem
 			// 
@@ -185,9 +192,16 @@
 			// 
 			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
 			this.RunSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.RunSimulationMenuItem.Size = new System.Drawing.Size(136, 22);
 			this.RunSimulationMenuItem.Text = "Run";
 			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulationMenuItem_Click);
+			// 
+			// StopSimulationMenuItem
+			// 
+			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
+			this.StopSimulationMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.StopSimulationMenuItem.Text = "Stop";
+			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulationMenuItem_Click);
 			// 
 			// symbolsToolStripMenuItem
 			// 
@@ -214,9 +228,9 @@
 			this.SaveSymbolMenuItem.Text = "Save Selected";
 			this.SaveSymbolMenuItem.Click += new System.EventHandler(this.SaveSymbolMenuItem_Click);
 			// 
-			// iTradeBindingSource
+			// TradesBindingSource
 			// 
-			this.iTradeBindingSource.DataSource = typeof(ElevatedTrader.ITrade);
+			this.TradesBindingSource.DataSource = typeof(ElevatedTrader.ITrade);
 			// 
 			// statusStrip1
 			// 
@@ -231,6 +245,24 @@
 			this.statusStrip1.Size = new System.Drawing.Size(846, 22);
 			this.statusStrip1.TabIndex = 2;
 			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// SimulationProgress
+			// 
+			this.SimulationProgress.Name = "SimulationProgress";
+			this.SimulationProgress.Size = new System.Drawing.Size(100, 16);
+			this.SimulationProgress.Step = 100;
+			// 
+			// toolStripStatusLabel2
+			// 
+			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+			this.toolStripStatusLabel2.Size = new System.Drawing.Size(36, 17);
+			this.toolStripStatusLabel2.Text = "State:";
+			// 
+			// StateStatusLabel
+			// 
+			this.StateStatusLabel.Name = "StateStatusLabel";
+			this.StateStatusLabel.Size = new System.Drawing.Size(26, 17);
+			this.StateStatusLabel.Text = "Idle";
 			// 
 			// toolStripStatusLabel1
 			// 
@@ -296,7 +328,7 @@
             this.priceDataGridViewTextBoxColumn,
             this.equityDataGridViewTextBoxColumn,
             this.profitDataGridViewTextBoxColumn});
-			this.TradeResultGrid.DataSource = this.iTradeBindingSource;
+			this.TradeResultGrid.DataSource = this.TradesBindingSource;
 			this.TradeResultGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TradeResultGrid.Location = new System.Drawing.Point(0, 0);
 			this.TradeResultGrid.MultiSelect = false;
@@ -419,7 +451,7 @@
 			// 
 			this.SymbolComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.SymbolComboBox.DataSource = this.iTradeBindingSource;
+			this.SymbolComboBox.DataSource = this.TradesBindingSource;
 			this.SymbolComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.SymbolComboBox.FormattingEnabled = true;
 			this.SymbolComboBox.Location = new System.Drawing.Point(6, 20);
@@ -441,38 +473,6 @@
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
-			// SimulationProgress
-			// 
-			this.SimulationProgress.Name = "SimulationProgress";
-			this.SimulationProgress.Size = new System.Drawing.Size(100, 16);
-			this.SimulationProgress.Step = 100;
-			// 
-			// StopLoadingMenuItem
-			// 
-			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
-			this.StopLoadingMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.StopLoadingMenuItem.Text = "Stop";
-			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
-			// 
-			// StopSimulationMenuItem
-			// 
-			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
-			this.StopSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.StopSimulationMenuItem.Text = "Stop";
-			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulationMenuItem_Click);
-			// 
-			// toolStripStatusLabel2
-			// 
-			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-			this.toolStripStatusLabel2.Size = new System.Drawing.Size(36, 17);
-			this.toolStripStatusLabel2.Text = "State:";
-			// 
-			// StateStatusLabel
-			// 
-			this.StateStatusLabel.Name = "StateStatusLabel";
-			this.StateStatusLabel.Size = new System.Drawing.Size(26, 17);
-			this.StateStatusLabel.Text = "Idle";
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -489,7 +489,7 @@
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.MainMenu.ResumeLayout(false);
 			this.MainMenu.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).EndInit();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
 			this.panel1.ResumeLayout(false);
@@ -513,7 +513,7 @@
 		private System.Windows.Forms.ToolStripMenuItem FileMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SaveMenuItem;
-		private System.Windows.Forms.BindingSource iTradeBindingSource;
+		private System.Windows.Forms.BindingSource TradesBindingSource;
 		private System.Windows.Forms.ToolStripMenuItem simulationToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem RunSimulationMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;

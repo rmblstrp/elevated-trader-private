@@ -65,6 +65,7 @@ namespace ElevatedTrader
 		{
 			session.Reset();
 			aggregator.Reset();
+			indicators.Clear();
 		}
 	}
 }

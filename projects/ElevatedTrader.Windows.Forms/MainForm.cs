@@ -92,6 +92,7 @@
 		private BindingList<ITrade> trades = new BindingList<ITrade>();
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
+		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
 		private int dataCount = 50000;
 		#endregion
 
@@ -426,6 +427,7 @@
 			TradeChart.Series.Clear();
 			periodSeries.Clear();
 			tradeSeries.Clear();
+			indicatorSeries.Clear();
 
 			LinkSession();
 			LinkAggregrator();
@@ -570,16 +572,30 @@
 				this.Invoke(psa, ps);
 			}
 
+			var ind = strategy.Indicators[size][0];
+
+			if (!indicatorSeries.ContainsKey(ind))
+			{
+				var series = CreateIndicatorSeries();
+
+				Action<IIndicator, Series> inda = (inds, indx) =>
+				{
+					indicatorSeries.Add(inds, indx);
+					TradeChart.Series.Add(indx);
+				};
+
+				this.Invoke(inda, ind, series);
+			}
+
 			var item = strategy.Aggregator.Periods[size];
 
-			var point = CreatePeriodDataPoint(item[item.Count - 1]);
-
-			Action<int, DataPoint> pda = (idx, pdx) =>
+			Action<int, DataPoint, IIndicator, DataPoint> pda = (idx, pdx, indx, indp) =>
 			{
 				periodSeries[idx].Points.Add(pdx);
+				indicatorSeries[indx].Points.Add(indp);
 			};
 
-			this.Invoke(pda, size, point);
+			this.Invoke(pda, size, CreatePeriodDataPoint(item[item.Count - 1]), ind, CreateIndicatorDataPoint(ind));
 		}
 
 		private Series CreatePeriodSeries()
@@ -610,6 +626,20 @@
 			return item;
 		}
 
+		private Series CreateIndicatorSeries()
+		{
+			var item = new Series()
+			{
+				ChartArea = "TradeChart",
+				ChartType = SeriesChartType.Line,
+				IsXValueIndexed = false,
+				YValuesPerPoint = 1,
+				Palette = ChartColorPalette.Pastel
+			};
+
+			return item;
+		}
+
 		private DataPoint CreatePeriodDataPoint(ITradingPeriod period)
 		{
 			var item = new DataPoint()
@@ -626,6 +656,17 @@
 			{
 				XValue = trade.Indexes[size] + 1,
 				YValues = new double[] { trade.Price }
+			};
+
+			return item;
+		}
+		private DataPoint CreateIndicatorDataPoint(IIndicator indicator)
+		{
+			var last = indicator.Results[indicator.Results.Count - 1];
+
+			var item = new DataPoint()
+			{
+				YValues = new double[] { last.Values.Count == 0 ? double.NaN : last.Values[0] }
 			};
 
 			return item;

@@ -14,7 +14,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		public double Last
+		public double Price
 		{
 			get;
 			set;

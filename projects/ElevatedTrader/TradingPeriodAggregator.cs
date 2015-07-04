@@ -12,7 +12,7 @@ namespace ElevatedTrader
 		protected Dictionary<int, IList<ITradingPeriod>> periods = new Dictionary<int, IList<ITradingPeriod>>();
 		protected List<int> sizes = new List<int>();
 
-		public ITradeTick LastTick
+		public ITradeTick Last
 		{
 			get { return last; }
 		}
@@ -34,8 +34,6 @@ namespace ElevatedTrader
 
 		public void AddTick(ITradeTick tick)
 		{
-			last = tick;
-
 			foreach (var item in periods)
 			{
 				var period = item.Value[item.Value.Count - 1];
@@ -48,6 +46,8 @@ namespace ElevatedTrader
 					AddNewPeriod(item.Key);
 				}
 			}
+
+			last = tick;
 		}
 
 		protected void AddNewPeriod(int key)

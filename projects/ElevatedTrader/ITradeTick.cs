@@ -13,7 +13,7 @@ namespace ElevatedTrader
 			get;
 		}
 
-		double Last
+		double Price
 		{
 			get;
 		}

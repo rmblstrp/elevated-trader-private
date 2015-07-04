@@ -66,7 +66,8 @@ namespace ElevatedTrader
 
 		protected void AddTrade(TradeType type, int quantity, ITradingPeriodAggregator ticks)
 		{
-			var price =  type == TradeType.Buy ? ticks.LastTick.Ask : ticks.LastTick.Bid;
+			//var price =  type == TradeType.Buy ? ticks.Last.Ask : ticks.Last.Bid;
+			var price = ticks.Last.Price;
 			var open_cost = Symbol.HasOpenCost ? 1 : 0;
 
 			if (Position == 0)

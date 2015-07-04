@@ -90,8 +90,8 @@
 
 		private List<TradeTick> ticks = new List<TradeTick>(10000000);
 		private BindingList<ITrade> trades = new BindingList<ITrade>();
-		private Dictionary<int, Series> series = new Dictionary<int, Series>();
-		private Series tradeSeries;
+		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
+		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
 		private int dataCount = 50000;
 		#endregion
 
@@ -397,7 +397,7 @@
 								{
 									Ask = item.AskPrice,
 									Bid = item.BidPrice,
-									Last = item.Price
+									Price = item.Price
 								}
 							);
 
@@ -424,9 +424,8 @@
 			busy = true;
 
 			TradeChart.Series.Clear();
-			series.Clear();
-
-			TradeChart.Series.Add(tradeSeries = CreateTradeSeries());
+			periodSeries.Clear();
+			tradeSeries.Clear();
 
 			LinkSession();
 			LinkAggregrator();
@@ -515,9 +514,27 @@
 
 		private void OnTrade(object sender, ITrade trade)
 		{
-			Action a = () => { trades.Add(trade); TickCountStatusLabel.Text = trades.Count.ToString(); };
+			Action<ITrade> a = (order) =>
+			{
+				trades.Add(order);
 
-			this.Invoke(a);
+				foreach (var kv in periodSeries)
+				{
+					if (!tradeSeries.ContainsKey(kv.Key))
+					{
+						var ts = CreateTradeSeries();
+
+						tradeSeries.Add(kv.Key, ts);
+						TradeChart.Series.Add(ts);
+					}
+
+					tradeSeries[kv.Key].Points.Add(CreateTradeDataPoint(kv.Key, order));
+				}
+
+				TickCountStatusLabel.Text = trades.Count.ToString();
+			};
+
+			this.Invoke(a, trade);
 		}
 
 		private void SetDataCountMenuItem_Click(object sender, EventArgs e)
@@ -529,7 +546,7 @@
 
 		private void LinkAggregrator()
 		{
-			series.Clear();
+			periodSeries.Clear();
 			strategy.Aggregator.BeforeNewPeriod += Aggregator_BeforeNewPeriod;
 		}		
 
@@ -540,10 +557,10 @@
 
 		private void Aggregator_BeforeNewPeriod(int size)
 		{
-			if (!series.ContainsKey(size))
+			if (!periodSeries.ContainsKey(size))
 			{
 				var ps = CreatePeriodSeries();
-				series.Add(size, ps);
+				periodSeries.Add(size, ps);
 
 				Action<Series> psa = psx =>
 				{
@@ -557,7 +574,12 @@
 
 			var point = CreatePeriodDataPoint(item[item.Count - 1]);
 
-			series[size].Points.Add(point);
+			Action<int, DataPoint> pda = (idx, pdx) =>
+			{
+				periodSeries[idx].Points.Add(pdx);
+			};
+
+			this.Invoke(pda, size, point);
 		}
 
 		private Series CreatePeriodSeries()
@@ -579,8 +601,8 @@
 			var item = new Series()
 			{
 				ChartArea = "TradeChart",
-				ChartType = SeriesChartType.Point,
-				IsXValueIndexed = true,
+				ChartType = SeriesChartType.Line,
+				IsXValueIndexed = false,
 				YValuesPerPoint = 1,
 				Color = Color.WhiteSmoke
 			};

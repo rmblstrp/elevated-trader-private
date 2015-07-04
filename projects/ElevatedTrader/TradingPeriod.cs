@@ -81,21 +81,21 @@ namespace ElevatedTrader
 		{
 			if (TickCount == 0)
 			{
-				Open = High = Low = Close = tick.Last;
+				Open = High = Low = Close = tick.Price;
 				changes.Add(0);
 			}
 			else
 			{
-				changes.Add(tick.Last - Close);
-				Close = tick.Last;
-				High = Math.Max(High, tick.Last);
-				Low = Math.Min(Low, tick.Last);
+				changes.Add(tick.Price - Close);
+				Close = tick.Price;
+				High = Math.Max(High, tick.Price);
+				Low = Math.Min(Low, tick.Price);
 			}
 
 			TickCount++;
-			Total += tick.Last;
+			Total += tick.Price;
 
-			ticks.Add(tick.Last);
+			ticks.Add(tick.Price);
 		}
 
 		public double Value(PeriodValueType type)

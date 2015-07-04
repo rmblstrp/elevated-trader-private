@@ -335,6 +335,8 @@
 			chartArea1.AxisX.LineColor = System.Drawing.Color.Gainsboro;
 			chartArea1.AxisX.MajorGrid.Enabled = false;
 			chartArea1.AxisX.MajorTickMark.LineColor = System.Drawing.Color.Gainsboro;
+			chartArea1.AxisX.Minimum = 0D;
+			chartArea1.AxisY.IsStartedFromZero = false;
 			chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.Gainsboro;
 			chartArea1.AxisY.LineColor = System.Drawing.Color.Gainsboro;
 			chartArea1.AxisY.MajorGrid.Enabled = false;

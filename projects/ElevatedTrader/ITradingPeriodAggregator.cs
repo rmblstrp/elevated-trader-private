@@ -12,6 +12,8 @@ namespace ElevatedTrader
 
 		IDictionary<int, IList<ITradingPeriod>> Periods { get; }
 
+		event Action<int> AfterNewPeriod;
+
 		event Action<int> BeforeNewPeriod;
 
 		void AddSize(int size, int capacity);

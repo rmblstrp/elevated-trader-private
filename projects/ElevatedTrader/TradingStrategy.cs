@@ -38,12 +38,17 @@ namespace ElevatedTrader
 			session = new TradingSession();
 			aggregator = new TradingPeriodAggregator();
 
+			aggregator.AfterNewPeriod += AfterNewPeriod;
 			aggregator.BeforeNewPeriod += BeforeNewPeriod;
 		}
 
 		public virtual void AddTick(ITradeTick tick)
 		{
 			aggregator.AddTick(tick);
+		}
+
+		protected virtual void AfterNewPeriod(int size)
+		{
 		}
 
 		protected virtual void BeforeNewPeriod(int size)

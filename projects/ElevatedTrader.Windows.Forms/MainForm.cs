@@ -601,10 +601,10 @@
 			var item = new Series()
 			{
 				ChartArea = "TradeChart",
-				ChartType = SeriesChartType.Line,
+				ChartType = SeriesChartType.Point,
 				IsXValueIndexed = false,
 				YValuesPerPoint = 1,
-				Color = Color.WhiteSmoke
+				Color = Color.Gold
 			};
 
 			return item;
@@ -624,7 +624,7 @@
 		{
 			var item = new DataPoint()
 			{
-				XValue = trade.Indexes[size],
+				XValue = trade.Indexes[size] + 1,
 				YValues = new double[] { trade.Price }
 			};
 

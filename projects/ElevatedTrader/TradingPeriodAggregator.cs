@@ -22,6 +22,7 @@ namespace ElevatedTrader
 			get { return periods; }
 		}
 
+		public event Action<int> AfterNewPeriod;
 		public event Action<int> BeforeNewPeriod;
 
 		public void AddSize(int size, int capacity)
@@ -34,25 +35,39 @@ namespace ElevatedTrader
 
 		public void AddTick(ITradeTick tick)
 		{
+			last = tick;
+
 			foreach (var item in periods)
 			{
 				var period = item.Value[item.Value.Count - 1];
 
-				period.AddTick(tick);
-
 				if (period.TickCount == item.Key)
 				{
 					DoBeforeNewPeriod(item.Key);
+					
 					AddNewPeriod(item.Key);
+					period.AddTick(tick);
+
+					DoAfterNewPeriod(item.Key);
+				}
+				else
+				{
+					period.AddTick(tick);
 				}
 			}
-
-			last = tick;
 		}
 
 		protected void AddNewPeriod(int key)
 		{
 			periods[key].Add(new TradingPeriod());
+		}
+
+		protected void DoAfterNewPeriod(int size)
+		{
+			if (AfterNewPeriod != null)
+			{
+				AfterNewPeriod(size);
+			}
 		}
 
 		protected void DoBeforeNewPeriod(int size)

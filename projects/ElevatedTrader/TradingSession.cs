@@ -64,10 +64,10 @@ namespace ElevatedTrader
 			trades.Clear();
 		}
 
-		protected void AddTrade(TradeType type, int quantity, ITradingPeriodAggregator ticks)
+		protected void AddTrade(TradeType type, int quantity, ITradingPeriodAggregator aggregator)
 		{
-			//var price =  type == TradeType.Buy ? ticks.Last.Ask : ticks.Last.Bid;
-			var price = ticks.Last.Price;
+			var price =  type == TradeType.Buy ? aggregator.Last.Ask : aggregator.Last.Bid;
+			//var price = aggregator.Last.Price;
 			var open_cost = Symbol.HasOpenCost ? 1 : 0;
 
 			if (Position == 0)
@@ -75,7 +75,7 @@ namespace ElevatedTrader
 				Position += quantity;
 				Equity += (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
 
-				var trade = new Trade(type, quantity, price, Equity, 0, ticks.Indexes());
+				var trade = new Trade(type, quantity, price, Equity, 0, aggregator.Indexes());
 				trades.Add(trade);
 				DoOnTrade(trade);
 				return;
@@ -95,7 +95,7 @@ namespace ElevatedTrader
 
 			Equity += profit + Math.Abs(price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
 
-			var order = new Trade(type, quantity, price, Equity, profit, ticks.Indexes());
+			var order = new Trade(type, quantity, price, Equity, profit, aggregator.Indexes());
 
 			trades.Add(order);
 

@@ -58,13 +58,27 @@ public class HullStrategy : TradingStrategy
 	{
 		base.AddTick(tick);
 
-		hma.Calculate(aggregator.Periods[settings.PeriodTicks]);		
+		hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
+	}
+
+	protected override void AfterNewPeriod(int size)
+	{
+		base.AfterNewPeriod(size);
+
+		ExecuteDecision();
+
+		hma.NewPeriod();
 	}
 
 	protected override void BeforeNewPeriod(int size)
 	{
 		base.BeforeNewPeriod(size);
 
+		
+	}
+
+	private void ExecuteDecision()
+	{
 		var result = hma.Results[hma.Results.Count - 1];
 
 		if (result.Signaled)
@@ -78,8 +92,6 @@ public class HullStrategy : TradingStrategy
 				Sell();
 			}
 		}
-
-		hma.NewPeriod();
 	}
 
 	public override void Initialize()

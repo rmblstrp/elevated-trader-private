@@ -29,7 +29,7 @@ namespace ElevatedTrader
 			var wma_mid = new List<double>(mid);
 			var wma_full = new List<double>(length);
 
-			for (int index = values.Count - length - 1; index < values.Count; index++)
+			for (int index = values.Count - length; index < values.Count; index++)
 			{
 				wma_mid.Clear();
 				wma_full.Clear();
@@ -41,7 +41,7 @@ namespace ElevatedTrader
 
 				for (int x = 0; x < length; x++)
 				{
-					wma_mid.Add(values[index - length + x]);
+					wma_full.Add(values[index - length + x]);
 				}
 
 				var wma1 = WeightedAverage(wma_mid) * 2;

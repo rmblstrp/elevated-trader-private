@@ -58,12 +58,27 @@ public class HullStrategy : TradingStrategy
 	{
 		base.AddTick(tick);
 
-		hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
+		hma.Calculate(aggregator.Periods[settings.PeriodTicks]);		
 	}
 
 	protected override void BeforeNewPeriod(int size)
 	{
 		base.BeforeNewPeriod(size);
+
+		var result = hma.Results[hma.Results.Count - 1];
+
+		if (result.Signaled)
+		{
+			if (result.Direction == TrendDirection.Rising)
+			{				
+				
+				Sell();
+			}
+			else if (result.Direction == TrendDirection.Falling)
+			{
+				Buy();
+			}
+		}
 
 		hma.NewPeriod();
 	}

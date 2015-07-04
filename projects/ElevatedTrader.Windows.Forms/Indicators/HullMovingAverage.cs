@@ -36,15 +36,17 @@ public class HullMovingAverage : IIndicator
 		NewPeriod();
 	}
 
+	int count = 0;
+
 	public void Calculate(IList<ITradingPeriod> periods)
 	{
 		var required_size = Length * 2;
-
+		
 		if (periods.Count < required_size) return;
 
 		var values = new List<double>(required_size);
 
-		for (int index = periods.Count - required_size - 1; index < periods.Count; index++)
+		for (int index = periods.Count - required_size; index < periods.Count; index++)
 		{
 			values.Add(periods[index].Value(PriceValue));
 		}
@@ -59,15 +61,18 @@ public class HullMovingAverage : IIndicator
 		{
 			var last = Results[Results.Count - 2];
 
-			if (hma == last.Values[0])
+			if (last.Values.Count > 0)
 			{
-				result.Direction = TrendDirection.Sideways;
-			}
-			else
-			{
-				result.Direction = hma > last.Values[0]
-					? TrendDirection.Rising 
-					: TrendDirection.Falling;
+				if (hma == last.Values[0])
+				{
+					result.Direction = TrendDirection.Sideways;
+				}
+				else
+				{
+					result.Direction = hma > last.Values[0]
+						? TrendDirection.Rising
+						: TrendDirection.Falling;
+				}
 			}
 
 			result.Signaled = last.Direction != TrendDirection.None && last.Direction != result.Direction;

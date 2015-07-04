@@ -40,6 +40,8 @@ namespace ElevatedTrader
 			{
 				var period = item.Value[item.Value.Count - 1];
 
+				period.AddTick(tick);
+
 				if (period.TickCount == item.Key)
 				{
 					DoBeforeNewPeriod(item.Key);
@@ -83,11 +85,7 @@ namespace ElevatedTrader
 		public void Reset()
 		{
 			periods.Clear();
-
-			for (int index = 0; index < sizes.Count; index++)
-			{
-				AddNewPeriod(sizes[index]);
-			}
+			sizes.Clear();
 		}
 	}
 }

@@ -89,6 +89,7 @@
 
 		private List<TradeTick> ticks = new List<TradeTick>(10000000);
 		private BindingList<ITrade> trades = new BindingList<ITrade>();
+		private int dataCount = 5000000;
 		#endregion
 
 		#region -- Constants --
@@ -162,18 +163,30 @@
 		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
 			LoadScripts();
+			Action a = () =>
+			{
+				StrategiesComboBox.SelectedIndex = 0;
+			};
+
+			this.Invoke(a);
 		}
 
 		void strategiesWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
 			LoadScripts();
+			Action a = () =>
+			{
+				StrategiesComboBox.SelectedIndex = 0;
+			};
+
+			this.Invoke(a);
 		}
 
 		private void LoadScripts()
 		{
 			var files = ListStrategyFiles().Union(ListIndicatorsFiles()).ToArray();
 
-			scripts_assembly = Assembly.LoadFile(CSScript.CompileFiles(files, reference_assemblies));
+			scripts_assembly = Assembly.LoadFile(CSScript.CompileFiles(files, null, true, reference_assemblies));
 
 			var implements = typeof(ITradingStrategy);
 			var types = scripts_assembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
@@ -202,8 +215,6 @@
 		{
 			if (strategy != null)
 			{
-				UnlinkSessionEvent();
-
 				// should probably do other cleanup here;
 				strategy = null;
 			}
@@ -363,8 +374,9 @@
 
 				using (var command = connection.CreateCommand())
 				{
-					command.CommandText = "select top(250000) json from quotedata where symbol = @symbol";
+					command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
+					command.Parameters.Add(new SqlParameter("@count", dataCount));
 
 					using (var reader = command.ExecuteReader())
 					{
@@ -408,9 +420,18 @@
 			if (busy) return;
 			busy = true;
 
-			SetState(ApplicationState.Running);
-			await Task.Run(() => RunSimulation());
-			SetState(ApplicationState.Idle);
+			LinkSession();
+
+			try
+			{
+				SetState(ApplicationState.Running);
+				await Task.Run(() => RunSimulation());
+				SetState(ApplicationState.Idle);
+			}
+			finally
+			{
+				UnlinkSession();
+			}
 		}
 
 		private void RunSimulation()
@@ -424,9 +445,13 @@
 
 			this.Invoke(set_maximum, ticks.Count, StepValue);
 
+			strategy.Initialize();
+
 			for (int index = 0; index < ticks.Count; index++)
 			{
 				var item = ticks[index];
+
+				strategy.AddTick(item);
 
 				if ((index + 1) % StepValue == 0)
 				{
@@ -456,8 +481,6 @@
 
 		private void LinkSession()
 		{
-			UnlinkSessionEvent();
-
 			if (strategy.Session.Trades is BindingList<ITrade>)
 			{
 				TradesBindingSource.DataSource = strategy.Session.Trades as BindingList<ITrade>;
@@ -471,7 +494,7 @@
 			}
 		}
 
-		private void UnlinkSessionEvent()
+		private void UnlinkSession()
 		{
 			if (session_ontrade)
 			{
@@ -482,7 +505,16 @@
 
 		private void OnTrade(object sender, ITrade trade)
 		{
-			trades.Add(trade);
+			Action a = () => { trades.Add(trade); TickCountStatusLabel.Text = trades.Count.ToString(); };
+
+			this.Invoke(a);
+		}
+
+		private void SetDataCountMenuItem_Click(object sender, EventArgs e)
+		{
+			var input = Microsoft.VisualBasic.Interaction.InputBox("Set the number of ticks you want to load", "Data Count", dataCount.ToString(), -1, -1);
+
+			dataCount = int.Parse(input);
 		}
 	}
 }

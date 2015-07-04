@@ -5,6 +5,6 @@
 	"TickValue": 12.50,
 	"HasOpenCost": false,
 	"PerTradeCost": 0,
-	"PerQuantityCost": 8,
+	"PerQuantityCost": 5,
 	"Slippage":  0
 }

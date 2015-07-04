@@ -9,7 +9,7 @@ namespace ElevatedTrader
 {
 	public class TradingSession : ITradingSession
 	{		
-		protected BindingList<ITrade> trades = new BindingList<ITrade>();
+		protected List<ITrade> trades = new List<ITrade>();
 
 		public double Equity
 		{
@@ -60,6 +60,7 @@ namespace ElevatedTrader
 		public void Reset()
 		{
 			Position = 0;
+			Equity = 0;
 			trades.Clear();
 		}
 
@@ -73,14 +74,17 @@ namespace ElevatedTrader
 				Position += quantity;
 				Equity += (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
 
-				trades.Add(new Trade(type, quantity, price, Equity, 0, ticks.Indexes()));
+				var trade = new Trade(type, quantity, price, Equity, 0, ticks.Indexes());
+				trades.Add(trade);
+				DoOnTrade(trade);
+				return;
 			}
 
 			var last = trades[trades.Count - 1];			
 			var price_difference = price - last.Price;
 			var tick_change = price_difference / Symbol.TickRate;
 			var value = tick_change * Symbol.TickValue;			
-			var profit = (price * Position) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
+			var profit = (value * Position) - Math.Abs(Position * Symbol.PerQuantityCost);
 
 			// position + quantity = a
 			// position - quantity = b
@@ -88,16 +92,21 @@ namespace ElevatedTrader
 			
 			Position += quantity;
 
-			Equity += profit - (price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
+			Equity += profit + Math.Abs(price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
 
 			var order = new Trade(type, quantity, price, Equity, profit, ticks.Indexes());
 
 			trades.Add(order);
 
+			DoOnTrade(order);
+		}
+
+		protected void DoOnTrade(ITrade trade)
+		{
 			if (Trade != null)
 			{
-				Trade(this, order);
+				Trade(this, trade);
 			}
-		}		
+		}
 	}
 }

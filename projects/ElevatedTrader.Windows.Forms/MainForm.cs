@@ -15,6 +15,7 @@
 	using System.Windows.Forms;
 	using CSScriptLibrary;
 	using Newtonsoft.Json;
+	using System.Windows.Forms.DataVisualization.Charting;
 
 	public partial class MainForm : Form
 	{
@@ -89,7 +90,8 @@
 
 		private List<TradeTick> ticks = new List<TradeTick>(10000000);
 		private BindingList<ITrade> trades = new BindingList<ITrade>();
-		private int dataCount = 5000000;
+		private Dictionary<int, BindingList<ITradingPeriod>> series = new Dictionary<int, BindingList<ITradingPeriod>>();
+		private int dataCount = 50000;
 		#endregion
 
 		#region -- Constants --
@@ -421,6 +423,7 @@
 			busy = true;
 
 			LinkSession();
+			LinkAggregrator();
 
 			try
 			{
@@ -431,6 +434,7 @@
 			finally
 			{
 				UnlinkSession();
+				UnlinkAggregator();
 			}
 		}
 
@@ -477,8 +481,8 @@
 		}
 		#endregion
 
+		#region -- Session Data --
 		private bool session_ontrade = false;
-
 		private void LinkSession()
 		{
 			if (strategy.Session.Trades is BindingList<ITrade>)
@@ -516,5 +520,74 @@
 
 			dataCount = int.Parse(input);
 		}
+
+		private void LinkAggregrator()
+		{
+			series.Clear();
+			strategy.Aggregator.BeforeNewPeriod += Aggregator_BeforeNewPeriod;
+		}		
+
+		private void UnlinkAggregator()
+		{
+			strategy.Aggregator.BeforeNewPeriod -= Aggregator_BeforeNewPeriod;
+		}
+
+		private void Aggregator_BeforeNewPeriod(int size)
+		{
+			if (!series.ContainsKey(size))
+			{
+				series.Add(size, new BindingList<ITradingPeriod>());
+			}
+
+			var item = strategy.Aggregator.Periods[size];
+
+			series[size].Add(item[item.Count - 1]);
+		}
+
+		private Series CreatePeriodSeries()
+		{
+			var item = new Series()
+			{
+				ChartType = SeriesChartType.Stock,
+				IsXValueIndexed = false,
+				YValuesPerPoint = 4
+			};
+
+			return item;
+		}
+
+		private Series TradeSeries()
+		{
+			var item = new Series()
+			{
+				ChartType = SeriesChartType.Point,
+				IsXValueIndexed = true,
+				YValuesPerPoint = 1
+			};
+
+			return item;
+		}
+
+		private DataPoint CreatePeriodDataPoint(ITradingPeriod period)
+		{
+			var item = new DataPoint()
+			{
+				YValues = new double[] { period.High, period.Low, period.Open, period.Close }
+			};
+
+			return item;
+		}
+
+		private DataPoint CreateTradeDataPoint(int size, ITrade trade)
+		{
+			var item = new DataPoint()
+			{
+				XValue = trade.Indexes[size],
+				YValues = new double[] { trade.Price }
+			};
+
+			return item;
+		}
+		#endregion		
 	}
 }

@@ -31,6 +31,12 @@
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, "25,18,20,22");
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, "26,20,22,25");
+			System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 21.35D);
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 24.75D);
+			System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -46,6 +52,8 @@
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.LoadDataMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.StopLoadingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.SetDataCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.RunSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.StopSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,8 +83,6 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.SetDataCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).BeginInit();
 			this.statusStrip1.SuspendLayout();
@@ -172,16 +178,28 @@
 			// LoadDataMenuItem
 			// 
 			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
-			this.LoadDataMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.LoadDataMenuItem.Text = "Load";
 			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
 			// 
 			// StopLoadingMenuItem
 			// 
 			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
-			this.StopLoadingMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.StopLoadingMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.StopLoadingMenuItem.Text = "Stop";
 			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(123, 6);
+			// 
+			// SetDataCountMenuItem
+			// 
+			this.SetDataCountMenuItem.Name = "SetDataCountMenuItem";
+			this.SetDataCountMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.SetDataCountMenuItem.Text = "Set Count";
+			this.SetDataCountMenuItem.Click += new System.EventHandler(this.SetDataCountMenuItem_Click);
 			// 
 			// simulationToolStripMenuItem
 			// 
@@ -310,17 +328,35 @@
 			// 
 			// chart1
 			// 
-			chartArea1.Name = "ChartArea1";
+			this.chart1.BorderlineColor = System.Drawing.Color.DimGray;
+			this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+			chartArea1.AxisX.MajorGrid.Enabled = false;
+			chartArea1.AxisY.MajorGrid.Enabled = false;
+			chartArea1.BackHatchStyle = System.Windows.Forms.DataVisualization.Charting.ChartHatchStyle.BackwardDiagonal;
+			chartArea1.Name = "TradeChart";
 			this.chart1.ChartAreas.Add(chartArea1);
 			this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chart1.Location = new System.Drawing.Point(0, 0);
 			this.chart1.Name = "chart1";
-			series1.ChartArea = "ChartArea1";
+			series1.ChartArea = "TradeChart";
+			series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Stock;
 			series1.Name = "Series1";
+			series1.Points.Add(dataPoint1);
+			series1.Points.Add(dataPoint2);
+			series1.YValuesPerPoint = 4;
+			series2.ChartArea = "TradeChart";
+			series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+			series2.Name = "Series2";
+			series2.Points.Add(dataPoint3);
+			series2.Points.Add(dataPoint4);
 			this.chart1.Series.Add(series1);
+			this.chart1.Series.Add(series2);
 			this.chart1.Size = new System.Drawing.Size(586, 223);
 			this.chart1.TabIndex = 3;
 			this.chart1.Text = "chart1";
+			title1.Name = "Title1";
+			title1.Text = "Trade Results";
+			this.chart1.Titles.Add(title1);
 			// 
 			// TradeResultGrid
 			// 
@@ -476,18 +512,6 @@
 			this.SymbolProperties.Size = new System.Drawing.Size(231, 147);
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
-			// 
-			// SetDataCountMenuItem
-			// 
-			this.SetDataCountMenuItem.Name = "SetDataCountMenuItem";
-			this.SetDataCountMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.SetDataCountMenuItem.Text = "Set Count";
-			this.SetDataCountMenuItem.Click += new System.EventHandler(this.SetDataCountMenuItem_Click);
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// MainForm
 			// 

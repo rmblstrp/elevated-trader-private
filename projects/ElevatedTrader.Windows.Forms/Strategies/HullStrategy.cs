@@ -70,13 +70,12 @@ public class HullStrategy : TradingStrategy
 		if (result.Signaled)
 		{
 			if (result.Direction == TrendDirection.Rising)
-			{				
-				
-				Sell();
+			{
+				Buy();
 			}
 			else if (result.Direction == TrendDirection.Falling)
 			{
-				Buy();
+				Sell();
 			}
 		}
 

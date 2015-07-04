@@ -5,6 +5,7 @@
 	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 	using System.Data;
+	using System.Data.SqlClient;
 	using System.Drawing;
 	using System.IO;
 	using System.Linq;
@@ -17,6 +18,16 @@
 
 	public partial class MainForm : Form
 	{
+		#region -- Internal Classes --
+		public class ApplicationSettings
+		{
+			public string DataConnetionString
+			{
+				get;
+				set;
+			}
+		}
+
 		public class SolutionSettings
 		{
 			public string Strategy
@@ -37,8 +48,14 @@
 				set;
 			}
 		}
+		#endregion
 
+		#region -- Private Fields --
 		private string filename = null;
+		private ApplicationSettings application = new ApplicationSettings()
+		{
+			DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
+		};
 
 		private BindingSource symbolsBindingSource = new BindingSource();
 		private BindingList<TradeSymbol> symbols = new BindingList<TradeSymbol>();
@@ -55,6 +72,18 @@
 		private OpenFileDialog openDialog;
 		private SaveFileDialog saveDialog;
 
+		private Assembly scripts_assembly = null;
+		private string[] reference_assemblies = new string[]
+		{
+			"ElevatedTrader",
+			"MathNet.Numerics"
+		};
+
+		private List<TradeTick> ticks = new List<TradeTick>(10000000);
+		#endregion
+
+		#region -- Constants --
+
 		const string SymbolsPath = @"symbols\";
 		const string IndicatorsPath = @"indicators\";
 		const string StrategiesPath = @"strategies\";
@@ -66,14 +95,7 @@
 
 		const string SolutionExtension = ".json";
 		const string SolutionFilter = "JSON Solution|*" + SolutionExtension;
-
-
-		Assembly scripts_assembly = null;
-		private string[] reference_assemblies = new string[]
-		{
-			"ElevatedTrader",
-			"MathNet.Numerics"
-		};
+		#endregion
 
 		public MainForm()
 		{
@@ -125,6 +147,7 @@
 			};
 		}
 
+		#region -- Strategies --
 		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
 			LoadScripts();
@@ -180,6 +203,13 @@
 			solution.Settings = null;
 		}
 
+		private void StrategiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			InitializeStrategy(StrategiesComboBox.Text);
+		}
+		#endregion
+
+		#region -- Symbols --
 		private void LoadSymbols()
 		{
 			var files = Directory.EnumerateFiles(SymbolsPath, SymbolsFilter, SearchOption.TopDirectoryOnly);
@@ -196,11 +226,6 @@
 			SymbolComboBox.DataSource = symbolsBindingSource;
 		}
 
-		private void StrategiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			InitializeStrategy(StrategiesComboBox.Text);
-		}
-
 		private void SymbolComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			symbol = symbols[SymbolComboBox.SelectedIndex];
@@ -209,7 +234,9 @@
 			solution.Symbol = symbol.Symbol;
 			strategy.Session.Symbol = symbol;
 		}
+		#endregion
 
+		#region -- Dialogs --
 		private void AddSymbolMenuItem_Click(object sender, EventArgs e)
 		{
 			var input = Microsoft.VisualBasic.Interaction.InputBox("Add a new ticker symbol", "New Symbol", string.Empty, -1, -1);
@@ -268,7 +295,7 @@
 
 			var symbolIndex = symbols.IndexOf((from x in symbols where x.Symbol == obj.Symbol select x).Single());
 			var strategyIndex = strategies.IndexOf(obj.Strategy);
-			
+
 			if (strategyIndex < 0)
 			{
 				MessageBox.Show("The selected strategy is not currently available");
@@ -281,6 +308,96 @@
 			strategy.Settings = JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
 			StrategySettings.SelectedObject = strategy.Settings;
 			solution = obj;
+		}
+		#endregion
+
+		private async void LoadDataMenuItem_Click(object sender, EventArgs e)
+		{
+			await Task.Run(() => LoadTickData());
+		}
+
+		public class OldDataFormat
+		{
+			public double AskPrice { get; set; }
+			public double BidPrice { get; set; }
+			public double Price { get; set; }
+		}
+
+		private void LoadTickData()
+		{
+			Action<int> update_count = count => { TickCountStatusLabel.Text = count.ToString(); };
+
+			//{"AskPrice":1.111,"BidPrice":1.1109,"EventId":6157792271241579016,"ExchangeCode":"\u0000","IsTrade":true,"Price":1.1109,"Size":1,"Time":"2015-06-08T00:18:58Z","Type":0}
+			using (var connection = new SqlConnection(application.DataConnetionString))
+			{
+				connection.Open();
+
+				using (var command = connection.CreateCommand())
+				{
+					command.CommandText = "select json from quotedata where symbol = @symbol";
+					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
+
+					using (var reader = command.ExecuteReader())
+					{
+						ticks.Clear();
+
+						int count = 0;
+
+						while (reader.Read())
+						{
+							var item = JsonConvert.DeserializeObject<OldDataFormat>(reader.GetString(0));
+
+							ticks.Add
+							(
+								new TradeTick()
+								{
+									Ask = item.AskPrice,
+									Bid = item.BidPrice,
+									Last = item.Price
+								}
+							);
+
+							if (++count % 25000 == 0)
+							{
+								this.Invoke(update_count, count);
+							}
+						}
+
+						this.Invoke(update_count, count);
+					}
+				}
+
+				connection.Close();
+			}
+		}
+
+		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
+		{
+			await Task.Run(() => RunSimulation());
+		}
+
+		private void RunSimulation()
+		{
+			const int StepValue = 250;
+
+			Action<int, int> set_maximum = (max, inc) => { SimulationProgress.Maximum = max; SimulationProgress.Step = inc; };
+			Action set_value = () => { SimulationProgress.Value = 0; };
+			Action increment = () => { SimulationProgress.Increment(1); };
+			Action step = () => { SimulationProgress.PerformStep(); };
+
+			this.Invoke(set_maximum, ticks.Count, StepValue);
+
+			for (int index = 0; index < ticks.Count; index++)
+			{
+				var item = ticks[index];
+
+				if ((index + 1) % StepValue == 0)
+				{
+					this.Invoke(step);
+				}
+			}
+
+			this.Invoke(set_value);
 		}
 	}
 }

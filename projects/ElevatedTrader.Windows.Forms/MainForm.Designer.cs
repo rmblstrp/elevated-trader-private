@@ -44,13 +44,16 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.LoadDataMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.RunSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.symbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.iTradeBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.TickCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -67,8 +70,10 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
+			this.SimulationProgress = new System.Windows.Forms.ToolStripProgressBar();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).BeginInit();
+			this.statusStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
 			this.splitContainer2.Panel1.SuspendLayout();
@@ -111,13 +116,13 @@
 			// NewSolutionMenuItem
 			// 
 			this.NewSolutionMenuItem.Name = "NewSolutionMenuItem";
-			this.NewSolutionMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.NewSolutionMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.NewSolutionMenuItem.Text = "New Solution";
 			// 
 			// OpenMenuItem
 			// 
 			this.OpenMenuItem.Name = "OpenMenuItem";
-			this.OpenMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.OpenMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.OpenMenuItem.Text = "Open...";
 			this.OpenMenuItem.Click += new System.EventHandler(this.OpenMenuItem_Click);
 			// 
@@ -125,47 +130,57 @@
 			// 
 			this.SaveMenuItem.Name = "SaveMenuItem";
 			this.SaveMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.SaveMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.SaveMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.SaveMenuItem.Text = "Save";
 			this.SaveMenuItem.Click += new System.EventHandler(this.SaveMenuItem_Click);
 			// 
 			// SaveAsMenuItem
 			// 
 			this.SaveAsMenuItem.Name = "SaveAsMenuItem";
-			this.SaveAsMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.SaveAsMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.SaveAsMenuItem.Text = "Save As...";
 			this.SaveAsMenuItem.Click += new System.EventHandler(this.SaveAsMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(142, 6);
 			// 
 			// settingsToolStripMenuItem
 			// 
 			this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.settingsToolStripMenuItem.Text = "Settings";
 			// 
 			// toolStripMenuItem1
 			// 
+			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.LoadDataMenuItem});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(43, 20);
 			this.toolStripMenuItem1.Text = "Data";
 			// 
+			// LoadDataMenuItem
+			// 
+			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(100, 22);
+			this.LoadDataMenuItem.Text = "Load";
+			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
+			// 
 			// simulationToolStripMenuItem
 			// 
 			this.simulationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runToolStripMenuItem});
+            this.RunSimulationMenuItem});
 			this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
 			this.simulationToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
 			this.simulationToolStripMenuItem.Text = "Simulation";
 			// 
-			// runToolStripMenuItem
+			// RunSimulationMenuItem
 			// 
-			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-			this.runToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
-			this.runToolStripMenuItem.Text = "Run";
+			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
+			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.RunSimulationMenuItem.Text = "Run";
+			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulationMenuItem_Click);
 			// 
 			// symbolsToolStripMenuItem
 			// 
@@ -198,11 +213,27 @@
 			// 
 			// statusStrip1
 			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SimulationProgress,
+            this.toolStripStatusLabel1,
+            this.TickCountStatusLabel});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 472);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(846, 22);
 			this.statusStrip1.TabIndex = 2;
 			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
+			this.toolStripStatusLabel1.Text = "Tick Count:";
+			// 
+			// TickCountStatusLabel
+			// 
+			this.TickCountStatusLabel.Name = "TickCountStatusLabel";
+			this.TickCountStatusLabel.Size = new System.Drawing.Size(13, 17);
+			this.TickCountStatusLabel.Text = "0";
 			// 
 			// panel1
 			// 
@@ -401,6 +432,12 @@
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
+			// SimulationProgress
+			// 
+			this.SimulationProgress.Name = "SimulationProgress";
+			this.SimulationProgress.Size = new System.Drawing.Size(100, 16);
+			this.SimulationProgress.Step = 100;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -417,6 +454,8 @@
 			this.MainMenu.ResumeLayout(false);
 			this.MainMenu.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iTradeBindingSource)).EndInit();
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.panel1.ResumeLayout(false);
 			this.splitContainer2.Panel1.ResumeLayout(false);
 			this.splitContainer2.Panel2.ResumeLayout(false);
@@ -440,7 +479,7 @@
 		private System.Windows.Forms.ToolStripMenuItem SaveMenuItem;
 		private System.Windows.Forms.BindingSource iTradeBindingSource;
 		private System.Windows.Forms.ToolStripMenuItem simulationToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem RunSimulationMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -466,6 +505,10 @@
 		private System.Windows.Forms.ToolStripMenuItem AddSymbolMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SaveSymbolMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SaveAsMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem LoadDataMenuItem;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.ToolStripStatusLabel TickCountStatusLabel;
+		private System.Windows.Forms.ToolStripProgressBar SimulationProgress;
 	}
 }
 

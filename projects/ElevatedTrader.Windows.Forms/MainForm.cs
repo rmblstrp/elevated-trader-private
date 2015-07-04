@@ -90,7 +90,8 @@
 
 		private List<TradeTick> ticks = new List<TradeTick>(10000000);
 		private BindingList<ITrade> trades = new BindingList<ITrade>();
-		private Dictionary<int, BindingList<ITradingPeriod>> series = new Dictionary<int, BindingList<ITradingPeriod>>();
+		private Dictionary<int, Series> series = new Dictionary<int, Series>();
+		private Series tradeSeries;
 		private int dataCount = 50000;
 		#endregion
 
@@ -422,6 +423,11 @@
 			if (busy) return;
 			busy = true;
 
+			TradeChart.Series.Clear();
+			series.Clear();
+
+			TradeChart.Series.Add(tradeSeries = CreateTradeSeries());
+
 			LinkSession();
 			LinkAggregrator();
 
@@ -536,33 +542,47 @@
 		{
 			if (!series.ContainsKey(size))
 			{
-				series.Add(size, new BindingList<ITradingPeriod>());
+				var ps = CreatePeriodSeries();
+				series.Add(size, ps);
+
+				Action<Series> psa = psx =>
+				{
+					TradeChart.Series.Add(psx);
+				};
+
+				this.Invoke(psa, ps);
 			}
 
 			var item = strategy.Aggregator.Periods[size];
 
-			series[size].Add(item[item.Count - 1]);
+			var point = CreatePeriodDataPoint(item[item.Count - 1]);
+
+			series[size].Points.Add(point);
 		}
 
 		private Series CreatePeriodSeries()
 		{
 			var item = new Series()
 			{
+				ChartArea = "TradeChart",
 				ChartType = SeriesChartType.Stock,
 				IsXValueIndexed = false,
-				YValuesPerPoint = 4
+				YValuesPerPoint = 4,
+				Color = Color.DimGray
 			};
 
 			return item;
 		}
 
-		private Series TradeSeries()
+		private Series CreateTradeSeries()
 		{
 			var item = new Series()
 			{
+				ChartArea = "TradeChart",
 				ChartType = SeriesChartType.Point,
 				IsXValueIndexed = true,
-				YValuesPerPoint = 1
+				YValuesPerPoint = 1,
+				Color = Color.WhiteSmoke
 			};
 
 			return item;

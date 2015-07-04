@@ -69,7 +69,7 @@
 			this.TickCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-			this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+			this.TradeChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.TradeResultGrid = new System.Windows.Forms.DataGridView();
 			this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -91,7 +91,7 @@
 			this.splitContainer2.Panel1.SuspendLayout();
 			this.splitContainer2.Panel2.SuspendLayout();
 			this.splitContainer2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).BeginInit();
 			this.panel2.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -317,7 +317,7 @@
 			// 
 			// splitContainer2.Panel1
 			// 
-			this.splitContainer2.Panel1.Controls.Add(this.chart1);
+			this.splitContainer2.Panel1.Controls.Add(this.TradeChart);
 			// 
 			// splitContainer2.Panel2
 			// 
@@ -326,37 +326,52 @@
 			this.splitContainer2.SplitterDistance = 223;
 			this.splitContainer2.TabIndex = 1;
 			// 
-			// chart1
+			// TradeChart
 			// 
-			this.chart1.BorderlineColor = System.Drawing.Color.DimGray;
-			this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+			this.TradeChart.BackColor = System.Drawing.Color.Black;
+			this.TradeChart.BorderlineColor = System.Drawing.Color.Gray;
+			this.TradeChart.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+			chartArea1.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Gainsboro;
+			chartArea1.AxisX.LineColor = System.Drawing.Color.Gainsboro;
 			chartArea1.AxisX.MajorGrid.Enabled = false;
+			chartArea1.AxisX.MajorTickMark.LineColor = System.Drawing.Color.Gainsboro;
+			chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.Gainsboro;
+			chartArea1.AxisY.LineColor = System.Drawing.Color.Gainsboro;
 			chartArea1.AxisY.MajorGrid.Enabled = false;
-			chartArea1.BackHatchStyle = System.Windows.Forms.DataVisualization.Charting.ChartHatchStyle.BackwardDiagonal;
+			chartArea1.AxisY.MajorTickMark.LineColor = System.Drawing.Color.Gainsboro;
+			chartArea1.BackColor = System.Drawing.Color.Black;
+			chartArea1.BorderColor = System.Drawing.Color.Gainsboro;
 			chartArea1.Name = "TradeChart";
-			this.chart1.ChartAreas.Add(chartArea1);
-			this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chart1.Location = new System.Drawing.Point(0, 0);
-			this.chart1.Name = "chart1";
+			this.TradeChart.ChartAreas.Add(chartArea1);
+			this.TradeChart.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.TradeChart.Location = new System.Drawing.Point(0, 0);
+			this.TradeChart.Name = "TradeChart";
+			this.TradeChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
 			series1.ChartArea = "TradeChart";
 			series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Stock;
+			series1.Color = System.Drawing.Color.DimGray;
 			series1.Name = "Series1";
 			series1.Points.Add(dataPoint1);
 			series1.Points.Add(dataPoint2);
 			series1.YValuesPerPoint = 4;
+			series2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
 			series2.ChartArea = "TradeChart";
 			series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+			series2.Color = System.Drawing.Color.WhiteSmoke;
 			series2.Name = "Series2";
 			series2.Points.Add(dataPoint3);
 			series2.Points.Add(dataPoint4);
-			this.chart1.Series.Add(series1);
-			this.chart1.Series.Add(series2);
-			this.chart1.Size = new System.Drawing.Size(586, 223);
-			this.chart1.TabIndex = 3;
-			this.chart1.Text = "chart1";
+			series2.ShadowColor = System.Drawing.Color.Empty;
+			this.TradeChart.Series.Add(series1);
+			this.TradeChart.Series.Add(series2);
+			this.TradeChart.Size = new System.Drawing.Size(586, 223);
+			this.TradeChart.TabIndex = 3;
+			this.TradeChart.Text = "chart1";
+			title1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			title1.ForeColor = System.Drawing.Color.White;
 			title1.Name = "Title1";
 			title1.Text = "Trade Results";
-			this.chart1.Titles.Add(title1);
+			this.TradeChart.Titles.Add(title1);
 			// 
 			// TradeResultGrid
 			// 
@@ -537,7 +552,7 @@
 			this.splitContainer2.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
 			this.splitContainer2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).EndInit();
 			this.panel2.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
@@ -562,7 +577,7 @@
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.SplitContainer splitContainer2;
-		private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+		private System.Windows.Forms.DataVisualization.Charting.Chart TradeChart;
 		private System.Windows.Forms.DataGridView TradeResultGrid;
 		private System.Windows.Forms.DataGridViewTextBoxColumn typeDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;

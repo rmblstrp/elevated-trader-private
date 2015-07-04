@@ -174,6 +174,7 @@
 
 			strategy = (ITradingStrategy)scripts_assembly.CreateInstance(name);
 			StrategySettings.SelectedObject = strategy.Settings;
+			strategy.Session.Symbol = symbol;
 
 			solution.Strategy = name;
 			solution.Settings = null;
@@ -206,6 +207,7 @@
 			SymbolProperties.SelectedObject = symbol;
 
 			solution.Symbol = symbol.Symbol;
+			strategy.Session.Symbol = symbol;
 		}
 
 		private void AddSymbolMenuItem_Click(object sender, EventArgs e)
@@ -264,17 +266,20 @@
 
 			var obj = JsonConvert.DeserializeObject<SolutionSettings>(File.ReadAllText(openDialog.FileName));
 
-			var index = strategies.IndexOf(obj.Strategy);
-
-			if (index < 0)
+			var symbolIndex = symbols.IndexOf((from x in symbols where x.Symbol == obj.Symbol select x).Single());
+			var strategyIndex = strategies.IndexOf(obj.Strategy);
+			
+			if (strategyIndex < 0)
 			{
 				MessageBox.Show("The selected strategy is not currently available");
 				return;
 			}
 
-			StrategiesComboBox.SelectedIndex = index;
+			SymbolComboBox.SelectedIndex = symbolIndex;
+			StrategiesComboBox.SelectedIndex = strategyIndex;
 
 			strategy.Settings = JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
+			StrategySettings.SelectedObject = strategy.Settings;
 			solution = obj;
 		}
 	}

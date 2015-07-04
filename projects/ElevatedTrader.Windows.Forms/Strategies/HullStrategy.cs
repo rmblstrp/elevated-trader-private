@@ -46,6 +46,7 @@ public class HullStrategy : TradingStrategy
 	public override object Settings
 	{
 		get { return settings; }
+		set { settings = (StrategySettings)value; }
 	}
 
 	public override Type SettingsType

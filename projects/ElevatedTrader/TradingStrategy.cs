@@ -25,6 +25,7 @@ namespace ElevatedTrader
 		public abstract object Settings
 		{
 			get;
+			set;
 		}
 
 		public abstract Type SettingsType

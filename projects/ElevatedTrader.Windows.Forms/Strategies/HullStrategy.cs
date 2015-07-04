@@ -9,18 +9,9 @@ public class HullStrategy : TradingStrategy
 {
 	private HullMovingAverage hma;
 
-	public class StrategySettings
+	public class StrategySettings : TradingStrategySettings
 	{
-		private int capacity = 8192;
 		private int length = 8;
-		private int ticks = 610;
-		private PeriodValueType valueType = PeriodValueType.WeightedAverage;
-
-		public int Capacity
-		{
-			get { return capacity; }
-			set { capacity = value; }
-		}
 
 		public int Length
 		{
@@ -28,22 +19,15 @@ public class HullStrategy : TradingStrategy
 			set { length = value; }
 		}
 
-		public int PeriodTicks
+		public StrategySettings()
 		{
-			get { return ticks; }
-			set { ticks = value; }
-		}
-
-		public PeriodValueType PeriodValue
-		{
-			get { return valueType; }
-			set { valueType = value; }
+			
 		}
 	}
 
 	private StrategySettings settings = new StrategySettings();
 
-	public override object Settings
+	public override TradingStrategySettings Settings
 	{
 		get { return settings; }
 		set { settings = (StrategySettings)value; }
@@ -73,8 +57,6 @@ public class HullStrategy : TradingStrategy
 	protected override void BeforeNewPeriod(int size)
 	{
 		base.BeforeNewPeriod(size);
-
-		
 	}
 
 	private void ExecuteDecision()
@@ -103,6 +85,13 @@ public class HullStrategy : TradingStrategy
 		{
 			Length = settings.Length
 		};
+
+		if (!indicators.ContainsKey(settings.PeriodTicks))
+		{
+			indicators.Add(settings.PeriodTicks, new List<IIndicator>());
+		}
+
+		indicators[settings.PeriodTicks].Add(hma);
 	}
 
 	private void Buy()

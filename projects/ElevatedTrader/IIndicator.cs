@@ -11,6 +11,8 @@ namespace ElevatedTrader
 	{
 		IList<IIndicatorResult> Results { get; }
 
+		bool IsStockPriceRelated { get; }
+
 		void Calculate(IList<ITradingPeriod> periods);
 
 		void NewPeriod();

@@ -9,6 +9,11 @@ public class HullMovingAverage : IIndicator
 {
 	protected List<IIndicatorResult> results;
 
+	public bool IsStockPriceRelated
+	{
+		get { return true; }
+	}
+
 	public int Length
 	{
 		get;

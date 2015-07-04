@@ -11,10 +11,16 @@ namespace ElevatedTrader
 		protected ITradingSession session;
 		protected ITradingPeriodAggregator aggregator;
 		protected ITradeSymbol symbol;
+		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int,IList<IIndicator>>();
 
 		public ITradingPeriodAggregator Aggregator
 		{
 			get { return aggregator; }
+		}
+
+		public IDictionary<int, IList<IIndicator>> Indicators
+		{
+			get { return indicators; }
 		}
 
 		public virtual ITradingSession Session
@@ -22,7 +28,7 @@ namespace ElevatedTrader
 			get { return session; }
 		}
 
-		public abstract object Settings
+		public abstract TradingStrategySettings Settings
 		{
 			get;
 			set;

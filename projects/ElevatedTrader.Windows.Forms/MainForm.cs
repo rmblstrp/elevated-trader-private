@@ -332,7 +332,7 @@
 			SymbolComboBox.SelectedIndex = symbolIndex;
 			StrategiesComboBox.SelectedIndex = strategyIndex;
 
-			strategy.Settings = JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
+			strategy.Settings = (TradingStrategySettings)JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
 			StrategySettings.SelectedObject = strategy.Settings;
 			solution = obj;
 		}

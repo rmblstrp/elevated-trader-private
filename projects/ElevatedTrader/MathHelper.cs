@@ -23,7 +23,7 @@ namespace ElevatedTrader
 		public static double HullMovingAverage(IList<double> values)
 		{
 			var length = values.Count / 2;
-			var mid = (int)Math.Ceiling((double)length / 2);
+			var mid = (int)Math.Floor((double)length / 2);
 			var sqrt = Math.Sqrt(length);
 			var difference = new List<double>(length);
 			var wma_mid = new List<double>(mid);

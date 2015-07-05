@@ -592,10 +592,14 @@
 			Action<int, DataPoint, IIndicator, DataPoint> pda = (idx, pdx, indx, indp) =>
 			{
 				periodSeries[idx].Points.Add(pdx);
-				indicatorSeries[indx].Points.Add(indp);
+
+				if (indp != null)
+				{
+					indicatorSeries[indx].Points.Add(indp);
+				}
 			};
 
-			this.Invoke(pda, size, CreatePeriodDataPoint(item[item.Count - 1]), ind, CreateIndicatorDataPoint(ind));
+			this.Invoke(pda, size, CreatePeriodDataPoint(item), ind, CreateIndicatorDataPoint(ind));
 		}
 
 		private Series CreatePeriodSeries()
@@ -640,10 +644,13 @@
 			return item;
 		}
 
-		private DataPoint CreatePeriodDataPoint(ITradingPeriod period)
+		private DataPoint CreatePeriodDataPoint(IList<ITradingPeriod> periods)
 		{
+			var period = periods[periods.Count - 1];
+
 			var item = new DataPoint()
 			{
+				XValue = periods.Count,
 				YValues = new double[] { period.High, period.Low, period.Open, period.Close }
 			};
 
@@ -664,9 +671,15 @@
 		{
 			var last = indicator.Results[indicator.Results.Count - 1];
 
+			if (last.Values.Count == 0)
+			{
+				return null;
+			}
+
 			var item = new DataPoint()
 			{
-				YValues = new double[] { last.Values.Count == 0 ? double.NaN : last.Values[0] }
+				XValue = indicator.Results.Count,
+				YValues = new double[] { last.Values[0] }
 			};
 
 			return item;

@@ -12,11 +12,25 @@ public class HullStrategy : TradingStrategy
 	public class StrategySettings : TradingStrategySettings
 	{
 		private int length = 8;
+		private double tickPercentage = 0.75;
+		private bool periodCorrection = false;
 
 		public int Length
 		{
 			get { return length; }
 			set { length = value; }
+		}
+
+		public bool PeriodCorrection
+		{
+			get { return periodCorrection; }
+			set { periodCorrection = value; }
+		}
+
+		public double TickPercentage
+		{
+			get { return tickPercentage; }
+			set { tickPercentage = value; }
 		}
 
 		public StrategySettings()
@@ -26,6 +40,7 @@ public class HullStrategy : TradingStrategy
 	}
 
 	private StrategySettings settings = new StrategySettings();
+	private bool descisionExecuted = false;
 
 	public override TradingStrategySettings Settings
 	{
@@ -42,21 +57,37 @@ public class HullStrategy : TradingStrategy
 	{
 		base.AddTick(tick);
 
-		hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
+		var list = aggregator.Periods[settings.PeriodTicks];
+		var period = list[list.Count - 1];
+
+		if (!descisionExecuted && period.TickCount >= settings.PeriodTicks * settings.TickPercentage)
+		{
+			hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
+
+			ExecuteDecision();
+
+			descisionExecuted = true;
+		}
 	}
 
 	protected override void AfterNewPeriod(int size)
 	{
 		base.AfterNewPeriod(size);
 
-		ExecuteDecision();
+		if (descisionExecuted && settings.PeriodCorrection)
+		{
+			hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
+
+			ExecuteDecision();
+		}
 
 		hma.NewPeriod();
+		descisionExecuted = false;
 	}
 
 	protected override void BeforeNewPeriod(int size)
 	{
-		base.BeforeNewPeriod(size);
+		base.BeforeNewPeriod(size);		
 	}
 
 	private void ExecuteDecision()
@@ -73,7 +104,7 @@ public class HullStrategy : TradingStrategy
 			{
 				Sell();
 			}
-		}
+		}		
 	}
 
 	public override void Initialize()
@@ -83,7 +114,8 @@ public class HullStrategy : TradingStrategy
 		aggregator.AddSize(settings.PeriodTicks, settings.Capacity);
 		hma = new HullMovingAverage(settings.Capacity)
 		{
-			Length = settings.Length
+			Length = settings.Length,
+			PeriodValue = settings.PeriodValue
 		};
 
 		if (!indicators.ContainsKey(settings.PeriodTicks))

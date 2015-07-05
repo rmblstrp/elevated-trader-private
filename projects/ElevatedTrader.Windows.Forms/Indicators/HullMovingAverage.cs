@@ -20,11 +20,7 @@ public class HullMovingAverage : IIndicator
 		set;
 	}
 
-	public PeriodValueType PriceValue
-	{
-		get;
-		set;
-	}
+	public PeriodValueType PeriodValue { get; set; }
 
 	public IList<IIndicatorResult> Results
 	{
@@ -45,15 +41,15 @@ public class HullMovingAverage : IIndicator
 
 	public void Calculate(IList<ITradingPeriod> periods)
 	{
-		var required_size = Length * 2;
+		var required_size = (int)(Length * 2);
 		
 		if (periods.Count < required_size) return;
 
 		var values = new List<double>(required_size);
 
-		for (int index = periods.Count - required_size; index < periods.Count; index++)
+		for (int index = Math.Max(0, periods.Count - required_size); index < periods.Count; index++)
 		{
-			values.Add(periods[index].Value(PriceValue));
+			values.Add(periods[index].Value(PeriodValue));
 		}
 
 		var hma = MathHelper.HullMovingAverage(values);

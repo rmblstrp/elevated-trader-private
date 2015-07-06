@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader", "..\projects\ElevatedTrader\ElevatedTrader.csproj", "{18A39E37-5244-418F-9FD9-B1D024E15421}"
@@ -12,21 +12,35 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18A39E37-5244-418F-9FD9-B1D024E15421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18A39E37-5244-418F-9FD9-B1D024E15421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Debug|x64.Build.0 = Debug|Any CPU
 		{18A39E37-5244-418F-9FD9-B1D024E15421}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18A39E37-5244-418F-9FD9-B1D024E15421}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5232F345-1C68-432A-8649-56EDA2351C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5232F345-1C68-432A-8649-56EDA2351C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Release|x64.ActiveCfg = Release|x64
+		{18A39E37-5244-418F-9FD9-B1D024E15421}.Release|x64.Build.0 = Release|x64
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Debug|x64.Build.0 = Debug|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|x64.ActiveCfg = Release|x64
+		{0595CB18-0992-45D0-A45F-12516C23C558}.Release|x64.Build.0 = Release|x64
+		{5232F345-1C68-432A-8649-56EDA2351C9B}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{5232F345-1C68-432A-8649-56EDA2351C9B}.Debug|Any CPU.Build.0 = Debug|x64
+		{5232F345-1C68-432A-8649-56EDA2351C9B}.Debug|x64.ActiveCfg = Debug|x64
+		{5232F345-1C68-432A-8649-56EDA2351C9B}.Debug|x64.Build.0 = Debug|x64
 		{5232F345-1C68-432A-8649-56EDA2351C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5232F345-1C68-432A-8649-56EDA2351C9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5232F345-1C68-432A-8649-56EDA2351C9B}.Release|x64.ActiveCfg = Release|x64
+		{5232F345-1C68-432A-8649-56EDA2351C9B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

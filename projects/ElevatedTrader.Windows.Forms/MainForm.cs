@@ -63,7 +63,8 @@
 		private bool busy = false;
 		private ApplicationSettings application = new ApplicationSettings()
 		{
-			DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
+			//DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
+			DataConnetionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
 		};
 
 		private BindingSource symbolsBindingSource = new BindingSource();
@@ -378,7 +379,8 @@
 
 				using (var command = connection.CreateCommand())
 				{
-					command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
+					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
+					command.CommandText = "select top(@count) json from symbolhistory where symbol = @symbol";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
 					command.Parameters.Add(new SqlParameter("@count", dataCount));
 
@@ -390,7 +392,8 @@
 
 						while (reader.Read())
 						{
-							var item = JsonConvert.DeserializeObject<OldDataFormat>(reader.GetString(0));
+							//var item = JsonConvert.DeserializeObject<OldDataFormat>(reader.GetString(0));
+							var item = JsonConvert.DeserializeObject<TradeHistoryQuote>(reader.GetString(0));
 
 							ticks.Add
 							(
@@ -398,7 +401,8 @@
 								{
 									Ask = item.AskPrice,
 									Bid = item.BidPrice,
-									Price = item.Price
+									//Price = item.Price
+									Price = (item.AskPrice + item.BidPrice) / 2
 								}
 							);
 
@@ -639,7 +643,7 @@
 				IsXValueIndexed = false,
 				YValuesPerPoint = 1,
 				Palette = ChartColorPalette.Pastel,
-				Enabled = false
+				YAxisType = AxisType.Secondary
 			};
 
 			return item;

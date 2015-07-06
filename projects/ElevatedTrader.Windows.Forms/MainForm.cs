@@ -7,6 +7,7 @@
 	using System.Data;
 	using System.Data.SqlClient;
 	using System.Drawing;
+	using System.Dynamic;
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
@@ -161,16 +162,15 @@
 				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
 			};
 
-
+			StrategiesComboBox.DataSource = strategies;
 		}
 
 		#region -- Strategies --
 		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
-			LoadScripts();
 			Action a = () =>
 			{
-				StrategiesComboBox.SelectedIndex = 0;
+				LoadScripts();
 			};
 
 			this.Invoke(a);
@@ -178,10 +178,9 @@
 
 		void strategiesWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
-			LoadScripts();
 			Action a = () =>
 			{
-				StrategiesComboBox.SelectedIndex = 0;
+				LoadScripts();
 			};
 
 			this.Invoke(a);
@@ -196,6 +195,9 @@
 			var implements = typeof(ITradingStrategy);
 			var types = scripts_assembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
 
+			var selected = (string)StrategiesComboBox.SelectedItem;
+			var settings = strategy == null ? null : strategy.Settings;
+
 			strategies.Clear();
 
 			foreach (var item in types)
@@ -203,7 +205,13 @@
 				strategies.Add(item.FullName);
 			}
 
-			StrategiesComboBox.DataSource = strategies;
+			if (!string.IsNullOrWhiteSpace(selected))
+			{
+				var index = strategies.IndexOf(selected);
+				StrategiesComboBox.SelectedIndex = -1;
+				StrategiesComboBox.SelectedIndex = index;
+				strategy.Settings = JsonConvert.DeserializeObject<ExpandoObject>(JsonConvert.SerializeObject(settings));
+			}
 		}
 
 		private IEnumerable<string> ListIndicatorsFiles()
@@ -234,6 +242,8 @@
 
 		private void StrategiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (StrategiesComboBox.SelectedIndex < 0) return;
+
 			InitializeStrategy(StrategiesComboBox.Text);
 		}
 		#endregion

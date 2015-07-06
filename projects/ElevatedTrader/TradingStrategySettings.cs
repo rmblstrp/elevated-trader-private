@@ -29,5 +29,11 @@ namespace ElevatedTrader
 			get { return valueType; }
 			set { valueType = value; }
 		}
+
+		public bool ReversePositions
+		{
+			get;
+			set;
+		}
 	}
 }

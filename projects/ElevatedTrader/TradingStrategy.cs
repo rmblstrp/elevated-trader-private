@@ -28,7 +28,7 @@ namespace ElevatedTrader
 			get { return session; }
 		}
 
-		public abstract TradingStrategySettings Settings
+		public abstract object Settings
 		{
 			get;
 			set;

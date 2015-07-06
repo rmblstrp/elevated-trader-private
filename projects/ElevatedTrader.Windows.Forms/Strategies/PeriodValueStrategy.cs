@@ -28,17 +28,27 @@ public class PeriodValueStrategy : TradingStrategy
 
 		public StrategySettings()
 		{
-			
+
 		}
 	}
 
 	private StrategySettings settings = new StrategySettings();
 	private bool descisionExecuted = false;
 
-	public override TradingStrategySettings Settings
+	public override object Settings
 	{
 		get { return settings; }
-		set { settings = (StrategySettings)value; }
+		set
+		{
+			dynamic obj = value;
+
+			settings.Capacity = (int)obj.Capacity;
+			settings.PeriodTicks = (int)obj.PeriodTicks;
+			settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
+			settings.ReversePositions = obj.ReversePositions;
+			settings.PeriodCorrection = obj.PeriodCorrection;
+			settings.TickPercentage = obj.TickPercentage;
+		}
 	}
 
 	public override Type SettingsType
@@ -65,7 +75,7 @@ public class PeriodValueStrategy : TradingStrategy
 
 	protected override void AfterNewPeriod(int size)
 	{
-		base.AfterNewPeriod(size);		
+		base.AfterNewPeriod(size);
 
 		periodValue.NewPeriod();
 		descisionExecuted = false;
@@ -74,11 +84,11 @@ public class PeriodValueStrategy : TradingStrategy
 
 	protected override void BeforeNewPeriod(int size)
 	{
-		base.BeforeNewPeriod(size);		
+		base.BeforeNewPeriod(size);
 
 		periodValue.Calculate(aggregator.Periods[settings.PeriodTicks]);
 
-		var result = periodValue.Results[periodValue.Results.Count - 1];		
+		var result = periodValue.Results[periodValue.Results.Count - 1];
 
 		if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction || !wasSignaled)
 		{
@@ -99,15 +109,27 @@ public class PeriodValueStrategy : TradingStrategy
 
 			if (result.Direction == TrendDirection.Rising)
 			{
-				Buy();
+				ExecuteOrder(TradeType.Buy);
 			}
 			else if (result.Direction == TrendDirection.Falling)
 			{
-				Sell();
+				ExecuteOrder(TradeType.Sell);
 			}
 		}
 
 		direction = result.Direction;
+	}
+
+	private void ExecuteOrder(TradeType type)
+	{
+		if ((type == TradeType.Buy && !settings.ReversePositions) || (type == TradeType.Sell && settings.ReversePositions))
+		{
+			Buy();
+		}
+		else
+		{
+			Sell();
+		}
 	}
 
 	public override void Initialize()

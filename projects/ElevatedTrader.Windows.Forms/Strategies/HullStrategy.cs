@@ -35,17 +35,28 @@ public class HullStrategy : TradingStrategy
 
 		public StrategySettings()
 		{
-			
+
 		}
 	}
 
 	private StrategySettings settings = new StrategySettings();
 	private bool descisionExecuted = false;
 
-	public override TradingStrategySettings Settings
+	public override object Settings
 	{
 		get { return settings; }
-		set { settings = (StrategySettings)value; }
+		set
+		{
+			dynamic obj = value;
+
+			settings.Capacity = (int)obj.Capacity;
+			settings.PeriodTicks = (int)obj.PeriodTicks;
+			settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
+			settings.ReversePositions = obj.ReversePositions;
+			settings.Length = (int)obj.Length;
+			settings.PeriodCorrection = obj.PeriodCorrection;
+			settings.TickPercentage = obj.TickPercentage;
+		}
 	}
 
 	public override Type SettingsType
@@ -72,7 +83,7 @@ public class HullStrategy : TradingStrategy
 
 	protected override void AfterNewPeriod(int size)
 	{
-		base.AfterNewPeriod(size);		
+		base.AfterNewPeriod(size);
 
 		hma.NewPeriod();
 		descisionExecuted = false;
@@ -81,13 +92,13 @@ public class HullStrategy : TradingStrategy
 
 	protected override void BeforeNewPeriod(int size)
 	{
-		base.BeforeNewPeriod(size);		
+		base.BeforeNewPeriod(size);
 
 		hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
 
-		var result = hma.Results[hma.Results.Count - 1];		
+		var result = hma.Results[hma.Results.Count - 1];
 
-		if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction  || !wasSignaled)
+		if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction || !wasSignaled)
 		{
 			ExecuteDecision();
 		}
@@ -106,15 +117,28 @@ public class HullStrategy : TradingStrategy
 
 			if (result.Direction == TrendDirection.Rising)
 			{
-				Buy();
+				ExecuteOrder(TradeType.Buy);
 			}
 			else if (result.Direction == TrendDirection.Falling)
 			{
-				Sell();
+				ExecuteOrder(TradeType.Sell);
 			}
 		}
 
 		direction = result.Direction;
+	}
+
+
+	private void ExecuteOrder(TradeType type)
+	{
+		if ((type == TradeType.Buy && !settings.ReversePositions) || (type == TradeType.Sell && settings.ReversePositions))
+		{
+			Buy();
+		}
+		else
+		{
+			Sell();
+		}
 	}
 
 	public override void Initialize()

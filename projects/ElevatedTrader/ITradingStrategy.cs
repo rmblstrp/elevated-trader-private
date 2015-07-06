@@ -14,7 +14,7 @@ namespace ElevatedTrader
 
 		ITradingSession Session { get; }
 
-		TradingStrategySettings Settings { get; set;  }
+		object Settings { get; set;  }
 
 		Type SettingsType { get; }
 

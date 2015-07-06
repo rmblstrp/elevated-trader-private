@@ -145,7 +145,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 						command.Parameters.Add(new SqlParameter("@json", json));
 						command.ExecuteNonQuery();
 
-						logger.Error(string.Format("{0} - {2}: {1}", typeof(T).Name, json, symbol));
+						logger.Info(string.Format("{0} - {2}: {1}", typeof(T).Name, json, symbol));
 					}
 				}
 				catch (Exception ex)

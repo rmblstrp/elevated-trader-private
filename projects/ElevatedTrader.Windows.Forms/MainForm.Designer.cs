@@ -29,18 +29,18 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-			System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, "25,18,20,22");
-			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, "26,20,22,25");
-			System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint3 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 21.35D);
-			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint4 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 24.75D);
-			System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, "25,18,20,22");
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, "26,20,22,25");
+			System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 21.35D);
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 24.75D);
+			System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.MainMenu = new System.Windows.Forms.MenuStrip();
 			this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.NewSolutionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -178,26 +178,28 @@
 			// LoadDataMenuItem
 			// 
 			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
-			this.LoadDataMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.LoadDataMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.LoadDataMenuItem.Text = "Load";
 			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
 			// 
 			// StopLoadingMenuItem
 			// 
 			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
-			this.StopLoadingMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.StopLoadingMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
+			this.StopLoadingMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.StopLoadingMenuItem.Text = "Stop";
 			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(123, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// SetDataCountMenuItem
 			// 
 			this.SetDataCountMenuItem.Name = "SetDataCountMenuItem";
-			this.SetDataCountMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.SetDataCountMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.SetDataCountMenuItem.Text = "Set Count";
 			this.SetDataCountMenuItem.Click += new System.EventHandler(this.SetDataCountMenuItem_Click);
 			// 
@@ -214,14 +216,15 @@
 			// 
 			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
 			this.RunSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.RunSimulationMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.RunSimulationMenuItem.Text = "Run";
 			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulationMenuItem_Click);
 			// 
 			// StopSimulationMenuItem
 			// 
 			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
-			this.StopSimulationMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.StopSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.StopSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.StopSimulationMenuItem.Text = "Stop";
 			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulationMenuItem_Click);
 			// 
@@ -331,49 +334,49 @@
 			this.TradeChart.BackColor = System.Drawing.Color.Black;
 			this.TradeChart.BorderlineColor = System.Drawing.Color.Gray;
 			this.TradeChart.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-			chartArea1.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Gainsboro;
-			chartArea1.AxisX.LineColor = System.Drawing.Color.Gainsboro;
-			chartArea1.AxisX.MajorGrid.Enabled = false;
-			chartArea1.AxisX.MajorTickMark.LineColor = System.Drawing.Color.Gainsboro;
-			chartArea1.AxisX.Minimum = 0D;
-			chartArea1.AxisY.IsStartedFromZero = false;
-			chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.Gainsboro;
-			chartArea1.AxisY.LineColor = System.Drawing.Color.Gainsboro;
-			chartArea1.AxisY.MajorGrid.Enabled = false;
-			chartArea1.AxisY.MajorTickMark.LineColor = System.Drawing.Color.Gainsboro;
-			chartArea1.BackColor = System.Drawing.Color.Black;
-			chartArea1.BorderColor = System.Drawing.Color.Gainsboro;
-			chartArea1.Name = "TradeChart";
-			this.TradeChart.ChartAreas.Add(chartArea1);
+			chartArea2.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Gainsboro;
+			chartArea2.AxisX.LineColor = System.Drawing.Color.Gainsboro;
+			chartArea2.AxisX.MajorGrid.Enabled = false;
+			chartArea2.AxisX.MajorTickMark.LineColor = System.Drawing.Color.Gainsboro;
+			chartArea2.AxisX.Minimum = 0D;
+			chartArea2.AxisY.IsStartedFromZero = false;
+			chartArea2.AxisY.LabelStyle.ForeColor = System.Drawing.Color.Gainsboro;
+			chartArea2.AxisY.LineColor = System.Drawing.Color.Gainsboro;
+			chartArea2.AxisY.MajorGrid.Enabled = false;
+			chartArea2.AxisY.MajorTickMark.LineColor = System.Drawing.Color.Gainsboro;
+			chartArea2.BackColor = System.Drawing.Color.Black;
+			chartArea2.BorderColor = System.Drawing.Color.Gainsboro;
+			chartArea2.Name = "TradeChart";
+			this.TradeChart.ChartAreas.Add(chartArea2);
 			this.TradeChart.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TradeChart.Location = new System.Drawing.Point(0, 0);
 			this.TradeChart.Name = "TradeChart";
 			this.TradeChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
-			series1.ChartArea = "TradeChart";
-			series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Stock;
-			series1.Color = System.Drawing.Color.DimGray;
-			series1.Name = "Series1";
-			series1.Points.Add(dataPoint1);
-			series1.Points.Add(dataPoint2);
-			series1.YValuesPerPoint = 4;
-			series2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
-			series2.ChartArea = "TradeChart";
-			series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-			series2.Color = System.Drawing.Color.WhiteSmoke;
-			series2.Name = "Series2";
-			series2.Points.Add(dataPoint3);
-			series2.Points.Add(dataPoint4);
-			series2.ShadowColor = System.Drawing.Color.Empty;
-			this.TradeChart.Series.Add(series1);
-			this.TradeChart.Series.Add(series2);
+			series3.ChartArea = "TradeChart";
+			series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Stock;
+			series3.Color = System.Drawing.Color.DimGray;
+			series3.Name = "Series1";
+			series3.Points.Add(dataPoint5);
+			series3.Points.Add(dataPoint6);
+			series3.YValuesPerPoint = 4;
+			series4.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
+			series4.ChartArea = "TradeChart";
+			series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+			series4.Color = System.Drawing.Color.WhiteSmoke;
+			series4.Name = "Series2";
+			series4.Points.Add(dataPoint7);
+			series4.Points.Add(dataPoint8);
+			series4.ShadowColor = System.Drawing.Color.Empty;
+			this.TradeChart.Series.Add(series3);
+			this.TradeChart.Series.Add(series4);
 			this.TradeChart.Size = new System.Drawing.Size(586, 223);
 			this.TradeChart.TabIndex = 3;
 			this.TradeChart.Text = "chart1";
-			title1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			title1.ForeColor = System.Drawing.Color.White;
-			title1.Name = "Title1";
-			title1.Text = "Trade Results";
-			this.TradeChart.Titles.Add(title1);
+			title2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			title2.ForeColor = System.Drawing.Color.White;
+			title2.Name = "Title1";
+			title2.Text = "Trade Results";
+			this.TradeChart.Titles.Add(title2);
 			// 
 			// TradeResultGrid
 			// 
@@ -405,9 +408,9 @@
 			// quantityDataGridViewTextBoxColumn
 			// 
 			this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-			dataGridViewCellStyle1.Format = "N0";
-			dataGridViewCellStyle1.NullValue = null;
-			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle5.Format = "N0";
+			dataGridViewCellStyle5.NullValue = null;
+			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
 			this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
 			this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
 			this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
@@ -415,9 +418,9 @@
 			// priceDataGridViewTextBoxColumn
 			// 
 			this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
-			dataGridViewCellStyle2.Format = "C2";
-			dataGridViewCellStyle2.NullValue = null;
-			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.Format = "C2";
+			dataGridViewCellStyle6.NullValue = null;
+			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
 			this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
 			this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
 			this.priceDataGridViewTextBoxColumn.ReadOnly = true;
@@ -425,9 +428,9 @@
 			// equityDataGridViewTextBoxColumn
 			// 
 			this.equityDataGridViewTextBoxColumn.DataPropertyName = "Equity";
-			dataGridViewCellStyle3.Format = "C2";
-			dataGridViewCellStyle3.NullValue = null;
-			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle7.Format = "C2";
+			dataGridViewCellStyle7.NullValue = null;
+			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle7;
 			this.equityDataGridViewTextBoxColumn.HeaderText = "Equity";
 			this.equityDataGridViewTextBoxColumn.Name = "equityDataGridViewTextBoxColumn";
 			this.equityDataGridViewTextBoxColumn.ReadOnly = true;
@@ -435,9 +438,9 @@
 			// profitDataGridViewTextBoxColumn
 			// 
 			this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-			dataGridViewCellStyle4.Format = "C2";
-			dataGridViewCellStyle4.NullValue = null;
-			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle8.Format = "C2";
+			dataGridViewCellStyle8.NullValue = null;
+			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle8;
 			this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
 			this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
 			this.profitDataGridViewTextBoxColumn.ReadOnly = true;

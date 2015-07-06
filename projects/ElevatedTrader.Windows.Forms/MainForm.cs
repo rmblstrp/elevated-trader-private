@@ -662,7 +662,8 @@
 			var item = new DataPoint()
 			{
 				XValue = trade.Indexes[size] + 1,
-				YValues = new double[] { trade.Price }
+				YValues = new double[] { trade.Price },
+				Color = trade.Type == TradeType.Buy ? Color.LightGreen : Color.LightPink
 			};
 
 			return item;
@@ -679,7 +680,8 @@
 			var item = new DataPoint()
 			{
 				XValue = indicator.Results.Count,
-				YValues = new double[] { last.Values[0] }
+				YValues = new double[] { last.Values[0] },
+				Color = last.Direction == TrendDirection.Rising ? Color.LightGreen : Color.LightPink
 			};
 
 			return item;

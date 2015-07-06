@@ -638,7 +638,8 @@
 				ChartType = SeriesChartType.Line,
 				IsXValueIndexed = false,
 				YValuesPerPoint = 1,
-				Palette = ChartColorPalette.Pastel
+				Palette = ChartColorPalette.Pastel,
+				Enabled = false
 			};
 
 			return item;
@@ -687,5 +688,11 @@
 			return item;
 		}
 		#endregion		
+
+		private void ShowGraphMenuItem_Click(object sender, EventArgs e)
+		{
+			TradeInfoSplitContainer.Panel1Collapsed = !TradeInfoSplitContainer.Panel1Collapsed;
+			ShowGraphMenuItem.Checked = TradeInfoSplitContainer.Panel1Collapsed;
+		}
 	}
 }

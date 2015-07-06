@@ -76,6 +76,7 @@ public class HullStrategy : TradingStrategy
 
 		hma.NewPeriod();
 		descisionExecuted = false;
+		wasSignaled = false;
 	}
 
 	protected override void BeforeNewPeriod(int size)
@@ -86,13 +87,14 @@ public class HullStrategy : TradingStrategy
 
 		var result = hma.Results[hma.Results.Count - 1];		
 
-		if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction)
+		if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction  || !wasSignaled)
 		{
 			ExecuteDecision();
 		}
 	}
 
 	private TrendDirection direction;
+	private bool wasSignaled = false;
 
 	private void ExecuteDecision()
 	{
@@ -100,6 +102,8 @@ public class HullStrategy : TradingStrategy
 
 		if (result.Signaled)
 		{
+			wasSignaled = true;
+
 			if (result.Direction == TrendDirection.Rising)
 			{
 				Buy();

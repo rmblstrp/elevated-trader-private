@@ -68,7 +68,7 @@
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.TickCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+			this.TradeInfoSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.TradeChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.TradeResultGrid = new System.Windows.Forms.DataGridView();
 			this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -83,14 +83,16 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
+			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ShowGraphMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).BeginInit();
 			this.statusStrip1.SuspendLayout();
 			this.panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-			this.splitContainer2.Panel1.SuspendLayout();
-			this.splitContainer2.Panel2.SuspendLayout();
-			this.splitContainer2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.TradeInfoSplitContainer)).BeginInit();
+			this.TradeInfoSplitContainer.Panel1.SuspendLayout();
+			this.TradeInfoSplitContainer.Panel2.SuspendLayout();
+			this.TradeInfoSplitContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).BeginInit();
 			this.panel2.SuspendLayout();
@@ -105,7 +107,8 @@
             this.FileMenuItem,
             this.toolStripMenuItem1,
             this.simulationToolStripMenuItem,
-            this.symbolsToolStripMenuItem});
+            this.symbolsToolStripMenuItem,
+            this.viewToolStripMenuItem});
 			this.MainMenu.Location = new System.Drawing.Point(0, 0);
 			this.MainMenu.Name = "MainMenu";
 			this.MainMenu.Size = new System.Drawing.Size(846, 24);
@@ -303,7 +306,7 @@
 			// 
 			// panel1
 			// 
-			this.panel1.Controls.Add(this.splitContainer2);
+			this.panel1.Controls.Add(this.TradeInfoSplitContainer);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 24);
 			this.panel1.Name = "panel1";
@@ -311,24 +314,23 @@
 			this.panel1.Size = new System.Drawing.Size(596, 448);
 			this.panel1.TabIndex = 3;
 			// 
-			// splitContainer2
+			// TradeInfoSplitContainer
 			// 
-			this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer2.Location = new System.Drawing.Point(5, 0);
-			this.splitContainer2.Name = "splitContainer2";
-			this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.TradeInfoSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.TradeInfoSplitContainer.Location = new System.Drawing.Point(5, 0);
+			this.TradeInfoSplitContainer.Name = "TradeInfoSplitContainer";
+			this.TradeInfoSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer2.Panel1
+			// TradeInfoSplitContainer.Panel1
 			// 
-			this.splitContainer2.Panel1.Controls.Add(this.TradeChart);
-			this.splitContainer2.Panel1Collapsed = true;
+			this.TradeInfoSplitContainer.Panel1.Controls.Add(this.TradeChart);
 			// 
-			// splitContainer2.Panel2
+			// TradeInfoSplitContainer.Panel2
 			// 
-			this.splitContainer2.Panel2.Controls.Add(this.TradeResultGrid);
-			this.splitContainer2.Size = new System.Drawing.Size(586, 443);
-			this.splitContainer2.SplitterDistance = 223;
-			this.splitContainer2.TabIndex = 1;
+			this.TradeInfoSplitContainer.Panel2.Controls.Add(this.TradeResultGrid);
+			this.TradeInfoSplitContainer.Size = new System.Drawing.Size(586, 443);
+			this.TradeInfoSplitContainer.SplitterDistance = 223;
+			this.TradeInfoSplitContainer.TabIndex = 1;
 			// 
 			// TradeChart
 			// 
@@ -396,7 +398,7 @@
 			this.TradeResultGrid.Name = "TradeResultGrid";
 			this.TradeResultGrid.ReadOnly = true;
 			this.TradeResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.TradeResultGrid.Size = new System.Drawing.Size(586, 443);
+			this.TradeResultGrid.Size = new System.Drawing.Size(586, 216);
 			this.TradeResultGrid.TabIndex = 3;
 			// 
 			// typeDataGridViewTextBoxColumn
@@ -534,6 +536,23 @@
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
+			// viewToolStripMenuItem
+			// 
+			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ShowGraphMenuItem});
+			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.viewToolStripMenuItem.Text = "View";
+			// 
+			// ShowGraphMenuItem
+			// 
+			this.ShowGraphMenuItem.Checked = true;
+			this.ShowGraphMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.ShowGraphMenuItem.Name = "ShowGraphMenuItem";
+			this.ShowGraphMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.ShowGraphMenuItem.Text = "Show Graph";
+			this.ShowGraphMenuItem.Click += new System.EventHandler(this.ShowGraphMenuItem_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -554,10 +573,10 @@
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
 			this.panel1.ResumeLayout(false);
-			this.splitContainer2.Panel1.ResumeLayout(false);
-			this.splitContainer2.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-			this.splitContainer2.ResumeLayout(false);
+			this.TradeInfoSplitContainer.Panel1.ResumeLayout(false);
+			this.TradeInfoSplitContainer.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.TradeInfoSplitContainer)).EndInit();
+			this.TradeInfoSplitContainer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).EndInit();
 			this.panel2.ResumeLayout(false);
@@ -582,7 +601,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.SplitContainer splitContainer2;
+		private System.Windows.Forms.SplitContainer TradeInfoSplitContainer;
 		private System.Windows.Forms.DataVisualization.Charting.Chart TradeChart;
 		private System.Windows.Forms.DataGridView TradeResultGrid;
 		private System.Windows.Forms.DataGridViewTextBoxColumn typeDataGridViewTextBoxColumn;
@@ -612,6 +631,8 @@
 		private System.Windows.Forms.ToolStripStatusLabel StateStatusLabel;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem SetDataCountMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ShowGraphMenuItem;
 	}
 }
 

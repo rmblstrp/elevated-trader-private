@@ -179,7 +179,7 @@
 			// 
 			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
 			this.LoadDataMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-			this.LoadDataMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.LoadDataMenuItem.Text = "Load";
 			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
 			// 
@@ -187,19 +187,19 @@
 			// 
 			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
 			this.StopLoadingMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.StopLoadingMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.StopLoadingMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.StopLoadingMenuItem.Text = "Stop";
 			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(123, 6);
 			// 
 			// SetDataCountMenuItem
 			// 
 			this.SetDataCountMenuItem.Name = "SetDataCountMenuItem";
-			this.SetDataCountMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.SetDataCountMenuItem.Size = new System.Drawing.Size(126, 22);
 			this.SetDataCountMenuItem.Text = "Set Count";
 			this.SetDataCountMenuItem.Click += new System.EventHandler(this.SetDataCountMenuItem_Click);
 			// 
@@ -216,7 +216,7 @@
 			// 
 			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
 			this.RunSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.RunSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.RunSimulationMenuItem.Text = "Run";
 			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulationMenuItem_Click);
 			// 
@@ -224,7 +224,7 @@
 			// 
 			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
 			this.StopSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.StopSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.StopSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.StopSimulationMenuItem.Text = "Stop";
 			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulationMenuItem_Click);
 			// 
@@ -321,6 +321,7 @@
 			// splitContainer2.Panel1
 			// 
 			this.splitContainer2.Panel1.Controls.Add(this.TradeChart);
+			this.splitContainer2.Panel1Collapsed = true;
 			// 
 			// splitContainer2.Panel2
 			// 
@@ -395,7 +396,7 @@
 			this.TradeResultGrid.Name = "TradeResultGrid";
 			this.TradeResultGrid.ReadOnly = true;
 			this.TradeResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.TradeResultGrid.Size = new System.Drawing.Size(586, 216);
+			this.TradeResultGrid.Size = new System.Drawing.Size(586, 443);
 			this.TradeResultGrid.TabIndex = 3;
 			// 
 			// typeDataGridViewTextBoxColumn

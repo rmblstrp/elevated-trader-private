@@ -102,9 +102,10 @@
 
 		#region -- Constants --
 
+		const string PathBase = @"library\";
 		const string SymbolsPath = @"symbols\";
-		const string IndicatorsPath = @"indicators\";
-		const string StrategiesPath = @"strategies\";
+		const string IndicatorsPath = PathBase + @"indicators\";
+		const string StrategiesPath = PathBase + @"strategies\";
 
 		const string ScriptsFilter = "*.cs";
 
@@ -169,6 +170,8 @@
 		}
 
 		#region -- Strategies --
+
+		int indicator_notify_count = 0;
 		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
 			Action a = () =>
@@ -176,9 +179,14 @@
 				LoadScripts();
 			};
 
-			this.Invoke(a);
+			if (++indicator_notify_count == 3)
+			{
+				this.Invoke(a);
+				indicator_notify_count = 0;
+			}
 		}
 
+		int strategy_notify_count = 0;
 		void strategiesWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
 			Action a = () =>
@@ -186,7 +194,11 @@
 				LoadScripts();
 			};
 
-			this.Invoke(a);
+			if (++strategy_notify_count == 3)
+			{
+				this.Invoke(a);
+				strategy_notify_count = 0;
+			}
 		}
 
 		private void LoadScripts()

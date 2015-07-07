@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ElevatedTrader
 {
 	public class TradingSession : ITradingSession
-	{		
+	{
 		protected List<ITrade> trades = new List<ITrade>();
 
 		public double Equity
@@ -66,7 +66,7 @@ namespace ElevatedTrader
 
 		protected void AddTrade(TradeType type, int quantity, ITradingPeriodAggregator aggregator)
 		{
-			var price =  type == TradeType.Buy ? aggregator.Last.Ask : aggregator.Last.Bid;
+			var price = type == TradeType.Buy ? aggregator.Last.Ask : aggregator.Last.Bid;
 			//var price = aggregator.Last.Price;
 			var open_cost = Symbol.HasOpenCost ? 1 : 0;
 
@@ -81,19 +81,19 @@ namespace ElevatedTrader
 				return;
 			}
 
-			var last = trades[trades.Count - 1];			
+			var last = trades[trades.Count - 1];
 			var price_difference = price - last.Price;
 			var tick_change = price_difference / Symbol.TickRate;
-			var value = tick_change * Symbol.TickValue;			
-			var profit = (value * Position) - Math.Abs(Position * Symbol.PerQuantityCost);
+			var value = tick_change * Symbol.TickValue;
+			var profit = (value * Position) - Math.Abs(Position * Symbol.PerQuantityCost) - Math.Abs(Position * Symbol.TickValue * Symbol.Slippage);
 
 			// position + quantity = a
 			// position - quantity = b
 			// a - b - position = ???
-			
+
 			Position += quantity;
 
-			Equity += profit + Math.Abs(price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost;
+			Equity += profit + Math.Abs(price * Position * open_cost) - Math.Abs(Position * Symbol.PerQuantityCost) - Symbol.PerTradeCost - Math.Abs(Position * Symbol.TickValue * Symbol.Slippage);
 
 			var order = new Trade(type, quantity, price, Equity, profit, aggregator.Indexes());
 

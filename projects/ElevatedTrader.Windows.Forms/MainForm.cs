@@ -64,8 +64,8 @@
 		private bool busy = false;
 		private ApplicationSettings application = new ApplicationSettings()
 		{
-			//DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
-			DataConnetionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
+			DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
+			//DataConnetionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
 		};
 
 		private BindingSource symbolsBindingSource = new BindingSource();
@@ -91,11 +91,12 @@
 		};
 
 		private List<TradeTick> ticks = new List<TradeTick>(10000000);
-		private BindingList<ITrade> trades = new BindingList<ITrade>();
+		private BindingList<ITrade> trades;
+		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
 		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
-		private int dataCount = 50000;
+		private int dataCount = int.MaxValue;
 		#endregion
 
 		#region -- Constants --
@@ -163,6 +164,7 @@
 			};
 
 			StrategiesComboBox.DataSource = strategies;
+			SetShowGraphCheckedState();
 		}
 
 		#region -- Strategies --
@@ -390,7 +392,7 @@
 				using (var command = connection.CreateCommand())
 				{
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
-					command.CommandText = "select top(@count) json from symbolhistory where symbol = @symbol";
+					command.CommandText = "select top(@count) json, type from symbolhistory where symbol = @symbol";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
 					command.Parameters.Add(new SqlParameter("@count", dataCount));
 
@@ -402,19 +404,27 @@
 
 						while (reader.Read())
 						{
-							//var item = JsonConvert.DeserializeObject<OldDataFormat>(reader.GetString(0));
-							var item = JsonConvert.DeserializeObject<TradeHistoryQuote>(reader.GetString(0));
+							//var item = JsonConvert.DeserializeObject<OldDataFormat>(reader.GetString(0));							
 
-							ticks.Add
-							(
-								new TradeTick()
-								{
-									Ask = item.AskPrice,
-									Bid = item.BidPrice,
-									//Price = item.Price
-									Price = (item.AskPrice + item.BidPrice) / 2
-								}
-							);
+							var type = (TradeHistoryType)reader.GetInt32(1);
+
+							switch (type)
+							{
+								case TradeHistoryType.TimeAndSale:
+									var item = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
+									ticks.Add
+									(
+										new TradeTick()
+										{
+											Ask = item.AskPrice,
+											Bid = item.BidPrice,
+											Price = item.Price
+										}
+									);
+									break;
+							}
+
+
 
 							if (++count % 25000 == 0)
 							{
@@ -442,6 +452,13 @@
 			periodSeries.Clear();
 			tradeSeries.Clear();
 			indicatorSeries.Clear();
+			tradeBuffer.Clear();
+
+			if (trades != null)
+			{
+				trades.Clear();
+				TradesBindingSource.DataSource = null;
+			}
 
 			LinkSession();
 			LinkAggregrator();
@@ -451,6 +468,9 @@
 				SetState(ApplicationState.Running);
 				await Task.Run(() => RunSimulation());
 				SetState(ApplicationState.Idle);
+
+				trades = new BindingList<ITrade>(tradeBuffer);
+				TradesBindingSource.DataSource = trades;
 			}
 			finally
 			{
@@ -512,8 +532,6 @@
 			}
 			else
 			{
-				trades.Clear();
-				TradesBindingSource.DataSource = trades;
 				strategy.Session.Trade += OnTrade;
 				session_ontrade = true;
 			}
@@ -532,7 +550,7 @@
 		{
 			Action<ITrade> a = (order) =>
 			{
-				trades.Add(order);
+				tradeBuffer.Add(order);
 
 				foreach (var kv in periodSeries)
 				{
@@ -547,7 +565,7 @@
 					tradeSeries[kv.Key].Points.Add(CreateTradeDataPoint(kv.Key, order));
 				}
 
-				TickCountStatusLabel.Text = trades.Count.ToString();
+				TickCountStatusLabel.Text = tradeBuffer.Count.ToString();
 			};
 
 			this.Invoke(a, trade);
@@ -564,7 +582,7 @@
 		{
 			periodSeries.Clear();
 			strategy.Aggregator.BeforeNewPeriod += Aggregator_BeforeNewPeriod;
-		}		
+		}
 
 		private void UnlinkAggregator()
 		{
@@ -701,12 +719,18 @@
 
 			return item;
 		}
-		#endregion		
+		#endregion
 
 		private void ShowGraphMenuItem_Click(object sender, EventArgs e)
 		{
 			TradeInfoSplitContainer.Panel1Collapsed = !TradeInfoSplitContainer.Panel1Collapsed;
-			ShowGraphMenuItem.Checked = TradeInfoSplitContainer.Panel1Collapsed;
+			SetShowGraphCheckedState();
+		}
+
+		private void SetShowGraphCheckedState()
+		{
+			ShowGraphMenuItem.Checked = !TradeInfoSplitContainer.Panel1Collapsed;
+			ShowGraphMenuItem.CheckState = ShowGraphMenuItem.Checked ? CheckState.Checked : CheckState.Unchecked;
 		}
 	}
 }

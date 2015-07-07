@@ -130,9 +130,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Symbols\6E.json" />
     <None Include="Symbols\ES.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Symbols\ZN.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

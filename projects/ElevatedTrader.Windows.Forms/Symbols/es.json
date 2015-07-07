@@ -6,5 +6,5 @@
 	"HasOpenCost": false,
 	"PerTradeCost": 0,
 	"PerQuantityCost": 3.42,
-	"Slippage":  0
+	"Slippage":  2
 }

@@ -49,7 +49,7 @@ public class HullMovingAverage : IIndicator
 
 		for (int index = Math.Max(0, periods.Count - required_size); index < periods.Count; index++)
 		{
-			values.Add(periods[index].Value(PeriodValue));
+			values.Add(periods[index].PeriodValue(PeriodValue));
 		}
 
 		var hma = MathHelper.HullMovingAverage(values);

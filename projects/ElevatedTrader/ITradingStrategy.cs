@@ -18,6 +18,8 @@ namespace ElevatedTrader
 
 		Type SettingsType { get; }
 
+		void AddQuote(ITradeQuote quote);
+
 		void AddTick(ITradeTick tick);
 
 		void Initialize();

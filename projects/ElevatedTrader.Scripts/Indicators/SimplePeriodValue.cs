@@ -34,7 +34,7 @@ public class SimplePeriodValue : IIndicator
 	public void Calculate(IList<ITradingPeriod> periods)
 	{
 		var current = periods.Last();
-		var pv = current.Value(PeriodValue);
+		var pv = current.PeriodValue(PeriodValue);
 		
 		var result = (IndicatorResult)Results[Results.Count - 1];
 		result.Values.Clear();

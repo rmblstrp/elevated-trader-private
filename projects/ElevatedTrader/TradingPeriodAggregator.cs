@@ -33,6 +33,16 @@ namespace ElevatedTrader
 			AddNewPeriod(size);
 		}
 
+		public void AddQuote(ITradeQuote quote)
+		{
+			foreach (var item in periods)
+			{
+				var period = item.Value[item.Value.Count - 1];
+
+				period.AddQuote(quote);
+			}
+		}
+
 		public void AddTick(ITradeTick tick)
 		{
 			last = tick;

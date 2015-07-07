@@ -11,6 +11,8 @@ namespace ElevatedTrader
 	{
 		protected List<double> ticks;
 		protected List<double> changes;
+		protected List<double> quotes;
+		protected double total, quoteTotal;
 
 		public virtual int TickCount
 		{
@@ -42,12 +44,6 @@ namespace ElevatedTrader
 			protected set;
 		}
 
-		public virtual double Total
-		{
-			get;
-			protected set;
-		}
-
 		public virtual double EfficiencyRatio
 		{
 			get
@@ -56,12 +52,17 @@ namespace ElevatedTrader
 			}
 		}
 
-		public IList<double> Ticks
+		public virtual IList<double> Quotes
+		{
+			get { return quotes; }
+		}
+
+		public virtual IList<double> Ticks
 		{
 			get { return ticks; }
 		}
 
-		public IList<double> Changes
+		public virtual IList<double> Changes
 		{
 			get { return changes; }
 		}
@@ -77,7 +78,15 @@ namespace ElevatedTrader
 			changes = new List<double>(capacity);
 		}
 
-		public void AddTick(ITradeTick tick)
+		public virtual void AddQuote(ITradeQuote quote)
+		{
+			var average = (quote.Bid - quote.Ask) / 2;
+
+			quoteTotal += average;
+			quotes.Add(average);
+		}
+
+		public virtual void AddTick(ITradeTick tick)
 		{
 			if (TickCount == 0)
 			{
@@ -93,17 +102,44 @@ namespace ElevatedTrader
 			}
 
 			TickCount++;
-			Total += tick.Price;
+			total += tick.Price;
 
 			ticks.Add(tick.Price);
 		}
 
-		public double Value(PeriodValueType type)
+		public virtual double QuoteValue(PeriodValueType type)
 		{
 			switch (type)
 			{
 				case PeriodValueType.Average:
-					return Total / TickCount;
+					return quoteTotal / quotes.Count;
+				case PeriodValueType.GeometricMean:
+					return MathHelper.GeometricMean(quotes);
+				case PeriodValueType.WeightedAverage:
+					return MathHelper.WeightedAverage(quotes);
+				case PeriodValueType.HarmonicMean:
+					return MathHelper.HarmonicMean(quotes);
+				case PeriodValueType.Median:
+					return Statistics.Median(quotes);
+				case PeriodValueType.Skewness:
+					return Statistics.Skewness(quotes);
+				case PeriodValueType.Variance:
+					return Statistics.Variance(quotes);
+				case PeriodValueType.Kurtosis:
+					return Statistics.Kurtosis(quotes);
+				case PeriodValueType.StandardDeviation:
+					return Statistics.StandardDeviation(quotes);
+			}
+
+			return 0;
+		}
+
+		public virtual double PeriodValue(PeriodValueType type)
+		{
+			switch (type)
+			{
+				case PeriodValueType.Average:
+					return total / TickCount;
 				case PeriodValueType.GeometricMean:
 					return MathHelper.GeometricMean(ticks);
 				case PeriodValueType.WeightedAverage:

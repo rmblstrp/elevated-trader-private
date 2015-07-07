@@ -18,6 +18,8 @@ namespace ElevatedTrader
 
 		void AddSize(int size, int capacity);
 
+		void AddQuote(ITradeQuote quote);
+
 		void AddTick(ITradeTick tick);
 
 		ITradingPeriod CurrentPeriod(int size);

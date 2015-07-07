@@ -18,7 +18,7 @@ namespace ElevatedTrader
 
 		double Close { get; }
 
-		double Total { get; }
+		IList<double> Quotes { get; }
 
 		IList<double> Ticks { get; }
 
@@ -26,8 +26,12 @@ namespace ElevatedTrader
 
 		double EfficiencyRatio { get; }
 
-		void AddTick(ITradeTick tick);
+		void AddQuote(ITradeQuote quote);
 
-		double Value(PeriodValueType type);
+		void AddTick(ITradeTick tick);		
+
+		double PeriodValue(PeriodValueType type);
+
+		double QuoteValue(PeriodValueType type);
 	}
 }

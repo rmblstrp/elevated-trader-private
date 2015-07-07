@@ -8,12 +8,14 @@ using ElevatedTrader;
 public class HullStrategy : TradingStrategy
 {
 	private HullMovingAverage hma;
+	private HullMovingAverage quote;
 
 	public class StrategySettings : TradingStrategySettings
 	{
 		private int length = 8;
 		private double tickPercentage = 0.75;
 		private bool periodCorrection = false;
+		private PeriodValueType quoteType = PeriodValueType.WeightedAverage;
 
 		public int Length
 		{
@@ -31,6 +33,12 @@ public class HullStrategy : TradingStrategy
 		{
 			get { return tickPercentage; }
 			set { tickPercentage = value; }
+		}
+
+		public PeriodValueType QuoteValue
+		{
+			get { return quoteType; }
+			set { quoteType = value; }
 		}
 
 		public StrategySettings()
@@ -52,6 +60,7 @@ public class HullStrategy : TradingStrategy
 			settings.Capacity = (int)obj.Capacity;
 			settings.PeriodTicks = (int)obj.PeriodTicks;
 			settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
+			settings.QuoteValue = (PeriodValueType)obj.QuoteValue;
 			settings.ReversePositions = obj.ReversePositions;
 			settings.Length = (int)obj.Length;
 			settings.PeriodCorrection = obj.PeriodCorrection;
@@ -74,6 +83,7 @@ public class HullStrategy : TradingStrategy
 		if (!descisionExecuted && period.TickCount >= settings.PeriodTicks * settings.TickPercentage)
 		{
 			hma.Calculate(aggregator.Periods[settings.PeriodTicks]);
+			quote.Calculate(aggregator.Periods[settings.PeriodTicks]);
 
 			ExecuteDecision();
 
@@ -110,16 +120,32 @@ public class HullStrategy : TradingStrategy
 	private void ExecuteDecision()
 	{
 		var result = hma.Results[hma.Results.Count - 1];
+		var periods = aggregator.Periods[settings.PeriodTicks];
+		var last = periods[periods.Count - 1];
+
+		//wasSignaled = true;
+
+		//if (result.Values.Count == 0) return;
+
+		//if (last.PeriodValue(settings.PeriodValue) > result.Values[0] && result.Direction == TrendDirection.Falling)
+		//{
+		//	ExecuteOrder(TradeType.Buy);
+		//}
+		//else if (last.PeriodValue(settings.PeriodValue) < result.Values[0] && result.Direction == TrendDirection.Rising)
+		//{
+		//	ExecuteOrder(TradeType.Sell);
+		//}
+		
 
 		if (result.Signaled)
 		{
 			wasSignaled = true;
 
-			if (result.Direction == TrendDirection.Rising)
+			if (result.Direction == TrendDirection.Rising && last.QuoteValue(settings.QuoteValue) > result.Values[0])
 			{
 				ExecuteOrder(TradeType.Buy);
 			}
-			else if (result.Direction == TrendDirection.Falling)
+			else if (result.Direction == TrendDirection.Falling && last.QuoteValue(settings.QuoteValue) < result.Values[0])
 			{
 				ExecuteOrder(TradeType.Sell);
 			}
@@ -147,6 +173,12 @@ public class HullStrategy : TradingStrategy
 
 		aggregator.AddSize(settings.PeriodTicks, settings.Capacity);
 		hma = new HullMovingAverage(settings.Capacity)
+		{
+			Length = settings.Length,
+			PeriodValue = settings.PeriodValue
+		};
+
+		quote = new HullMovingAverage(settings.Capacity)
 		{
 			Length = settings.Length,
 			PeriodValue = settings.PeriodValue

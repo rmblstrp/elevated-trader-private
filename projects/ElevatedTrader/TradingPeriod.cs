@@ -76,6 +76,7 @@ namespace ElevatedTrader
 		{
 			ticks = new List<double>(capacity);
 			changes = new List<double>(capacity);
+			quotes = new List<double>(capacity * 2);
 		}
 
 		public virtual void AddQuote(ITradeQuote quote)

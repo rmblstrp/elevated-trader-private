@@ -91,7 +91,13 @@
 			"MathNet.Numerics"
 		};
 
-		private List<TradeTick> ticks = new List<TradeTick>(10000000);
+		class HistoryContainer
+		{
+			public TradeHistoryType Type;
+			public object Item;
+		}
+
+		private List<HistoryContainer> history = new List<HistoryContainer>(10000000);
 		private BindingList<ITrade> trades;
 		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
@@ -405,13 +411,13 @@
 				using (var command = connection.CreateCommand())
 				{
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
-					command.CommandText = "select top(@count) json, type from symbolhistory where symbol = @symbol";
+					command.CommandText = "select top(@count) json, type from symbolhistory where symbol = @symbol order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
 					command.Parameters.Add(new SqlParameter("@count", dataCount));
 
 					using (var reader = command.ExecuteReader())
 					{
-						ticks.Clear();
+						history.Clear();
 
 						int count = 0;
 
@@ -423,15 +429,36 @@
 
 							switch (type)
 							{
-								case TradeHistoryType.TimeAndSale:
-									var item = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
-									ticks.Add
+								case TradeHistoryType.Quote:
+									var quote = JsonConvert.DeserializeObject<TradeHistoryQuote>(reader.GetString(0));
+
+									history.Add
 									(
-										new TradeTick()
+										new HistoryContainer()
 										{
-											Ask = item.AskPrice,
-											Bid = item.BidPrice,
-											Price = item.Price
+											Type = TradeHistoryType.Quote,
+											Item = new TradeQuote()
+											{
+												Ask = quote.AskPrice,
+												Bid = quote.BidPrice
+											}
+										}
+									);
+									break;
+
+								case TradeHistoryType.TimeAndSale:
+									var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
+									history.Add
+									(
+										new HistoryContainer()
+										{
+											Type = TradeHistoryType.TimeAndSale,
+											Item = new TradeTick()
+											{
+												Ask = ts.AskPrice,
+												Bid = ts.BidPrice,
+												Price = ts.Price
+											}
 										}
 									);
 									break;
@@ -501,15 +528,25 @@
 			Action increment = () => { SimulationProgress.Increment(1); };
 			Action step = () => { SimulationProgress.PerformStep(); };
 
-			this.Invoke(set_maximum, ticks.Count, StepValue);
+			this.Invoke(set_maximum, history.Count, StepValue);
 
 			strategy.Initialize();
 
-			for (int index = 0; index < ticks.Count; index++)
+			for (int index = 0; index < history.Count; index++)
 			{
-				var item = ticks[index];
+				var item = history[index];
 
-				strategy.AddTick(item);
+				switch (item.Type)
+				{
+					case TradeHistoryType.Quote:
+						strategy.AddQuote((ITradeQuote)item.Item);
+						break;
+					case TradeHistoryType.TimeAndSale:
+						strategy.AddTick((ITradeTick)item.Item);
+						break;
+				}
+
+				
 
 				if ((index + 1) % StepValue == 0)
 				{

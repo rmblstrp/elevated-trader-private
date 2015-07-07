@@ -88,13 +88,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Strategies\PeriodValueStrategy.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Indicators\HullMovingAverage.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Indicators\SimplePeriodValue.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -105,7 +105,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Strategies\HullStrategy.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -141,6 +141,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">
+      <Project>{c43a1534-cc2c-44db-bd0a-4ccbf30c193d}</Project>
+      <Name>ElevatedTrader.Math</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ElevatedTrader\ElevatedTrader.csproj">
       <Project>{18a39e37-5244-418f-9fd9-b1d024e15421}</Project>
       <Name>ElevatedTrader</Name>

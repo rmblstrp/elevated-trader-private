@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{04E95530-EE2E-4A8B-8366-E22C66A7F472}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ElevatedTrader.Scripts</RootNamespace>
+    <AssemblyName>ElevatedTrader.Scripts</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MathNet.Filtering">
+      <HintPath>..\..\solutions\packages\MathNet.Filtering.0.2.0-alpha\lib\net40\MathNet.Filtering.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Filtering.Kalman">
+      <HintPath>..\..\solutions\packages\MathNet.Filtering.Kalman.0.2.0-alpha\lib\net40\MathNet.Filtering.Kalman.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\..\solutions\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Indicators\HullMovingAverage.cs">
+      <Link>Indicators\HullMovingAverage.cs</Link>
+    </Compile>
+    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Indicators\SimplePeriodValue.cs">
+      <Link>Indicators\SimplePeriodValue.cs</Link>
+    </Compile>
+    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Strategies\HullStrategy.cs">
+      <Link>Strategies\HullStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Strategies\PeriodValueStrategy.cs">
+      <Link>Strategies\PeriodValueStrategy.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">
+      <Project>{c43a1534-cc2c-44db-bd0a-4ccbf30c193d}</Project>
+      <Name>ElevatedTrader.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ElevatedTrader\ElevatedTrader.csproj">
+      <Project>{18a39e37-5244-418f-9fd9-b1d024e15421}</Project>
+      <Name>ElevatedTrader</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

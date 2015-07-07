@@ -87,6 +87,7 @@
 		private string[] reference_assemblies = new string[]
 		{
 			"ElevatedTrader",
+			"ElevatedTrader.Math",
 			"MathNet.Numerics"
 		};
 

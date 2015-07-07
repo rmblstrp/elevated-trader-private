@@ -83,7 +83,6 @@
     <Compile Include="ITradeTick.cs" />
     <Compile Include="ITradingSession.cs" />
     <Compile Include="ITradingStrategy.cs" />
-    <Compile Include="MathHelper.cs" />
     <Compile Include="PeriodValueType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TradingStrategySettings.cs" />
@@ -100,7 +99,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">
+      <Project>{c43a1534-cc2c-44db-bd0a-4ccbf30c193d}</Project>
+      <Name>ElevatedTrader.Math</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

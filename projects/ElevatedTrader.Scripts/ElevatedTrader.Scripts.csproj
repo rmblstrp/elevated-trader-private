@@ -49,19 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Indicators\HullMovingAverage.cs">
-      <Link>Indicators\HullMovingAverage.cs</Link>
+    <Compile Include="Indicators\HullMovingAverage.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Indicators\SimplePeriodValue.cs">
-      <Link>Indicators\SimplePeriodValue.cs</Link>
-    </Compile>
-    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Strategies\HullStrategy.cs">
-      <Link>Strategies\HullStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\ElevatedTrader.Windows.Forms\bin\Debug\Strategies\PeriodValueStrategy.cs">
-      <Link>Strategies\PeriodValueStrategy.cs</Link>
+    <Compile Include="Indicators\SimplePeriodValue.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategies\HullStrategy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Strategies\PeriodValueStrategy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">

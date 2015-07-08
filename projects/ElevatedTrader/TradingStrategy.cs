@@ -17,6 +17,7 @@ namespace ElevatedTrader
 		protected ITradeSymbol symbol;
 		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int, IList<IIndicator>>();
 		protected T settings = new T();
+		protected Dictionary<int, bool> periodTriggered = new Dictionary<int, bool>();
 
 		public ITradingPeriodAggregator Aggregator
 		{
@@ -46,9 +47,6 @@ namespace ElevatedTrader
 				settings.ReversePositions = obj.ReversePositions;
 				settings.PeriodCorrection = obj.PeriodCorrection;
 				settings.TickPercentage = obj.TickPercentage;
-
-				//settings.PeriodTicks.Clear();
-				//settings.PeriodTicks.AddRange((IList<int>)obj.PeriodTicks);
 				settings.PeriodTicks = (int[])obj.PeriodTicks;
 			}
 		}
@@ -75,13 +73,31 @@ namespace ElevatedTrader
 		public virtual void AddTick(ITradeTick tick)
 		{
 			aggregator.AddTick(tick);
+
+			for (int index = 0; index < settings.PeriodTicks.Length; index++)
+			{
+				var size = settings.PeriodTicks[index];
+				var period = aggregator.Periods[size].Last();
+				var triggered = periodTriggered[size];
+
+				if (!triggered && period.TickCount >= size * settings.TickPercentage)
+				{
+					OnPeriodTrigger(size);
+					periodTriggered[size] = true;
+				}
+			}
 		}
 
 		protected virtual void AfterNewPeriod(int size)
 		{
+			periodTriggered[size] = false;
 		}
 
 		protected virtual void BeforeNewPeriod(int size)
+		{
+		}
+
+		protected virtual void OnPeriodTrigger(int size)
 		{
 		}
 
@@ -90,6 +106,14 @@ namespace ElevatedTrader
 			session.Reset();
 			aggregator.Reset();
 			indicators.Clear();
+			periodTriggered.Clear();
+
+			for (int index = 0; index < settings.PeriodTicks.Length; index++)
+			{
+				var size = settings.PeriodTicks[index];
+				aggregator.AddSize(size, settings.Capacity);
+				periodTriggered.Add(size, false);
+			}
 		}
 
 		protected void Reverse(TradeType type)

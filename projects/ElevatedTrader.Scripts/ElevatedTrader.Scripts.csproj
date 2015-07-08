@@ -89,9 +89,6 @@
     <Compile Include="Strategies\KalmanStrategy.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Strategies\PeriodValueStrategy.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">

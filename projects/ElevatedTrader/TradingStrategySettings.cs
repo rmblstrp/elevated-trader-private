@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
 	public class TradingStrategySettings
 	{
-		protected int[] ticks = new int[1];
-		protected int capacity = 8192;
-		protected PeriodValueType valueType = PeriodValueType.WeightedAverage;
-		private double tickPercentage = 0.75;
-		private bool periodCorrection = false;
+		protected int[] ticks = new int[] { 610 };
+		protected int capacity = 10000;
+		protected PeriodValueType valueType = PeriodValueType.WeightedAverage;		
+		protected bool periodCorrection = false;
+		protected double tickPercentage = 0.75;
 
 		public int Capacity
 		{

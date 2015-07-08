@@ -17,24 +17,11 @@ namespace Hull
 			get { return length; }
 			set { length = value; }
 		}
-
-		public PeriodValueType QuoteValue
-		{
-			get { return quoteType; }
-			set { quoteType = value; }
-		}
-
-		public Settings()
-		{
-		}
 	}
 
 	public class Strategy : TradingStrategy<Settings>
 	{
 		private HullMovingAverage hma;
-		private HullMovingAverage quote;
-
-		private bool descisionExecuted = false;
 		private TrendDirection direction;
 		private bool wasSignaled = false;
 
@@ -46,27 +33,8 @@ namespace Hull
 				base.Settings = value;
 
 				dynamic obj = value;
-				settings.QuoteValue = (PeriodValueType)obj.QuoteValue;
 				settings.Length = (int)obj.Length;
 
-			}
-		}
-
-		public override void AddTick(ITradeTick tick)
-		{
-			base.AddTick(tick);
-
-			var list = aggregator.Periods[settings.PeriodTicks[0]];
-			var period = list[list.Count - 1];
-
-			if (!descisionExecuted && period.TickCount >= settings.PeriodTicks[0] * settings.TickPercentage)
-			{
-				hma.Calculate(aggregator.Periods[settings.PeriodTicks[0]]);
-				quote.Calculate(aggregator.Periods[settings.PeriodTicks[0]]);
-
-				ExecuteDecision();
-
-				descisionExecuted = true;
 			}
 		}
 
@@ -75,22 +43,20 @@ namespace Hull
 			base.AfterNewPeriod(size);
 
 			hma.NewPeriod();
-			descisionExecuted = false;
+
 			wasSignaled = false;
 		}
 
 		protected override void BeforeNewPeriod(int size)
 		{
 			base.BeforeNewPeriod(size);
+		}
 
-			hma.Calculate(aggregator.Periods[settings.PeriodTicks[0]]);
+		protected override void OnPeriodTrigger(int size)
+		{
+			hma.Calculate(aggregator.Periods[size]);
 
-			var result = hma.Results[hma.Results.Count - 1];
-
-			if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction || !wasSignaled)
-			{
-				ExecuteDecision();
-			}
+			ExecuteDecision();
 		}
 
 		private void ExecuteDecision()
@@ -99,28 +65,17 @@ namespace Hull
 			var periods = aggregator.Periods[settings.PeriodTicks[0]];
 			var last = periods[periods.Count - 1];
 
-			wasSignaled = true;
-
 			if (result.Values.Count == 0) return;
-
-			if (last.PeriodValue(settings.PeriodValue) > result.Values[0] && result.Direction == TrendDirection.Falling)
-			{
-				ExecuteOrder(TradeType.Buy);
-			}
-			else if (last.PeriodValue(settings.PeriodValue) < result.Values[0] && result.Direction == TrendDirection.Rising)
-			{
-				ExecuteOrder(TradeType.Sell);
-			}
 
 			if (result.Signaled)
 			{
 				wasSignaled = true;
 
-				if (result.Direction == TrendDirection.Rising && last.QuoteValue(settings.QuoteValue) > result.Values[0])
+				if (result.Direction == TrendDirection.Rising && last.PeriodValue(settings.PeriodValue) > result.Values[0])
 				{
 					ExecuteOrder(TradeType.Buy);
 				}
-				else if (result.Direction == TrendDirection.Falling && last.QuoteValue(settings.QuoteValue) < result.Values[0])
+				else if (result.Direction == TrendDirection.Falling && last.PeriodValue(settings.PeriodValue) < result.Values[0])
 				{
 					ExecuteOrder(TradeType.Sell);
 				}
@@ -139,14 +94,9 @@ namespace Hull
 		{
 			base.Initialize();
 
-			aggregator.AddSize(settings.PeriodTicks[0], settings.Capacity);
+			var size = settings.PeriodTicks.Last();
+		
 			hma = new HullMovingAverage(settings.Capacity)
-			{
-				Length = settings.Length,
-				PeriodValue = settings.PeriodValue
-			};
-
-			quote = new HullMovingAverage(settings.Capacity)
 			{
 				Length = settings.Length,
 				PeriodValue = settings.PeriodValue
@@ -154,10 +104,10 @@ namespace Hull
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))
 			{
-				indicators.Add(settings.PeriodTicks[0], new List<IIndicator>());
+				indicators.Add(size, new List<IIndicator>());
 			}
 
-			indicators[settings.PeriodTicks[0]].Add(hma);
+			indicators[size].Add(hma);
 		}
 	}
 }

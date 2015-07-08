@@ -114,6 +114,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ElevatedTrader.Scripts\Strategies\HullStrategy.cs">
+      <Link>Strategies\HullStrategy.cs</Link>
+    </None>
+    <None Include="..\ElevatedTrader.Scripts\Strategies\KalmanStrategy.cs">
+      <Link>Strategies\KalmanStrategy.cs</Link>
+    </None>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,7 +160,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Indicators\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">
       <Project>{c43a1534-cc2c-44db-bd0a-4ccbf30c193d}</Project>

@@ -10,7 +10,6 @@ namespace Hull
 	public class Settings : TradingStrategySettings
 	{
 		private int length = 8;
-		private PeriodValueType quoteType = PeriodValueType.WeightedAverage;
 
 		public int Length
 		{

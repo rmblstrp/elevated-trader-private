@@ -8,7 +8,7 @@ namespace ElevatedTrader
 {
 	public class TradingStrategySettings
 	{
-		protected int ticks = 610;
+		protected int[] ticks = new int[1];
 		protected int capacity = 8192;
 		protected PeriodValueType valueType = PeriodValueType.WeightedAverage;
 		private double tickPercentage = 0.75;
@@ -20,7 +20,7 @@ namespace ElevatedTrader
 			set { capacity = value; }
 		}
 
-		public int PeriodTicks
+		public int[] PeriodTicks
 		{
 			get { return ticks; }
 			set { ticks = value; }

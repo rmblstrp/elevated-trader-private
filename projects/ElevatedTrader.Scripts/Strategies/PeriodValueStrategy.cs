@@ -10,60 +10,44 @@ public class PeriodValueStrategy : TradingStrategy
 	private SimplePeriodValue periodValue;
 	private bool descisionExecuted = false;
 
-	public override object Settings
-	{
-		get { return settings; }
-		set
-		{
-			dynamic obj = value;
-
-			settings.Capacity = (int)obj.Capacity;
-			settings.PeriodTicks = (int)obj.PeriodTicks;
-			settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
-			settings.ReversePositions = obj.ReversePositions;
-			settings.PeriodCorrection = obj.PeriodCorrection;
-			settings.TickPercentage = obj.TickPercentage;
-		}
-	}	
-
 	public override void AddTick(ITradeTick tick)
 	{
 		base.AddTick(tick);
 
-		var list = aggregator.Periods[settings.PeriodTicks];
-		var period = list[list.Count - 1];
+		//var list = aggregator.Periods[settings.PeriodTicks[0]];
+		//var period = list[list.Count - 1];
 
-		if (!descisionExecuted && period.TickCount >= settings.PeriodTicks * settings.TickPercentage)
-		{
-			periodValue.Calculate(aggregator.Periods[settings.PeriodTicks]);
+		//if (!descisionExecuted && period.TickCount >= settings.PeriodTicks[0] * settings.TickPercentage)
+		//{
+		//	periodValue.Calculate(aggregator.Periods[settings.PeriodTicks[0]]);
 
-			ExecuteDecision();
+		//	ExecuteDecision();
 
-			descisionExecuted = true;
-		}
+		//	descisionExecuted = true;
+		//}
 	}
 
 	protected override void AfterNewPeriod(int size)
 	{
 		base.AfterNewPeriod(size);
 
-		periodValue.NewPeriod();
-		descisionExecuted = false;
-		wasSignaled = false;
+		//periodValue.NewPeriod();
+		//descisionExecuted = false;
+		//wasSignaled = false;
 	}
 
 	protected override void BeforeNewPeriod(int size)
 	{
 		base.BeforeNewPeriod(size);
 
-		periodValue.Calculate(aggregator.Periods[settings.PeriodTicks]);
+		//periodValue.Calculate(aggregator.Periods[settings.PeriodTicks[0]]);
 
-		var result = periodValue.Results[periodValue.Results.Count - 1];
+		//var result = periodValue.Results[periodValue.Results.Count - 1];
 
-		if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction || !wasSignaled)
-		{
-			ExecuteDecision();
-		}
+		//if (descisionExecuted && settings.PeriodCorrection && direction != result.Direction || !wasSignaled)
+		//{
+		//	ExecuteDecision();
+		//}
 	}
 
 	private TrendDirection direction;
@@ -71,23 +55,23 @@ public class PeriodValueStrategy : TradingStrategy
 
 	private void ExecuteDecision()
 	{
-		var result = periodValue.Results[periodValue.Results.Count - 1];
+		//var result = periodValue.Results[periodValue.Results.Count - 1];
 
-		if (result.Signaled)
-		{
-			wasSignaled = true;
+		//if (result.Signaled)
+		//{
+		//	wasSignaled = true;
 
-			if (result.Direction == TrendDirection.Rising)
-			{
-				ExecuteOrder(TradeType.Buy);
-			}
-			else if (result.Direction == TrendDirection.Falling)
-			{
-				ExecuteOrder(TradeType.Sell);
-			}
-		}
+		//	if (result.Direction == TrendDirection.Rising)
+		//	{
+		//		ExecuteOrder(TradeType.Buy);
+		//	}
+		//	else if (result.Direction == TrendDirection.Falling)
+		//	{
+		//		ExecuteOrder(TradeType.Sell);
+		//	}
+		//}
 
-		direction = result.Direction;
+		//direction = result.Direction;
 	}
 
 	private void ExecuteOrder(TradeType type)
@@ -99,17 +83,17 @@ public class PeriodValueStrategy : TradingStrategy
 	{
 		base.Initialize();
 
-		aggregator.AddSize(settings.PeriodTicks, settings.Capacity);
-		periodValue = new SimplePeriodValue(settings.Capacity)
-		{
-			PeriodValue = settings.PeriodValue
-		};
+		//aggregator.AddSize(settings.PeriodTicks[0], settings.Capacity);
+		//periodValue = new SimplePeriodValue(settings.Capacity)
+		//{
+		//	PeriodValue = settings.PeriodValue
+		//};
 
-		if (!indicators.ContainsKey(settings.PeriodTicks))
-		{
-			indicators.Add(settings.PeriodTicks, new List<IIndicator>());
-		}
+		//if (!indicators.ContainsKey(settings.PeriodTicks[0]))
+		//{
+		//	indicators.Add(settings.PeriodTicks[0], new List<IIndicator>());
+		//}
 
-		indicators[settings.PeriodTicks].Add(periodValue);
+		//indicators[settings.PeriodTicks[0]].Add(periodValue);
 	}
 }

@@ -10,13 +10,13 @@ namespace ElevatedTrader
 	{
 	}
 
-	public abstract class TradingStrategy<T> : ITradingStrategy where T : TradingStrategySettings
+	public abstract class TradingStrategy<T> : ITradingStrategy where T : TradingStrategySettings, new()
 	{
 		protected ITradingSession session;
 		protected ITradingPeriodAggregator aggregator;
 		protected ITradeSymbol symbol;
 		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int, IList<IIndicator>>();
-		protected T settings;
+		protected T settings = new T();
 
 		public ITradingPeriodAggregator Aggregator
 		{
@@ -41,12 +41,15 @@ namespace ElevatedTrader
 				if (settings == null) return;
 
 				dynamic obj = value;
-				settings.Capacity = (int)obj.Capacity;
-				settings.PeriodTicks = (int)obj.PeriodTicks;
+				settings.Capacity = (int)obj.Capacity;				
 				settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
 				settings.ReversePositions = obj.ReversePositions;
 				settings.PeriodCorrection = obj.PeriodCorrection;
 				settings.TickPercentage = obj.TickPercentage;
+
+				//settings.PeriodTicks.Clear();
+				//settings.PeriodTicks.AddRange((IList<int>)obj.PeriodTicks);
+				settings.PeriodTicks = (int[])obj.PeriodTicks;
 			}
 		}
 

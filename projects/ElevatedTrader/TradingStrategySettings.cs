@@ -11,6 +11,8 @@ namespace ElevatedTrader
 		protected int ticks = 610;
 		protected int capacity = 8192;
 		protected PeriodValueType valueType = PeriodValueType.WeightedAverage;
+		private double tickPercentage = 0.75;
+		private bool periodCorrection = false;
 
 		public int Capacity
 		{
@@ -34,6 +36,18 @@ namespace ElevatedTrader
 		{
 			get;
 			set;
+		}
+
+		public bool PeriodCorrection
+		{
+			get { return periodCorrection; }
+			set { periodCorrection = value; }
+		}
+
+		public double TickPercentage
+		{
+			get { return tickPercentage; }
+			set { tickPercentage = value; }
 		}
 	}
 }

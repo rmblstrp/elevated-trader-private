@@ -5,49 +5,33 @@ using System.Text;
 using System.Threading.Tasks;
 using ElevatedTrader;
 
-public class HullStrategy : TradingStrategy
+public class HullStrategySettings : TradingStrategySettings
+{
+	private int length = 8;
+	private PeriodValueType quoteType = PeriodValueType.WeightedAverage;
+
+	public int Length
+	{
+		get { return length; }
+		set { length = value; }
+	}
+
+	public PeriodValueType QuoteValue
+	{
+		get { return quoteType; }
+		set { quoteType = value; }
+	}
+
+	public HullStrategySettings()
+	{
+	}
+}
+
+public class HullStrategy : TradingStrategy<HullStrategySettings>
 {
 	private HullMovingAverage hma;
 	private HullMovingAverage quote;
 
-	public class StrategySettings : TradingStrategySettings
-	{
-		private int length = 8;
-		private double tickPercentage = 0.75;
-		private bool periodCorrection = false;
-		private PeriodValueType quoteType = PeriodValueType.WeightedAverage;
-
-		public int Length
-		{
-			get { return length; }
-			set { length = value; }
-		}
-
-		public bool PeriodCorrection
-		{
-			get { return periodCorrection; }
-			set { periodCorrection = value; }
-		}
-
-		public double TickPercentage
-		{
-			get { return tickPercentage; }
-			set { tickPercentage = value; }
-		}
-
-		public PeriodValueType QuoteValue
-		{
-			get { return quoteType; }
-			set { quoteType = value; }
-		}
-
-		public StrategySettings()
-		{
-
-		}
-	}
-
-	private StrategySettings settings = new StrategySettings();
 	private bool descisionExecuted = false;
 
 	public override object Settings
@@ -55,22 +39,13 @@ public class HullStrategy : TradingStrategy
 		get { return settings; }
 		set
 		{
+			base.Settings = value;
+
 			dynamic obj = value;
-
-			settings.Capacity = (int)obj.Capacity;
-			settings.PeriodTicks = (int)obj.PeriodTicks;
-			settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
 			settings.QuoteValue = (PeriodValueType)obj.QuoteValue;
-			settings.ReversePositions = obj.ReversePositions;
 			settings.Length = (int)obj.Length;
-			settings.PeriodCorrection = obj.PeriodCorrection;
-			settings.TickPercentage = obj.TickPercentage;
+			
 		}
-	}
-
-	public override Type SettingsType
-	{
-		get { return typeof(StrategySettings); }
 	}
 
 	public override void AddTick(ITradeTick tick)

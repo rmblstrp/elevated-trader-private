@@ -86,6 +86,7 @@
     <Compile Include="Strategies\HullStrategy.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Strategies\KalmanStrategy.cs" />
     <Compile Include="Strategies\PeriodValueStrategy.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>

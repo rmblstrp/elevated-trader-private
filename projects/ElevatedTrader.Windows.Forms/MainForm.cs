@@ -88,7 +88,17 @@
 		{
 			"ElevatedTrader",
 			"ElevatedTrader.Math",
-			"MathNet.Numerics"
+			"MathNet.Numerics",
+			"MathNet.Filtering",
+			"MathNet.Filtering.Kalman",
+			"Accord",
+			"Accord.Extensions.Core",
+			"Accord.Extensions.Math",
+			"Accord.Extensions.Statistics",
+			"Accord.Math",
+			"Accord.Statistics",
+			"AForge",
+			"AForge.Math"
 		};
 
 		class HistoryContainer

@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public abstract class TradingStrategy : ITradingStrategy
+	public abstract class TradingStrategy : TradingStrategy<TradingStrategySettings>
+	{
+	}
+
+	public abstract class TradingStrategy<T> : ITradingStrategy where T : TradingStrategySettings
 	{
 		protected ITradingSession session;
 		protected ITradingPeriodAggregator aggregator;
 		protected ITradeSymbol symbol;
-		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int,IList<IIndicator>>();
+		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int, IList<IIndicator>>();
+		protected T settings;
 
 		public ITradingPeriodAggregator Aggregator
 		{
@@ -28,15 +33,26 @@ namespace ElevatedTrader
 			get { return session; }
 		}
 
-		public abstract object Settings
+		public virtual object Settings
 		{
-			get;
-			set;
+			get { return settings; }
+			set
+			{
+				if (settings == null) return;
+
+				dynamic obj = value;
+				settings.Capacity = (int)obj.Capacity;
+				settings.PeriodTicks = (int)obj.PeriodTicks;
+				settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
+				settings.ReversePositions = obj.ReversePositions;
+				settings.PeriodCorrection = obj.PeriodCorrection;
+				settings.TickPercentage = obj.TickPercentage;
+			}
 		}
 
-		public abstract Type SettingsType
+		public virtual Type SettingsType
 		{
-			get;
+			get { return typeof(T); }
 		}
 
 		public TradingStrategy()
@@ -71,6 +87,25 @@ namespace ElevatedTrader
 			session.Reset();
 			aggregator.Reset();
 			indicators.Clear();
+		}
+
+		protected void Reverse(TradeType type)
+		{
+			if (session.Position == 0)
+			{
+				if (type == TradeType.Buy || (type == TradeType.Sell && settings.ReversePositions))
+				{
+					session.Buy(aggregator);
+				}
+				else
+				{
+					session.Sell(aggregator);
+				}
+			}
+			else
+			{
+				session.Reverse(aggregator);
+			}
 		}
 	}
 }

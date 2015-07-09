@@ -48,8 +48,15 @@ namespace ElevatedTrader
 				settings.PeriodCorrection = obj.PeriodCorrection;
 				settings.TickPercentage = obj.TickPercentage;
 
-				var sizes = ((IEnumerable<object>)obj.PeriodTicks);
-				settings.PeriodTicks = (from x in  sizes select Convert.ToInt32(x)).ToArray();
+				if (obj.PeriodTicks as IEnumerable<object> != null)
+				{
+					var sizes = ((IEnumerable<object>)obj.PeriodTicks);
+					settings.PeriodTicks = (from x in sizes select Convert.ToInt32(x)).ToArray();
+				}
+				else
+				{
+					settings.PeriodTicks = (int[])obj.PeriodTicks;
+				}
 			}
 		}
 

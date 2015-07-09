@@ -206,7 +206,8 @@ namespace Kalman
 			kalman = new Indicator(settings.Capacity)
 			{
 				PeriodValue = settings.PeriodValue,
-				PlantNoise = settings.PlantNoise
+				PlantNoise = settings.PlantNoise,
+				MeasurementNoise = settings.MeasurementNoise
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))

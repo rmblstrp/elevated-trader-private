@@ -113,8 +113,8 @@
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
 		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
-		//private int dataCount = int.MaxValue;
-		private int dataCount = 1000000;
+		private int dataCount = int.MaxValue;
+		//private int dataCount = 1000000;
 		#endregion
 
 		#region -- Constants --
@@ -422,7 +422,7 @@
 				using (var command = connection.CreateCommand())
 				{
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
-					command.CommandText = "select top(@count) json, type from symbolhistory where symbol = @symbol order by id asc";
+					command.CommandText = "select top(@count) json, type from symbolhistory where symbol = @symbol and type = 3 order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
 					command.Parameters.Add(new SqlParameter("@count", dataCount));
 

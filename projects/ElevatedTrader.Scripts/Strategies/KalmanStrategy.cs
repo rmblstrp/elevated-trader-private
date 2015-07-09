@@ -149,6 +149,19 @@ namespace Kalman
 	{
 		private Indicator kalman;
 
+		public override object Settings
+		{
+			get { return settings; }
+			set
+			{
+				base.Settings = value;
+
+				dynamic obj = value;
+				settings.MeasurementNoise = (double)obj.MeasurementNoise;
+				settings.PlantNoise = (double)obj.PlantNoise;
+			}
+		}
+
 		protected override void AfterNewPeriod(int size)
 		{
 			base.AfterNewPeriod(size);

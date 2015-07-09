@@ -7,7 +7,7 @@ namespace ElevatedTrader
 	{
 		protected int[] ticks = new int[] { 610 };
 		protected int capacity = 10000;
-		protected PeriodValueType valueType = PeriodValueType.WeightedAverage;		
+		protected PeriodValueType valueType = PeriodValueType.Close;		
 		protected bool periodCorrection = false;
 		protected double tickPercentage = 0.75;
 

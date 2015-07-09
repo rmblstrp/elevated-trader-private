@@ -14,6 +14,7 @@ namespace Kalman
 	{
 		private List<IIndicatorResult> results;
 		private DiscreteKalmanFilter kalman;
+		private Matrix<double> F, G, Q, H, R;
 
 		public IList<IIndicatorResult> Results
 		{
@@ -21,6 +22,18 @@ namespace Kalman
 		}
 
 		public PeriodValueType PeriodValue
+		{
+			get;
+			set;
+		}
+
+		public double PlantNoise
+		{
+			get;
+			set;
+		}
+
+		public double? MeasurementNoise
 		{
 			get;
 			set;
@@ -43,33 +56,37 @@ namespace Kalman
 			if (periods.Count < 2) return;
 
 			var current = periods[periods.Count - 1];
-			var current_price = current.PeriodValue(PeriodValue);			
+			var current_price = current.PeriodValue(PeriodValue);
 			var previous = periods[periods.Count - 2];
 			var previous_price = previous.PeriodValue(PeriodValue);
-			
 			var distribution = MathNet.Numerics.Distributions.Normal.Estimate(current.Ticks);
-			var velocity = current_price - previous_price;
-			var variance = current.High - current.Low;
-			//var interval = previous.TickCount;
-			var interval = 1;
-			var efficiency = Math.Pow(1 - previous.EfficiencyRatio, 2);
+			//var measurement_noise = Math.Sqrt(distribution.StdDev);
+			var measurement_noise = MeasurementNoise.HasValue ? MeasurementNoise.Value : distribution.StdDev;
+			var plant_noise = PlantNoise;
 
-			if (periods.Count == 2)
+			if (kalman == null)
 			{
-				InitializeKalman(current_price, variance, velocity, interval, efficiency);
+				var velocity = current_price - previous_price;
+				var variance = current.High - current.Low;
+				//var interval = previous.TickCount;
+				var interval = 1;
+
+				var x0 = Matrix<double>.Build.Dense(2, 1, new[] { current_price, velocity / interval });
+				var p0 = Matrix<double>.Build.Dense(2, 2, new[] { measurement_noise, measurement_noise / interval, measurement_noise / interval, 2 * measurement_noise / (interval * interval) });
+
+				F = Matrix<double>.Build.Dense(2, 2, new[] { 1d, 0d, interval, 1 });   // State transition matrix
+				G = Matrix<double>.Build.Dense(2, 1, new[] { (interval * interval) / 2d, interval });   // Plant noise matrix
+				Q = Matrix<double>.Build.Dense(1, 1, new[] { plant_noise }); // Plant noise variance
+
+				R = Matrix<double>.Build.Dense(1, 1, new[] { measurement_noise }); // Measurement variance matrix
+				H = Matrix<double>.Build.Dense(1, 2, new[] { 1d, 0d }); // Measurement matrix
+
+				kalman = new DiscreteKalmanFilter(x0, p0);
+				kalman.Predict(F, G, Q);
 
 				return;
 			}
 
-
-			
-
-			var F = Matrix<double>.Build.Dense(2, 2, new[] { 1d, 0d, interval, 1 });   // State transition matrix
-			var G = Matrix<double>.Build.Dense(2, 1, new[] { (interval * interval) / 2d, interval });   // Plant noise matrix
-			var Q = Matrix<double>.Build.Dense(1, 1, new[] { efficiency }); // Plant noise variance
-
-			var R = Matrix<double>.Build.Dense(1, 1, new[] { efficiency }); // Measurement variance matrix
-			var H = Matrix<double>.Build.Dense(1, 2, new[] { 1d, 0d }); // Measurement matrix
 
 			var update = Matrix<double>.Build.Dense(1, 1, new[] { current_price });
 
@@ -104,26 +121,31 @@ namespace Kalman
 			}
 		}
 
-		private void InitializeKalman(double price, double variance, double velocity, double interval, double efficiency)
-		{
-			var x0 = Matrix<double>.Build.Dense(2, 1, new[] { price, velocity / interval });
-			var p0 = Matrix<double>.Build.Dense(2, 2, new[] { efficiency, efficiency / interval, efficiency / interval, 2 * efficiency / (interval * interval) });
-
-			var F = Matrix<double>.Build.Dense(2, 2, new[] { 1d, 0d, interval, 1 });   // State transition matrix
-			var G = Matrix<double>.Build.Dense(2, 1, new[] { (interval * interval) / 2d, interval });   // Plant noise matrix
-			var Q = Matrix<double>.Build.Dense(1, 1, new[] { efficiency }); // Plant noise variance
-
-			kalman = new DiscreteKalmanFilter(x0, p0);
-			kalman.Predict(F, G, Q);
-		}
-
 		public void NewPeriod()
 		{
 			Results.Add(new IndicatorResult());
 		}
 	}
 
-	public class Strategy : TradingStrategy
+	public class Settings : TradingStrategySettings
+	{
+		private double plantNoise = 0.1;
+		private double? measurementNoise = null;
+
+		public double PlantNoise
+		{
+			get { return plantNoise; }
+			set { plantNoise = value; }
+		}
+
+		public double? MeasurementNoise
+		{
+			get { return measurementNoise; }
+			set { measurementNoise = value; }
+		}
+	}
+
+	public class Strategy : TradingStrategy<Settings>
 	{
 		private Indicator kalman;
 
@@ -183,7 +205,8 @@ namespace Kalman
 
 			kalman = new Indicator(settings.Capacity)
 			{
-				PeriodValue = settings.PeriodValue
+				PeriodValue = settings.PeriodValue,
+				PlantNoise = settings.PlantNoise
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))

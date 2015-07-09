@@ -47,7 +47,9 @@ namespace ElevatedTrader
 				settings.ReversePositions = obj.ReversePositions;
 				settings.PeriodCorrection = obj.PeriodCorrection;
 				settings.TickPercentage = obj.TickPercentage;
-				settings.PeriodTicks = (int[])obj.PeriodTicks;
+
+				var sizes = ((IEnumerable<object>)obj.PeriodTicks);
+				settings.PeriodTicks = (from x in  sizes select Convert.ToInt32(x)).ToArray();
 			}
 		}
 

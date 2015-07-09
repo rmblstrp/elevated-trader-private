@@ -114,7 +114,7 @@
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
 		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
 		//private int dataCount = int.MaxValue;
-		private int dataCount = 100000;
+		private int dataCount = 1000000;
 		#endregion
 
 		#region -- Constants --
@@ -732,7 +732,7 @@
 				IsXValueIndexed = false,
 				YValuesPerPoint = 1,
 				Palette = ChartColorPalette.Pastel,
-				YAxisType = AxisType.Secondary
+				YAxisType = AxisType.Primary
 			};
 
 			return item;

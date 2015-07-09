@@ -51,6 +51,31 @@ namespace Kalman
 			NewPeriod();
 		}
 
+		public bool SmoothingEnabled
+		{
+			get;
+			set;
+		}
+
+		public int SmoothingLength
+		{
+			get;
+			set;
+		}
+
+		private IList<double> GetSmoothingValues()
+		{
+			var length = SmoothingLength;
+			var values = new List<double>(length);
+
+			for (int index = results.Count - length; index < results.Count; index++)
+			{
+				values.Add(results[index].Values[0]);
+			}
+
+			return values;
+		}
+
 		public void Calculate(IList<ITradingPeriod> periods)
 		{
 			if (periods.Count < 2) return;
@@ -99,6 +124,11 @@ namespace Kalman
 			result.Values.Clear();
 			result.Values.Add(prediction);
 
+			if (SmoothingEnabled && results.Count > SmoothingLength + 2)
+			{
+				result.Values[0] = GetSmoothingValues().Average();
+			}
+
 			if (Results.Count > 1)
 			{
 				var last = Results[Results.Count - 2];
@@ -131,6 +161,20 @@ namespace Kalman
 	{
 		private double plantNoise = 0.1;
 		private double? measurementNoise = null;
+		private bool smoothingEnabled = false;
+		private int smoothingLength = 5;
+
+		public bool SmoothingEnabled
+		{
+			get { return smoothingEnabled; }
+			set { smoothingEnabled = value; }
+		}
+
+		public int SmoothingLength
+		{
+			get { return smoothingLength; }
+			set { smoothingLength = value; }
+		}
 
 		public double PlantNoise
 		{
@@ -157,8 +201,10 @@ namespace Kalman
 				base.Settings = value;
 
 				dynamic obj = value;
-				settings.MeasurementNoise = (double)obj.MeasurementNoise;
+				settings.MeasurementNoise = (double?)obj.MeasurementNoise;
 				settings.PlantNoise = (double)obj.PlantNoise;
+				settings.SmoothingEnabled = (bool)obj.SmoothingEnabled;
+				settings.SmoothingLength = (int)obj.SmoothingLength;
 			}
 		}
 
@@ -220,7 +266,9 @@ namespace Kalman
 			{
 				PeriodValue = settings.PeriodValue,
 				PlantNoise = settings.PlantNoise,
-				MeasurementNoise = settings.MeasurementNoise
+				MeasurementNoise = settings.MeasurementNoise,
+				SmoothingEnabled = settings.SmoothingEnabled,
+				SmoothingLength = settings.SmoothingLength
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))

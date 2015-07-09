@@ -37,8 +37,6 @@ public class HullMovingAverage : IIndicator
 		NewPeriod();
 	}
 
-	int count = 0;
-
 	public void Calculate(IList<ITradingPeriod> periods)
 	{
 		var required_size = (int)(Length * 2);

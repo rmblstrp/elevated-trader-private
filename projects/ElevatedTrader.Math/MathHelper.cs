@@ -24,7 +24,7 @@ namespace ElevatedTrader
 		{
 			var length = values.Count / 2;
 			var mid = (int)Math.Floor((double)length / 2);
-			var sqrt = Math.Sqrt(length);
+			var sqrt = (int)Math.Floor(Math.Sqrt(length));
 			var difference = new List<double>(length);
 			var wma_mid = new List<double>(mid);
 			var wma_full = new List<double>(length);
@@ -50,9 +50,9 @@ namespace ElevatedTrader
 				difference.Add(wma1 - wma2);
 			}
 
-			var hma = new List<double>((int)sqrt);
+			var hma = new List<double>(sqrt);
 
-			for (int index = difference.Count - 1 - (int)sqrt; index < difference.Count; index++)
+			for (int index = difference.Count - sqrt; index < difference.Count; index++)
 			{
 				hma.Add(difference[index]);
 			}

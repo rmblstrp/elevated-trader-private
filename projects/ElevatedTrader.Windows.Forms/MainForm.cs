@@ -64,7 +64,7 @@
 		private bool busy = false;
 		private ApplicationSettings application = new ApplicationSettings()
 		{
-			DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
+			DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
 			//DataConnetionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
 		};
 
@@ -636,7 +636,7 @@
 		{
 			var input = Microsoft.VisualBasic.Interaction.InputBox("Set the number of ticks you want to load", "Data Count", dataCount.ToString(), -1, -1);
 
-			dataCount = int.Parse(input);
+			int.TryParse(input, out dataCount);
 		}
 
 		private void LinkAggregrator()

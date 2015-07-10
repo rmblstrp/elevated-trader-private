@@ -49,6 +49,27 @@ namespace Hull
 		protected override void BeforeNewPeriod(int size)
 		{
 			base.BeforeNewPeriod(size);
+
+			if (wasSignaled && settings.PeriodCorrection)
+			{
+				hma.Calculate(aggregator.Periods[size]);
+
+				var result = hma.Results[hma.Results.Count - 1];
+				var periods = aggregator.Periods[settings.PeriodTicks[0]];
+				var last = periods[periods.Count - 1];
+
+				if (result.Direction != direction)
+				{
+					if (direction == TrendDirection.Rising)
+					{
+						ExecuteOrder(TradeType.Sell);
+					}
+					else
+					{
+						ExecuteOrder(TradeType.Buy);
+					}
+				}
+			}
 		}
 
 		protected override void OnPeriodTrigger(int size)

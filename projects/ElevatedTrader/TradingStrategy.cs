@@ -138,7 +138,7 @@ namespace ElevatedTrader
 					session.Sell(aggregator);
 				}
 			}
-			else
+			else if (type == TradeType.Buy && session.Position < 0 || type == TradeType.Sell && session.Position > 0)
 			{
 				session.Reverse(aggregator);
 			}

@@ -48,13 +48,21 @@ namespace Kalman
 		{
 			results = new List<IIndicatorResult>(capacity);
 
-			NewPeriod();
+			AfterNewPeriod();
 		}
 
 		public bool SmoothingEnabled
 		{
 			get;
 			set;
+		}
+
+		private int smoothingValue = 1;
+
+		public int SmoothingValue
+		{
+			get { return smoothingValue; }
+			set { smoothingValue = (int)Math.Max(1, value); }
 		}
 
 		public void Calculate(IList<ITradingPeriod> periods)
@@ -83,9 +91,9 @@ namespace Kalman
 				F = Matrix<double>.Build.Dense(2, 2, new[] { 1d, 0d, interval, 1 });   // State transition matrix
 				G = Matrix<double>.Build.Dense(2, 1, new[] { (interval * interval) / 2d, interval });   // Plant noise matrix
 				Q = Matrix<double>.Build.Dense(1, 1, new[] { plant_noise }); // Plant noise variance
-
-				R = Matrix<double>.Build.Dense(1, 1, new[] { measurement_noise }); // Measurement variance matrix
+				
 				H = Matrix<double>.Build.Dense(1, 2, new[] { 1d, 0d }); // Measurement matrix
+				R = Matrix<double>.Build.Dense(1, 1, new[] { measurement_noise }); // Measurement variance matrix
 
 				kalman = new DiscreteKalmanFilter(x0, p0);
 				kalman.Predict(F, G, Q);
@@ -97,15 +105,20 @@ namespace Kalman
 			{
 				for (int index = 0; index < current.Ticks.Count - 1; index++)
 				{
-					var tick_price = current.Ticks[index];
-					var smoothing = Matrix<double>.Build.Dense(1, 1, new[] { tick_price });
+					if (index % SmoothingValue == 0)
+					{
+						var tick_price = current.Ticks[index];
+						var smoothing = Matrix<double>.Build.Dense(1, 1, new[] { tick_price });
 
-					kalman.Update(smoothing, H, R);
-					kalman.Predict(F, G, Q);
+						kalman.Update(smoothing, H, R);
+						kalman.Predict(F, G, Q);
+					}
 				}
 			}
 
 			var update = Matrix<double>.Build.Dense(1, 1, new[] { current_price });
+			R[0, 0] = measurement_noise;
+
 			kalman.Update(update, H, R);
 			kalman.Predict(F, G, Q);
 
@@ -137,7 +150,23 @@ namespace Kalman
 			}
 		}
 
-		public void NewPeriod()
+		public void BeforeNewPeriod(ITradingPeriod current)
+		{
+			if ( kalman != null)
+			{
+				var current_price = current.PeriodValue(PeriodValue);				
+				var distribution = MathNet.Numerics.Distributions.Normal.Estimate(current.Ticks);
+				var measurement_noise = MeasurementNoise.HasValue ? MeasurementNoise.Value : distribution.StdDev;
+
+				var update = Matrix<double>.Build.Dense(1, 1, new[] { current_price });
+				R[0, 0] = measurement_noise;
+				
+				kalman.Update(update, H, R);
+				kalman.Predict(F, G, Q);
+			}
+		}
+
+		public void AfterNewPeriod()
 		{
 			Results.Add(new IndicatorResult());
 		}
@@ -148,11 +177,18 @@ namespace Kalman
 		private double plantNoise = 0.1;
 		private double? measurementNoise = null;
 		private bool smoothingEnabled = false;
+		private int smoothingValue = 1;
 
 		public bool SmoothingEnabled
 		{
 			get { return smoothingEnabled; }
 			set { smoothingEnabled = value; }
+		}
+
+		public int SmoothingValue
+		{
+			get { return smoothingValue; }
+			set { smoothingValue = value; }
 		}
 
 		public double PlantNoise
@@ -183,6 +219,7 @@ namespace Kalman
 				settings.MeasurementNoise = (double?)obj.MeasurementNoise;
 				settings.PlantNoise = (double)obj.PlantNoise;
 				settings.SmoothingEnabled = (bool)obj.SmoothingEnabled;
+				settings.SmoothingValue = (int)obj.SmoothingValue;
 			}
 		}
 
@@ -190,13 +227,17 @@ namespace Kalman
 		{
 			base.AfterNewPeriod(size);
 
-			kalman.NewPeriod();
+			kalman.AfterNewPeriod();
 		}
 
 		protected override void BeforeNewPeriod(int size)
 		{
 			base.BeforeNewPeriod(size);
 
+			if (settings.PeriodCorrection)
+			{
+				kalman.BeforeNewPeriod(aggregator.Periods[size].Last());
+			}
 		}
 
 		protected override void OnPeriodTrigger(int size)
@@ -245,7 +286,8 @@ namespace Kalman
 				PeriodValue = settings.PeriodValue,
 				PlantNoise = settings.PlantNoise,
 				MeasurementNoise = settings.MeasurementNoise,
-				SmoothingEnabled = settings.SmoothingEnabled
+				SmoothingEnabled = settings.SmoothingEnabled,
+				SmoothingValue = settings.SmoothingValue
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))

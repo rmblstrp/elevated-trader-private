@@ -17,6 +17,6 @@ namespace ElevatedTrader
 
 		void Calculate(IList<ITradingPeriod> periods);
 
-		void NewPeriod();
+		void AfterNewPeriod();
 	}
 }

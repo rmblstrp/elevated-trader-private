@@ -113,8 +113,8 @@
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
 		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
-		private int dataCount = int.MaxValue;
-		//private int dataCount = 1000000;
+		//private int dataCount = int.MaxValue;
+		private int dataCount = 500000;
 		#endregion
 
 		#region -- Constants --

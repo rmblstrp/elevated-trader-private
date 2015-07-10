@@ -28,7 +28,7 @@ public class SimplePeriodValue : IIndicator
 	public SimplePeriodValue(int capacity)
 	{
 		results = new List<IIndicatorResult>(capacity);
-		NewPeriod();
+		AfterNewPeriod();
 	}
 
 	public void Calculate(IList<ITradingPeriod> periods)
@@ -62,7 +62,7 @@ public class SimplePeriodValue : IIndicator
 		}
 	}
 
-	public void NewPeriod()
+	public void AfterNewPeriod()
 	{
 		Results.Add(new IndicatorResult());
 	}

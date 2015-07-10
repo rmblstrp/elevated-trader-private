@@ -41,7 +41,7 @@ namespace Hull
 		{
 			base.AfterNewPeriod(size);
 
-			hma.NewPeriod();
+			hma.AfterNewPeriod();
 
 			wasSignaled = false;
 		}

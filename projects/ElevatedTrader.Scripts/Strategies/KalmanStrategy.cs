@@ -51,11 +51,24 @@ namespace Kalman
 			AfterNewPeriod();
 		}
 
-		public bool SmoothingEnabled
+		public double TransitionValue
 		{
 			get;
 			set;
 		}
+
+		public double MeasurementValue
+		{
+			get;
+			set;
+		}
+
+		public double TimeInterval
+		{
+			get;
+			set;
+		}
+		
 
 		public void Calculate(IList<ITradingPeriod> periods)
 		{
@@ -72,17 +85,15 @@ namespace Kalman
 				var plant_noise = GetPlantNoise(current);
 				var velocity = current_price - previous_price;
 				var variance = current.High - current.Low;
-				//var interval = previous.TickCount;
-				var interval = 1;
 
-				var x0 = Matrix<double>.Build.Dense(2, 1, new[] { current_price, velocity / interval });
-				var p0 = Matrix<double>.Build.Dense(2, 2, new[] { measurement_noise, measurement_noise / interval, measurement_noise / interval, 2 * measurement_noise / (interval * interval) });
+				var x0 = Matrix<double>.Build.Dense(2, 1, new[] { current_price, velocity / TimeInterval });
+				var p0 = Matrix<double>.Build.Dense(2, 2, new[] { measurement_noise, measurement_noise / TimeInterval, measurement_noise / TimeInterval, 2 * measurement_noise / (TimeInterval * TimeInterval) });
 
-				F = Matrix<double>.Build.Dense(2, 2, new[] { 1d, 0d, interval, 1 });   // State transition matrix
-				G = Matrix<double>.Build.Dense(2, 1, new[] { (interval * interval) / 2d, interval });   // Plant noise matrix
+				F = Matrix<double>.Build.Dense(2, 2, new[] { TransitionValue, 0d, TimeInterval, TransitionValue });   // State transition matrix
+				G = Matrix<double>.Build.Dense(2, 1, new[] { (TimeInterval * TimeInterval) / 2d, TimeInterval });   // Plant noise matrix
 				Q = Matrix<double>.Build.Dense(1, 1, new[] { plant_noise }); // Plant noise variance
 
-				H = Matrix<double>.Build.Dense(1, 2, new[] { 1d, 0d }); // Measurement matrix
+				H = Matrix<double>.Build.Dense(1, 2, new[] { MeasurementValue, 0d }); // Measurement matrix
 				R = Matrix<double>.Build.Dense(1, 1, new[] { measurement_noise }); // Measurement variance matrix
 
 				kalman = new DiscreteKalmanFilter(x0, p0);
@@ -125,14 +136,14 @@ namespace Kalman
 		{
 			var noise = current.PeriodValue(PeriodValueType.Variance);
 
-			return MeasurementNoise.HasValue ? (SmoothingEnabled ? noise * MeasurementNoise.Value : MeasurementNoise.Value) : noise;
+			return MeasurementNoise.HasValue ? MeasurementNoise.Value : noise;
 		}
 
 		private double GetPlantNoise(ITradingPeriod current)
 		{
 			var noise = current.PeriodValue(PeriodValueType.HarmonicMean);
 
-			return PlantNoise.HasValue ? (SmoothingEnabled ? noise * PlantNoise.Value : PlantNoise.Value) : noise;
+			return PlantNoise.HasValue ? PlantNoise.Value : noise;
 		}
 
 		private double GetPeriodPrice(ITradingPeriod current)
@@ -169,13 +180,14 @@ namespace Kalman
 	{
 		private double? plantNoise = 0.1;
 		private double? measurementNoise = null;
-		private bool smoothingEnabled = false;
-		private PeriodValueType smoothingValue = PeriodValueType.Close;
+		private double transitionValue = 1;
+		private double measurementValue = 1;
+		private double timeInterval = 1;
 
-		public bool SmoothingEnabled
+		public double TransitionValue
 		{
-			get { return smoothingEnabled; }
-			set { smoothingEnabled = value; }
+			get { return transitionValue; }
+			set { transitionValue = value; }
 		}
 
 		public double? PlantNoise
@@ -188,6 +200,18 @@ namespace Kalman
 		{
 			get { return measurementNoise; }
 			set { measurementNoise = value; }
+		}
+
+		public double MeasurementValue
+		{
+			get { return measurementValue; }
+			set { measurementValue = value; }
+		}
+
+		public double TimeInterval
+		{
+			get { return timeInterval; }
+			set { timeInterval = value; }
 		}
 	}
 
@@ -205,7 +229,9 @@ namespace Kalman
 				dynamic obj = value;
 				settings.MeasurementNoise = (double?)obj.MeasurementNoise;
 				settings.PlantNoise = (double?)obj.PlantNoise;
-				settings.SmoothingEnabled = (bool)obj.SmoothingEnabled;
+				settings.TransitionValue = (double)obj.TransitionValue;
+				settings.MeasurementValue = (double)obj.MeasurementValue;
+				settings.TimeInterval = (double)obj.TimeInterval;
 			}
 		}
 
@@ -272,7 +298,9 @@ namespace Kalman
 				PeriodValue = settings.PeriodValue,
 				PlantNoise = settings.PlantNoise,
 				MeasurementNoise = settings.MeasurementNoise,
-				SmoothingEnabled = settings.SmoothingEnabled
+				TransitionValue = settings.TransitionValue,
+				MeasurementValue = settings.MeasurementValue,
+				TimeInterval = settings.TimeInterval
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))

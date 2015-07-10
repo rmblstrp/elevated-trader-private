@@ -64,8 +64,8 @@
 		private bool busy = false;
 		private ApplicationSettings application = new ApplicationSettings()
 		{
-			DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
-			//DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
+			//DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
+			DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
 			//DataConnectionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
 		};
 
@@ -345,6 +345,7 @@
 
 				filename = saveDialog.FileName;
 				openDialog.InitialDirectory = Path.GetDirectoryName(filename);
+				saveDialog.InitialDirectory = Path.GetDirectoryName(filename);
 			}
 
 			solution.Settings = JsonConvert.SerializeObject(strategy.Settings);
@@ -363,7 +364,11 @@
 
 			if (openDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
 
-			var obj = JsonConvert.DeserializeObject<SolutionSettings>(File.ReadAllText(openDialog.FileName));
+			filename = openDialog.FileName;
+			openDialog.InitialDirectory = Path.GetDirectoryName(filename);
+			saveDialog.InitialDirectory = Path.GetDirectoryName(filename);
+
+			var obj = JsonConvert.DeserializeObject<SolutionSettings>(File.ReadAllText(filename));
 
 			var symbolIndex = symbols.IndexOf((from x in symbols where x.Symbol == obj.Symbol select x).Single());
 			var strategyIndex = strategies.IndexOf(obj.Strategy);

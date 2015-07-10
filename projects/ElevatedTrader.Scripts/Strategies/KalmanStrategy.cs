@@ -27,7 +27,7 @@ namespace Kalman
 			set;
 		}
 
-		public double PlantNoise
+		public double? PlantNoise
 		{
 			get;
 			set;
@@ -76,7 +76,7 @@ namespace Kalman
 			var distribution = MathNet.Numerics.Distributions.Normal.Estimate(current.Ticks);
 			//var measurement_noise = Math.Sqrt(distribution.StdDev);
 			var measurement_noise = MeasurementNoise.HasValue ? MeasurementNoise.Value : distribution.StdDev;
-			var plant_noise = PlantNoise;
+			var plant_noise = PlantNoise.HasValue ? PlantNoise.Value : distribution.StdDev; ;
 
 			if (kalman == null)
 			{
@@ -118,8 +118,12 @@ namespace Kalman
 
 			var update = Matrix<double>.Build.Dense(1, 1, new[] { current_price });
 			R[0, 0] = measurement_noise;
-
+			Q[0, 0] = plant_noise;
 			kalman.Update(update, H, R);
+
+			distribution = MathNet.Numerics.Distributions.Normal.Estimate(previous.Ticks);
+			plant_noise = PlantNoise.HasValue ? PlantNoise.Value : distribution.StdDev;
+			Q[0, 0] = plant_noise;
 			kalman.Predict(F, G, Q);
 
 			var prediction = kalman.State[0, 0];
@@ -174,7 +178,7 @@ namespace Kalman
 
 	public class Settings : TradingStrategySettings
 	{
-		private double plantNoise = 0.1;
+		private double? plantNoise = 0.1;
 		private double? measurementNoise = null;
 		private bool smoothingEnabled = false;
 		private int smoothingValue = 1;
@@ -191,7 +195,7 @@ namespace Kalman
 			set { smoothingValue = value; }
 		}
 
-		public double PlantNoise
+		public double? PlantNoise
 		{
 			get { return plantNoise; }
 			set { plantNoise = value; }
@@ -217,7 +221,7 @@ namespace Kalman
 
 				dynamic obj = value;
 				settings.MeasurementNoise = (double?)obj.MeasurementNoise;
-				settings.PlantNoise = (double)obj.PlantNoise;
+				settings.PlantNoise = (double?)obj.PlantNoise;
 				settings.SmoothingEnabled = (bool)obj.SmoothingEnabled;
 				settings.SmoothingValue = (int)obj.SmoothingValue;
 			}

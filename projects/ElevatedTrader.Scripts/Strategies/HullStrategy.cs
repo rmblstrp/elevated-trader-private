@@ -91,11 +91,11 @@ namespace Hull
 			{
 				wasSignaled = true;
 
-				if (result.Direction == TrendDirection.Rising && last.PeriodValue(settings.PeriodValue) > result.Values[0])
+				if (result.Direction == TrendDirection.Rising)
 				{
 					ExecuteOrder(TradeType.Buy);
 				}
-				else if (result.Direction == TrendDirection.Falling && last.PeriodValue(settings.PeriodValue) < result.Values[0])
+				else if (result.Direction == TrendDirection.Falling)
 				{
 					ExecuteOrder(TradeType.Sell);
 				}

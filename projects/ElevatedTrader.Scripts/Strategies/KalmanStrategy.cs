@@ -57,29 +57,19 @@ namespace Kalman
 			set;
 		}
 
-		private int smoothingValue = 1;
-
-		public int SmoothingValue
-		{
-			get { return smoothingValue; }
-			set { smoothingValue = (int)Math.Max(1, value); }
-		}
-
 		public void Calculate(IList<ITradingPeriod> periods)
 		{
 			if (periods.Count < 2) return;
 
 			var current = periods[periods.Count - 1];
-			var current_price = current.PeriodValue(PeriodValue);
+			var current_price = GetPeriodPrice(current);
 			var previous = periods[periods.Count - 2];
-			var previous_price = previous.PeriodValue(PeriodValue);
-			var distribution = MathNet.Numerics.Distributions.Normal.Estimate(current.Ticks);
-			//var measurement_noise = Math.Sqrt(distribution.StdDev);
-			var measurement_noise = MeasurementNoise.HasValue ? MeasurementNoise.Value : distribution.StdDev;
-			var plant_noise = PlantNoise.HasValue ? PlantNoise.Value : distribution.StdDev; ;
+			var previous_price = GetPeriodPrice(previous);
 
 			if (kalman == null)
 			{
+				var measurement_noise = GetMeasurementNoise(current);
+				var plant_noise = GetPlantNoise(current);
 				var velocity = current_price - previous_price;
 				var variance = current.High - current.Low;
 				//var interval = previous.TickCount;
@@ -91,7 +81,7 @@ namespace Kalman
 				F = Matrix<double>.Build.Dense(2, 2, new[] { 1d, 0d, interval, 1 });   // State transition matrix
 				G = Matrix<double>.Build.Dense(2, 1, new[] { (interval * interval) / 2d, interval });   // Plant noise matrix
 				Q = Matrix<double>.Build.Dense(1, 1, new[] { plant_noise }); // Plant noise variance
-				
+
 				H = Matrix<double>.Build.Dense(1, 2, new[] { 1d, 0d }); // Measurement matrix
 				R = Matrix<double>.Build.Dense(1, 1, new[] { measurement_noise }); // Measurement variance matrix
 
@@ -101,30 +91,7 @@ namespace Kalman
 				return;
 			}
 
-			if (SmoothingEnabled)
-			{
-				for (int index = 0; index < current.Ticks.Count - 1; index++)
-				{
-					if (index % SmoothingValue == 0)
-					{
-						var tick_price = current.Ticks[index];
-						var smoothing = Matrix<double>.Build.Dense(1, 1, new[] { tick_price });
-
-						kalman.Update(smoothing, H, R);
-						kalman.Predict(F, G, Q);
-					}
-				}
-			}
-
-			var update = Matrix<double>.Build.Dense(1, 1, new[] { current_price });
-			R[0, 0] = measurement_noise;
-			Q[0, 0] = plant_noise;
-			kalman.Update(update, H, R);
-
-			distribution = MathNet.Numerics.Distributions.Normal.Estimate(previous.Ticks);
-			plant_noise = PlantNoise.HasValue ? PlantNoise.Value : distribution.StdDev;
-			Q[0, 0] = plant_noise;
-			kalman.Predict(F, G, Q);
+			PerformKalman(current);
 
 			var prediction = kalman.State[0, 0];
 
@@ -154,19 +121,41 @@ namespace Kalman
 			}
 		}
 
+		private double GetMeasurementNoise(ITradingPeriod current)
+		{
+			var noise = current.PeriodValue(PeriodValueType.Variance);
+
+			return MeasurementNoise.HasValue ? (SmoothingEnabled ? noise * MeasurementNoise.Value : MeasurementNoise.Value) : noise;
+		}
+
+		private double GetPlantNoise(ITradingPeriod current)
+		{
+			var noise = current.PeriodValue(PeriodValueType.HarmonicMean);
+
+			return PlantNoise.HasValue ? (SmoothingEnabled ? noise * PlantNoise.Value : PlantNoise.Value) : noise;
+		}
+
+		private double GetPeriodPrice(ITradingPeriod current)
+		{
+			return current.PeriodValue(PeriodValue);
+		}
+
+		private void PerformKalman(ITradingPeriod current)
+		{
+			var current_price = GetPeriodPrice(current);
+			var measurement = Matrix<double>.Build.Dense(1, 1, new[] { current_price });
+			R[0, 0] = GetMeasurementNoise(current);
+			kalman.Update(measurement, H, R);
+
+			Q[0, 0] = GetPlantNoise(current);
+			kalman.Predict(F, G, Q);
+		}
+
 		public void BeforeNewPeriod(ITradingPeriod current)
 		{
-			if ( kalman != null)
+			if (kalman != null)
 			{
-				var current_price = current.PeriodValue(PeriodValue);				
-				var distribution = MathNet.Numerics.Distributions.Normal.Estimate(current.Ticks);
-				var measurement_noise = MeasurementNoise.HasValue ? MeasurementNoise.Value : distribution.StdDev;
-
-				var update = Matrix<double>.Build.Dense(1, 1, new[] { current_price });
-				R[0, 0] = measurement_noise;
-				
-				kalman.Update(update, H, R);
-				kalman.Predict(F, G, Q);
+				PerformKalman(current);
 			}
 		}
 
@@ -181,18 +170,12 @@ namespace Kalman
 		private double? plantNoise = 0.1;
 		private double? measurementNoise = null;
 		private bool smoothingEnabled = false;
-		private int smoothingValue = 1;
+		private PeriodValueType smoothingValue = PeriodValueType.Close;
 
 		public bool SmoothingEnabled
 		{
 			get { return smoothingEnabled; }
 			set { smoothingEnabled = value; }
-		}
-
-		public int SmoothingValue
-		{
-			get { return smoothingValue; }
-			set { smoothingValue = value; }
 		}
 
 		public double? PlantNoise
@@ -223,7 +206,6 @@ namespace Kalman
 				settings.MeasurementNoise = (double?)obj.MeasurementNoise;
 				settings.PlantNoise = (double?)obj.PlantNoise;
 				settings.SmoothingEnabled = (bool)obj.SmoothingEnabled;
-				settings.SmoothingValue = (int)obj.SmoothingValue;
 			}
 		}
 
@@ -290,8 +272,7 @@ namespace Kalman
 				PeriodValue = settings.PeriodValue,
 				PlantNoise = settings.PlantNoise,
 				MeasurementNoise = settings.MeasurementNoise,
-				SmoothingEnabled = settings.SmoothingEnabled,
-				SmoothingValue = settings.SmoothingValue
+				SmoothingEnabled = settings.SmoothingEnabled
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))

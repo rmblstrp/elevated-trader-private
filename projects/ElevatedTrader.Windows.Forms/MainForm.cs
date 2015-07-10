@@ -23,7 +23,7 @@
 		#region -- Internal Classes --
 		public class ApplicationSettings
 		{
-			public string DataConnetionString
+			public string DataConnectionString
 			{
 				get;
 				set;
@@ -64,8 +64,9 @@
 		private bool busy = false;
 		private ApplicationSettings application = new ApplicationSettings()
 		{
-			DataConnetionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
-			//DataConnetionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
+			DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
+			//DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
+			//DataConnectionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
 		};
 
 		private BindingSource symbolsBindingSource = new BindingSource();
@@ -415,7 +416,7 @@
 			Action<int> update_count = count => { TickCountStatusLabel.Text = count.ToString(); };
 
 			//{"AskPrice":1.111,"BidPrice":1.1109,"EventId":6157792271241579016,"ExchangeCode":"\u0000","IsTrade":true,"Price":1.1109,"Size":1,"Time":"2015-06-08T00:18:58Z","Type":0}
-			using (var connection = new SqlConnection(application.DataConnetionString))
+			using (var connection = new SqlConnection(application.DataConnectionString))
 			{
 				connection.Open();
 

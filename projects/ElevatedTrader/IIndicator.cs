@@ -11,12 +11,15 @@ namespace ElevatedTrader
 	{
 		IList<IIndicatorResult> Results { get; }
 
-		PeriodValueType PeriodValue { get; set; }
-
 		bool IsStockPriceRelated { get; }
 
 		void Calculate(IList<ITradingPeriod> periods);
 
 		void AfterNewPeriod();
+	}
+
+	public interface IIndicator<T> : IIndicator where T : TradingStrategySettings, new()
+	{
+		T Settings { get; set; }
 	}
 }

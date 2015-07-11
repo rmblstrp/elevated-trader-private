@@ -10,7 +10,59 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace Kalman
 {
-	public class Indicator : IIndicator
+	public class Settings : TradingStrategySettings
+	{
+		private double? plantNoise = 0.1;
+		private double? measurementNoise = null;
+		private double transitionValue = 1;
+		private double timeInterval = 1;
+		private double measurementNoiseMultiplier = 1;
+		private double plantNoiseMultiplier = 1;
+
+		public double TransitionValue
+		{
+			get { return transitionValue; }
+			set { transitionValue = value; }
+		}
+
+		public double? PlantNoise
+		{
+			get { return plantNoise; }
+			set { plantNoise = value; }
+		}
+
+		public double PlantNoiseMultiplier
+		{
+			get { return plantNoiseMultiplier; }
+			set { plantNoiseMultiplier = value; }
+		}
+
+		public double MeasurementNoiseMultiplier
+		{
+			get { return measurementNoiseMultiplier; }
+			set { measurementNoiseMultiplier = value; }
+		}
+
+		public double? MeasurementNoise
+		{
+			get { return measurementNoise; }
+			set { measurementNoise = value; }
+		}
+
+		public double TimeInterval
+		{
+			get { return timeInterval; }
+			set { timeInterval = value; }
+		}
+
+		public bool OrderCorrection
+		{
+			get;
+			set;
+		}
+	}
+
+	public class Indicator : IIndicator<Settings>
 	{
 		private List<IIndicatorResult> results;
 		private DiscreteKalmanFilter kalman;
@@ -19,24 +71,6 @@ namespace Kalman
 		public IList<IIndicatorResult> Results
 		{
 			get { return results; }
-		}
-
-		public PeriodValueType PeriodValue
-		{
-			get;
-			set;
-		}
-
-		public double? PlantNoise
-		{
-			get;
-			set;
-		}
-
-		public double? MeasurementNoise
-		{
-			get;
-			set;
 		}
 
 		public bool IsStockPriceRelated
@@ -51,25 +85,13 @@ namespace Kalman
 			AfterNewPeriod();
 		}
 
-		public double TransitionValue
-		{
-			get;
-			set;
-		}
-
-		public double MeasurementValue
-		{
-			get;
-			set;
-		}
-
-		public double TimeInterval
-		{
-			get;
-			set;
-		}
-
 		public ITradeSymbol Symbol
+		{
+			get;
+			set;
+		}
+
+		public Settings Settings
 		{
 			get;
 			set;
@@ -91,14 +113,14 @@ namespace Kalman
 				var velocity = current_price - previous_price;
 				var variance = current.High - current.Low;
 
-				var x0 = Matrix<double>.Build.Dense(2, 1, new[] { current_price, velocity / TimeInterval });
-				var p0 = Matrix<double>.Build.Dense(2, 2, new[] { measurement_noise, measurement_noise / TimeInterval, measurement_noise / TimeInterval, 2 * measurement_noise / (TimeInterval * TimeInterval) });
+				var x0 = Matrix<double>.Build.Dense(2, 1, new[] { current_price, velocity / Settings.TimeInterval });
+				var p0 = Matrix<double>.Build.Dense(2, 2, new[] { measurement_noise, measurement_noise / Settings.TimeInterval, measurement_noise / Settings.TimeInterval, 2 * measurement_noise / (Settings.TimeInterval * Settings.TimeInterval) });
 
-				F = Matrix<double>.Build.Dense(2, 2, new[] { TransitionValue, 0d, TimeInterval, TransitionValue });   // State transition matrix
-				G = Matrix<double>.Build.Dense(2, 1, new[] { (TimeInterval * TimeInterval) / 2d, TimeInterval });   // Plant noise matrix
+				F = Matrix<double>.Build.Dense(2, 2, new[] { Settings.TransitionValue, 0d, Settings.TimeInterval, Settings.TransitionValue });   // State transition matrix
+				G = Matrix<double>.Build.Dense(2, 1, new[] { (Settings.TimeInterval * Settings.TimeInterval) / 2d, Settings.TimeInterval });   // Plant noise matrix
 				Q = Matrix<double>.Build.Dense(1, 1, new[] { plant_noise }); // Plant noise variance
 
-				H = Matrix<double>.Build.Dense(1, 2, new[] { MeasurementValue, 0d }); // Measurement matrix
+				H = Matrix<double>.Build.Dense(1, 2, new[] { 1d, 0d }); // Measurement matrix
 				R = Matrix<double>.Build.Dense(1, 1, new[] { measurement_noise }); // Measurement variance matrix
 
 				kalman = new DiscreteKalmanFilter(x0, p0);
@@ -150,22 +172,22 @@ namespace Kalman
 		private double GetMeasurementNoise(ITradingPeriod current)
 		{
 			//var noise = current.PeriodValue(PeriodValueType.Variance);
-			var noise = (current.High - current.Low) / Symbol.TickRate;
+			var noise = (current.High - current.Low) / Symbol.TickRate * 2;
 
-			return MeasurementNoise.HasValue ? MeasurementNoise.Value : noise;
+			return Settings.MeasurementNoise.HasValue ? Settings.MeasurementNoise.Value : noise * Settings.MeasurementNoiseMultiplier;
 		}
 
 		private double GetPlantNoise(ITradingPeriod current)
 		{
 			//var noise = current.PeriodValue(PeriodValueType.HarmonicMean);
-			var noise = 1 / ((current.High - current.Low) / Symbol.TickRate);
+			var noise = 1 / ((current.High - current.Low) / Symbol.TickRate) * Settings.PlantNoiseMultiplier;
 
-			return PlantNoise.HasValue ? PlantNoise.Value : noise;
+			return Settings.PlantNoise.HasValue ? Settings.PlantNoise.Value : noise;
 		}
 
 		private double GetPeriodPrice(ITradingPeriod current)
 		{
-			return current.PeriodValue(PeriodValue);
+			return current.PeriodValue(Settings.PeriodValue);
 		}
 
 		private void PerformKalman(ITradingPeriod current)
@@ -195,54 +217,10 @@ namespace Kalman
 		}
 	}
 
-	public class Settings : TradingStrategySettings
-	{
-		private double? plantNoise = 0.1;
-		private double? measurementNoise = null;
-		private double transitionValue = 1;
-		private double measurementValue = 1;
-		private double timeInterval = 1;
-
-		public double TransitionValue
-		{
-			get { return transitionValue; }
-			set { transitionValue = value; }
-		}
-
-		public double? PlantNoise
-		{
-			get { return plantNoise; }
-			set { plantNoise = value; }
-		}
-
-		public double? MeasurementNoise
-		{
-			get { return measurementNoise; }
-			set { measurementNoise = value; }
-		}
-
-		public double MeasurementValue
-		{
-			get { return measurementValue; }
-			set { measurementValue = value; }
-		}
-
-		public double TimeInterval
-		{
-			get { return timeInterval; }
-			set { timeInterval = value; }
-		}
-
-		public bool OrderCorrection
-		{
-			get;
-			set;
-		}
-	}
-
 	public class Strategy : TradingStrategy<Settings>
 	{
 		private Indicator kalman;
+		private TrendDirection direction;
 
 		public override object Settings
 		{
@@ -255,8 +233,9 @@ namespace Kalman
 				settings.MeasurementNoise = (double?)obj.MeasurementNoise;
 				settings.PlantNoise = (double?)obj.PlantNoise;
 				settings.TransitionValue = (double)obj.TransitionValue;
-				settings.MeasurementValue = (double)obj.MeasurementValue;
 				settings.TimeInterval = (double)obj.TimeInterval;
+				settings.MeasurementNoiseMultiplier = (double)obj.MeasurementNoiseMultiplier;
+				settings.PlantNoiseMultiplier = (double)obj.PlantNoiseMultiplier;
 			}
 		}
 
@@ -277,7 +256,7 @@ namespace Kalman
 
 				if (settings.OrderCorrection)
 				{
-					ExecuteDecision();
+					ExecuteDecision(true);
 				}
 			}
 		}
@@ -289,7 +268,7 @@ namespace Kalman
 			ExecuteDecision();
 		}
 
-		private void ExecuteDecision()
+		private void ExecuteDecision(bool correction = false)
 		{
 			var result = kalman.Results[kalman.Results.Count - 1];
 
@@ -298,7 +277,7 @@ namespace Kalman
 			var periods = aggregator.Periods[settings.PeriodTicks[0]];
 			var last = periods[periods.Count - 1];
 
-			if (result.Signaled)
+			if (result.Signaled || (correction && result.Direction != direction && direction != TrendDirection.None))
 			{
 				if (result.Direction == TrendDirection.Rising)
 				{
@@ -309,6 +288,8 @@ namespace Kalman
 					ExecuteOrder(TradeType.Sell);
 				}
 			}
+
+			direction = result.Direction;
 		}
 
 
@@ -325,12 +306,7 @@ namespace Kalman
 
 			kalman = new Indicator(settings.Capacity)
 			{
-				PeriodValue = settings.PeriodValue,
-				PlantNoise = settings.PlantNoise,
-				MeasurementNoise = settings.MeasurementNoise,
-				TransitionValue = settings.TransitionValue,
-				MeasurementValue = settings.MeasurementValue,
-				TimeInterval = settings.TimeInterval,
+				Settings = settings,
 				Symbol = session.Symbol
 			};
 
@@ -339,7 +315,7 @@ namespace Kalman
 				indicators.Add(size, new List<IIndicator>());
 			}
 
-			indicators[size].Add(kalman);
+			indicators[size].Add(kalman as IIndicator);
 		}
 	}
 }

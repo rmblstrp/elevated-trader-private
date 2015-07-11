@@ -171,18 +171,28 @@ namespace Kalman
 
 		private double GetMeasurementNoise(ITradingPeriod current)
 		{
-			//var noise = current.PeriodValue(PeriodValueType.Variance);
-			var noise = (current.High - current.Low) / Symbol.TickRate * 2;
+			// the farther away from 1 the the worse the reading
+			var noise = (current.High - current.Low) / Symbol.TickRate * Settings.MeasurementNoiseMultiplier;
 
-			return Settings.MeasurementNoise.HasValue ? Settings.MeasurementNoise.Value : noise * Settings.MeasurementNoiseMultiplier;
+			if (double.IsInfinity(noise) || double.IsNaN(noise))
+			{
+				noise = 1;
+			}
+
+			return Settings.MeasurementNoise.HasValue ? Settings.MeasurementNoise.Value : noise;
 		}
 
 		private double GetPlantNoise(ITradingPeriod current)
 		{
-			//var noise = current.PeriodValue(PeriodValueType.HarmonicMean);
+			// the closer the value gets to 1 the better the reading
 			var noise = 1 / ((current.High - current.Low) / Symbol.TickRate) * Settings.PlantNoiseMultiplier;
 
-			return Settings.PlantNoise.HasValue ? Settings.PlantNoise.Value : noise;
+			if (double.IsInfinity(noise) || double.IsNaN(noise))
+			{
+				noise = 1;
+			}
+
+			return Settings.PlantNoise.HasValue ? Settings.PlantNoise.Value : Math.Max(noise, Math.Min(noise, 0));
 		}
 
 		private double GetPeriodPrice(ITradingPeriod current)

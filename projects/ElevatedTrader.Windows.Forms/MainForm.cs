@@ -124,6 +124,7 @@
 		const string SymbolsPath = @"symbols\";
 		const string IndicatorsPath = PathBase + @"indicators\";
 		const string StrategiesPath = PathBase + @"strategies\";
+		const string SolutionsPath = PathBase + @"solutions\";
 
 		const string ScriptsFilter = "*.cs";
 
@@ -172,7 +173,7 @@
 				DefaultExt = SolutionExtension,
 				FileName = string.Empty,
 				Filter = SolutionFilter,
-				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + SolutionsPath
 			};
 
 			saveDialog = new SaveFileDialog()
@@ -180,7 +181,7 @@
 				DefaultExt = SolutionExtension,
 				FileName = string.Empty,
 				Filter = SolutionFilter,
-				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + SolutionsPath
 			};
 
 			StrategiesComboBox.DataSource = strategies;
@@ -341,6 +342,11 @@
 		{
 			if (force || string.IsNullOrWhiteSpace(filename))
 			{
+				if (!string.IsNullOrWhiteSpace(filename))
+				{
+					saveDialog.FileName = Path.GetFileName(filename);
+				}
+
 				if (saveDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
 
 				filename = saveDialog.FileName;

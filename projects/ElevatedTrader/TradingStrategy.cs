@@ -14,7 +14,6 @@ namespace ElevatedTrader
 	{
 		protected ITradingSession session;
 		protected ITradingPeriodAggregator aggregator;
-		protected ITradeSymbol symbol;
 		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int, IList<IIndicator>>();
 		protected T settings = new T();
 		protected Dictionary<int, bool> periodTriggered = new Dictionary<int, bool>();

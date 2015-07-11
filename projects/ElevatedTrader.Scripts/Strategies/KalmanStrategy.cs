@@ -68,7 +68,12 @@ namespace Kalman
 			get;
 			set;
 		}
-		
+
+		public ITradeSymbol Symbol
+		{
+			get;
+			set;
+		}
 
 		public void Calculate(IList<ITradingPeriod> periods)
 		{
@@ -104,6 +109,11 @@ namespace Kalman
 
 			PerformKalman(current);
 
+			UpdateResult();
+		}
+
+		private void UpdateResult()
+		{
 			var prediction = kalman.State[0, 0];
 
 			var result = (IndicatorResult)Results[Results.Count - 1];
@@ -129,19 +139,26 @@ namespace Kalman
 				}
 
 				result.Signaled = last.Direction != TrendDirection.None && last.Direction != result.Direction;
+
+				if (result.Signaled)
+				{
+
+				}
 			}
 		}
 
 		private double GetMeasurementNoise(ITradingPeriod current)
 		{
-			var noise = current.PeriodValue(PeriodValueType.Variance);
+			//var noise = current.PeriodValue(PeriodValueType.Variance);
+			var noise = (current.High - current.Low) / Symbol.TickRate;
 
 			return MeasurementNoise.HasValue ? MeasurementNoise.Value : noise;
 		}
 
 		private double GetPlantNoise(ITradingPeriod current)
 		{
-			var noise = current.PeriodValue(PeriodValueType.HarmonicMean);
+			//var noise = current.PeriodValue(PeriodValueType.HarmonicMean);
+			var noise = 1 / ((current.High - current.Low) / Symbol.TickRate);
 
 			return PlantNoise.HasValue ? PlantNoise.Value : noise;
 		}
@@ -167,6 +184,8 @@ namespace Kalman
 			if (kalman != null)
 			{
 				PerformKalman(current);
+
+				UpdateResult();
 			}
 		}
 
@@ -213,6 +232,12 @@ namespace Kalman
 			get { return timeInterval; }
 			set { timeInterval = value; }
 		}
+
+		public bool OrderCorrection
+		{
+			get;
+			set;
+		}
 	}
 
 	public class Strategy : TradingStrategy<Settings>
@@ -249,6 +274,11 @@ namespace Kalman
 			if (settings.PeriodCorrection)
 			{
 				kalman.BeforeNewPeriod(aggregator.Periods[size].Last());
+
+				if (settings.OrderCorrection)
+				{
+					ExecuteDecision();
+				}
 			}
 		}
 
@@ -300,7 +330,8 @@ namespace Kalman
 				MeasurementNoise = settings.MeasurementNoise,
 				TransitionValue = settings.TransitionValue,
 				MeasurementValue = settings.MeasurementValue,
-				TimeInterval = settings.TimeInterval
+				TimeInterval = settings.TimeInterval,
+				Symbol = session.Symbol
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))

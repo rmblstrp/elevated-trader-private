@@ -153,10 +153,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Symbols\6A.json" />
+    <None Include="Symbols\6B.json" />
+    <None Include="Symbols\6C.json" />
     <None Include="Symbols\6E.json" />
-    <None Include="Symbols\ES.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Symbols\ES.json" />
+    <None Include="Symbols\M6E.json" />
+    <None Include="Symbols\NQ.json" />
+    <None Include="Symbols\TF.json" />
+    <None Include="Symbols\YM.json" />
     <None Include="Symbols\ZN.json" />
   </ItemGroup>
   <ItemGroup>

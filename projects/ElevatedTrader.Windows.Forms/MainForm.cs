@@ -394,6 +394,13 @@
 			if (busy) return;
 			busy = true;
 
+			await ExecuteLoadTickData();
+
+			busy = false;
+		}
+
+		private async Task ExecuteLoadTickData()
+		{
 			SetState(ApplicationState.Loading);
 			await Task.Run(() => LoadTickData());
 			SetState(ApplicationState.Idle);
@@ -415,19 +422,21 @@
 		{
 			Action<int> update_count = count => { TickCountStatusLabel.Text = count.ToString(); };
 
+			var history_list = history[symbol.Symbol];
+
+			if (settings.TickDataCount < history_list.Ticks.Count) return;
+
 			//{"AskPrice":1.111,"BidPrice":1.1109,"EventId":6157792271241579016,"ExchangeCode":"\u0000","IsTrade":true,"Price":1.1109,"Size":1,"Time":"2015-06-08T00:18:58Z","Type":0}
 			using (var connection = new SqlConnection(settings.ConnectionString))
 			{
 				connection.Open();
 
 				using (var command = connection.CreateCommand())
-				{
-					var history_list = history[symbol.Symbol];
-
+				{					
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
 					command.CommandText = "select top(@count) json, type, id from symbolhistory where symbol = @symbol and type = 3 and id > @id order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
-					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount));
+					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount - history_list.Ticks.Count));
 					command.Parameters.Add(new SqlParameter("@id", history_list.MaxId));
 
 					using (var reader = command.ExecuteReader())
@@ -494,7 +503,6 @@
 					}
 				}
 
-				busy = false;
 				connection.Close();
 			}
 		}
@@ -503,6 +511,25 @@
 		{
 			if (busy) return;
 			busy = true;
+
+			var history_list = history[symbol.Symbol];
+
+			var length = Math.Min(history_list.Ticks.Count, settings.TickDataCount);
+
+			if (history_list.Ticks.Count == 0)
+			{
+				if (MessageBox.Show("Would you like to load tick data?", "Tick Data", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
+				{
+					busy = false;
+					return;
+				}
+				else
+				{
+					await ExecuteLoadTickData();
+
+					if (!busy) return;
+				}
+			}			
 
 			TradeChart.Series.Clear();
 			periodSeries.Clear();
@@ -519,8 +546,11 @@
 			LinkSession();
 			LinkAggregrator();
 
+			TradeChart.Visible = false;
+
 			try
 			{
+				
 				SetState(ApplicationState.Running);
 				await Task.Run(() => RunSimulation());
 				SetState(ApplicationState.Idle);
@@ -530,6 +560,8 @@
 			}
 			finally
 			{
+				busy = false;
+				TradeChart.Visible = true;
 				UnlinkSession();
 				UnlinkAggregator();
 			}
@@ -544,13 +576,13 @@
 			Action increment = () => { SimulationProgress.Increment(1); };
 			Action step = () => { SimulationProgress.PerformStep(); };
 
-			this.Invoke(set_maximum, history.Count, StepValue);
-
-			strategy.Initialize();
-
 			var history_list = history[symbol.Symbol];
 
 			var length = Math.Min(history_list.Ticks.Count, settings.TickDataCount);
+
+			this.Invoke(set_maximum, length, StepValue);
+
+			strategy.Initialize();			
 
 			for (int index = 0; index < length; index++)
 			{
@@ -575,8 +607,6 @@
 
 				if (!busy) break;
 			}
-
-			busy = false;
 
 			this.Invoke(set_value);
 		}

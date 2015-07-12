@@ -18,6 +18,7 @@ namespace Kalman
 		private double timeInterval = 1;
 		private double measurementNoiseMultiplier = 1;
 		private double plantNoiseMultiplier = 1;
+		private double sidewaysTicks = 1;
 
 		public double TransitionValue
 		{
@@ -47,6 +48,12 @@ namespace Kalman
 		{
 			get { return measurementNoise; }
 			set { measurementNoise = value; }
+		}
+
+		public double SidewaysTicks
+		{
+			get { return sidewaysTicks; }
+			set { sidewaysTicks = value; }
 		}
 
 		public double TimeInterval
@@ -198,7 +205,7 @@ namespace Kalman
 				{
 					var difference = Math.Abs(result.Values[0] - last.Values[0]);
 
-					if ((difference / Symbol.TickRate) < 1)
+					if ((difference / Symbol.TickRate) < Settings.SidewaysTicks)
 					{
 						result.Direction = TrendDirection.Sideways;
 					}

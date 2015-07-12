@@ -211,13 +211,16 @@ namespace Kalman
 			kalman.Predict(F, G, Q);
 		}
 
-		public void BeforeNewPeriod(ITradingPeriod current)
+		public void BeforeNewPeriod(ITradingPeriod current, bool updateResult)
 		{
 			if (kalman != null)
 			{
 				PerformKalman(current);
 
-				UpdateResult();
+				if (updateResult)
+				{
+					UpdateResult();
+				}
 			}
 		}
 
@@ -262,7 +265,7 @@ namespace Kalman
 
 			if (settings.PeriodCorrection)
 			{
-				kalman.BeforeNewPeriod(aggregator.Periods[size].Last());
+				kalman.BeforeNewPeriod(aggregator.Periods[size].Last(), settings.OrderCorrection);
 
 				if (settings.OrderCorrection)
 				{

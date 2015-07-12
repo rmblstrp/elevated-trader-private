@@ -422,17 +422,16 @@
 
 				using (var command = connection.CreateCommand())
 				{
+					var history_list = history[symbol.Symbol];
+
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
-					command.CommandText = "select top(@count) json, type, id from symbolhistory where symbol = @symbol and type = 3 order by id asc";
+					command.CommandText = "select top(@count) json, type, id from symbolhistory where symbol = @symbol and type = 3 and id > @id order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
 					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount));
+					command.Parameters.Add(new SqlParameter("@id", history_list.MaxId));
 
 					using (var reader = command.ExecuteReader())
 					{
-						var history_list = history[symbol.Symbol];
-
-						history_list.Ticks.Clear();
-
 						int count = 0;						
 
 						while (reader.Read())

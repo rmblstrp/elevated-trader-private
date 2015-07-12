@@ -180,9 +180,25 @@ namespace Kalman
 			{
 				var last = Results[Results.Count - 2];
 
+				if (last.Direction == TrendDirection.Sideways)
+				{
+					for (int index = Results.Count - 3; index > 0; index--)
+					{
+						var item = Results[index];
+
+						if (item.Direction != TrendDirection.Sideways)
+						{
+							last = item;
+							break;
+						}
+					}
+				}
+
 				if (last.Values.Count > 0)
 				{
-					if (prediction == last.Values[0])
+					var difference = Math.Abs(result.Values[0] - last.Values[0]);
+
+					if ((difference / Symbol.TickRate) < 1)
 					{
 						result.Direction = TrendDirection.Sideways;
 					}

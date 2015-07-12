@@ -114,14 +114,48 @@ namespace Kalman
 				var variance = current.High - current.Low;
 
 				var x0 = Matrix<double>.Build.Dense(2, 1, new[] { current_price, velocity / Settings.TimeInterval });
-				var p0 = Matrix<double>.Build.Dense(2, 2, new[] { measurement_noise, measurement_noise / Settings.TimeInterval, measurement_noise / Settings.TimeInterval, 2 * measurement_noise / (Settings.TimeInterval * Settings.TimeInterval) });
+				var p0 = Matrix<double>.Build.Dense(2, 2, new[]
+				{
+					measurement_noise,
+					measurement_noise / Settings.TimeInterval,
+					measurement_noise / Settings.TimeInterval,
+					2 * measurement_noise / (Settings.TimeInterval * Settings.TimeInterval)
+				});
 
-				F = Matrix<double>.Build.Dense(2, 2, new[] { Settings.TransitionValue, 0d, Settings.TimeInterval, Settings.TransitionValue });   // State transition matrix
-				G = Matrix<double>.Build.Dense(2, 1, new[] { (Settings.TimeInterval * Settings.TimeInterval) / 2d, Settings.TimeInterval });   // Plant noise matrix
-				Q = Matrix<double>.Build.Dense(1, 1, new[] { plant_noise }); // Plant noise variance
+				// State transition matrix
+				F = Matrix<double>.Build.Dense(2, 2, new[]
+				{
+					Settings.TransitionValue,
+					0d,
+					Settings.TimeInterval,
+					Settings.TransitionValue
+				});
 
-				H = Matrix<double>.Build.Dense(1, 2, new[] { 1d, 0d }); // Measurement matrix
-				R = Matrix<double>.Build.Dense(1, 1, new[] { measurement_noise }); // Measurement variance matrix
+				// Plant noise matrix
+				G = Matrix<double>.Build.Dense(2, 1, new[]
+				{
+					(Settings.TimeInterval * Settings.TimeInterval) / 2d,
+					Settings.TimeInterval
+				});
+
+				// Plant noise variance
+				Q = Matrix<double>.Build.Dense(1, 1, new[]
+				{
+					plant_noise
+				});
+
+				// Measurement matrix
+				H = Matrix<double>.Build.Dense(1, 2, new[]
+				{
+					1d,
+					0d
+				});
+
+				// Measurement variance matrix
+				R = Matrix<double>.Build.Dense(1, 1, new[]
+				{
+					measurement_noise
+				});
 
 				kalman = new DiscreteKalmanFilter(x0, p0);
 				kalman.Predict(F, G, Q);
@@ -160,12 +194,8 @@ namespace Kalman
 					}
 				}
 
-				result.Signaled = last.Direction != TrendDirection.None && last.Direction != result.Direction;
-
-				if (result.Signaled)
-				{
-
-				}
+				//result.Signaled = last.Direction != TrendDirection.None && last.Direction != result.Direction;
+				result.Signaled = last.Direction != result.Direction;
 			}
 		}
 

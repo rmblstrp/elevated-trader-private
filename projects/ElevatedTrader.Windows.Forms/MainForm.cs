@@ -21,36 +21,6 @@
 	public partial class MainForm : Form
 	{
 		#region -- Internal Classes --
-		public class ApplicationSettings
-		{
-			public string DataConnectionString
-			{
-				get;
-				set;
-			}
-		}
-
-		public class SolutionSettings
-		{
-			public string Strategy
-			{
-				get;
-				set;
-			}
-
-			public string Settings
-			{
-				get;
-				set;
-			}
-
-			public string Symbol
-			{
-				get;
-				set;
-			}
-		}
-
 		private enum ApplicationState
 		{
 			Idle,
@@ -62,12 +32,8 @@
 		#region -- Private Fields --
 		private string filename = null;
 		private bool busy = false;
-		private ApplicationSettings application = new ApplicationSettings()
-		{
-			//DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
-			DataConnectionString = @"Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
-			//DataConnectionString = @"Data Source=thecodewerks.com;Initial Catalog=AutomatedTrading;Persist Security Info=True;User ID=elevated-trader;Password=Phuducran+7rafre"
-		};
+		private TraderSettings settings;
+		// "Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
 
 		private BindingSource symbolsBindingSource = new BindingSource();
 		private BindingList<TradeSymbol> symbols = new BindingList<TradeSymbol>();
@@ -114,12 +80,9 @@
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
 		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
-		//private int dataCount = int.MaxValue;
-		private int dataCount = 500000;
 		#endregion
 
 		#region -- Constants --
-
 		const string PathBase = @"library\";
 		const string SymbolsPath = @"symbols\";
 		const string IndicatorsPath = PathBase + @"indicators\";
@@ -138,6 +101,8 @@
 		public MainForm()
 		{
 			InitializeComponent();
+
+			settings = TraderSettings.Load();
 
 			LoadScripts();
 
@@ -186,6 +151,8 @@
 
 			StrategiesComboBox.DataSource = strategies;
 			SetShowGraphCheckedState();
+
+			FormClosing += delegate { TraderSettings.Save(settings); };
 		}
 
 		#region -- Strategies --
@@ -427,7 +394,7 @@
 			Action<int> update_count = count => { TickCountStatusLabel.Text = count.ToString(); };
 
 			//{"AskPrice":1.111,"BidPrice":1.1109,"EventId":6157792271241579016,"ExchangeCode":"\u0000","IsTrade":true,"Price":1.1109,"Size":1,"Time":"2015-06-08T00:18:58Z","Type":0}
-			using (var connection = new SqlConnection(application.DataConnectionString))
+			using (var connection = new SqlConnection(settings.ConnectionString))
 			{
 				connection.Open();
 
@@ -436,7 +403,7 @@
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
 					command.CommandText = "select top(@count) json, type from symbolhistory where symbol = @symbol and type = 3 order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
-					command.Parameters.Add(new SqlParameter("@count", dataCount));
+					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount));
 
 					using (var reader = command.ExecuteReader())
 					{
@@ -646,9 +613,15 @@
 
 		private void SetDataCountMenuItem_Click(object sender, EventArgs e)
 		{
-			var input = Microsoft.VisualBasic.Interaction.InputBox("Set the number of ticks you want to load", "Data Count", dataCount.ToString(), -1, -1);
+			var input = Microsoft.VisualBasic.Interaction.InputBox("Set the number of ticks you want to load", "Data Count", settings.TickDataCount.ToString(), -1, -1);
 
-			int.TryParse(input, out dataCount);
+			if (string.IsNullOrWhiteSpace(input)) return;
+
+			try
+			{
+				settings.TickDataCount = int.Parse(input);
+			}
+			catch { }
 		}
 
 		private void LinkAggregrator()

@@ -16,6 +16,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 		class EventListener : IDxFeedListener, IDisposable
 		{
 			private SqlConnection connection;
+			private string connectionString;
 
 			public EventListener(string connection_string)
 			{
@@ -54,7 +55,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 						Time = item.Time
 					};
 
-					LogEvent<TradeHistoryOrder>(TradeHistoryType.Order, buf.Symbol.ToString(), obj);
+					LogEvent<TradeHistoryOrder>(TradeHistoryType.Order, buf.Symbol.ToString(), obj, item.Time);
 				}
 			}
 
@@ -84,7 +85,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 						BidTime = item.BidTime
 					};
 
-					LogEvent<TradeHistoryQuote>(TradeHistoryType.Quote, buf.Symbol.ToString(), obj);
+					LogEvent<TradeHistoryQuote>(TradeHistoryType.Quote, buf.Symbol.ToString(), obj, item.BidTime > item.AskTime ?  item.BidTime : item.AskTime);
 				}
 			}
 
@@ -108,7 +109,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 						Type = item.Type
 					};
 
-					LogEvent<TradeHistoryTimeAndSale>(TradeHistoryType.TimeAndSale, buf.Symbol.ToString(), obj);
+					LogEvent<TradeHistoryTimeAndSale>(TradeHistoryType.TimeAndSale, buf.Symbol.ToString(), obj, item.Time);
 				}
 			}
 
@@ -127,22 +128,35 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 						Time = item.Time
 					};
 
-					LogEvent<TradeHistoryTrade>(TradeHistoryType.Trade, buf.Symbol.ToString(), obj);
+					LogEvent<TradeHistoryTrade>(TradeHistoryType.Trade, buf.Symbol.ToString(), obj, item.Time);
 				}
 			}
 
-			private void LogEvent<T>(TradeHistoryType type, string symbol, T history)
+			private void LogEvent<T>(TradeHistoryType type, string symbol, T history, DateTime traded)
 			{
 				var json = Newtonsoft.Json.JsonConvert.SerializeObject(history);
+
+				if (connection.State == System.Data.ConnectionState.Closed)
+				{
+					try
+					{
+						connection.Dispose();
+					}
+					catch { }
+
+					connection = new SqlConnection(connectionString);
+					connection.Open();
+				}
 
 				try
 				{
 					using (var command = connection.CreateCommand())
 					{
-						command.CommandText = "insert into SymbolHistory (symbol, type, json) values (@symbol, @type, @json)";
+						command.CommandText = "insert into SymbolHistory (symbol, type, json, traded) values (@symbol, @type, @json, @traded)";
 						command.Parameters.Add(new SqlParameter("@symbol", symbol));
 						command.Parameters.Add(new SqlParameter("@type", (int)type));
 						command.Parameters.Add(new SqlParameter("@json", json));
+						command.Parameters.Add(new SqlParameter("@traded", traded));
 						command.ExecuteNonQuery();
 
 						logger.Info(string.Format("{0} - {2}: {1}", typeof(T).Name, json, symbol));

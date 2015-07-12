@@ -74,7 +74,24 @@
 			public object Item;
 		}
 
-		private List<HistoryContainer> history = new List<HistoryContainer>(10000000);
+		private class HistoryList
+		{
+			private List<HistoryContainer> ticks = new List<HistoryContainer>(10000000);
+
+			public List<HistoryContainer> Ticks
+			{
+				get { return ticks; }
+			}
+
+			public long MaxId
+			{
+				get;
+				set;
+			}
+		}
+
+		private Dictionary<string, HistoryList> history = new Dictionary<string, HistoryList>(10);
+
 		private BindingList<ITrade> trades;
 		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
@@ -273,6 +290,11 @@
 
 			solution.Symbol = symbol.Symbol;
 			strategy.Session.Symbol = symbol;
+
+			if (!history.ContainsKey(symbol.Symbol))
+			{
+				history.Add(symbol.Symbol, new HistoryList());
+			}
 		}
 		#endregion
 
@@ -401,15 +423,17 @@
 				using (var command = connection.CreateCommand())
 				{
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
-					command.CommandText = "select top(@count) json, type from symbolhistory where symbol = @symbol and type = 3 order by id asc";
+					command.CommandText = "select top(@count) json, type, id from symbolhistory where symbol = @symbol and type = 3 order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
 					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount));
 
 					using (var reader = command.ExecuteReader())
 					{
-						history.Clear();
+						var history_list = history[symbol.Symbol];
 
-						int count = 0;
+						history_list.Ticks.Clear();
+
+						int count = 0;						
 
 						while (reader.Read())
 						{
@@ -422,7 +446,9 @@
 								case TradeHistoryType.Quote:
 									var quote = JsonConvert.DeserializeObject<TradeHistoryQuote>(reader.GetString(0));
 
-									history.Add
+									history_list.MaxId = Math.Max(history_list.MaxId, reader.GetInt64(2));
+
+									history_list.Ticks.Add
 									(
 										new HistoryContainer()
 										{
@@ -437,8 +463,11 @@
 									break;
 
 								case TradeHistoryType.TimeAndSale:
+									history_list.MaxId = Math.Max(history_list.MaxId, reader.GetInt64(2));
+									
 									var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
-									history.Add
+
+									history_list.Ticks.Add
 									(
 										new HistoryContainer()
 										{
@@ -453,8 +482,6 @@
 									);
 									break;
 							}
-
-
 
 							if (++count % 25000 == 0)
 							{
@@ -522,9 +549,13 @@
 
 			strategy.Initialize();
 
-			for (int index = 0; index < history.Count; index++)
+			var history_list = history[symbol.Symbol];
+
+			var length = Math.Min(history_list.Ticks.Count, settings.TickDataCount);
+
+			for (int index = 0; index < length; index++)
 			{
-				var item = history[index];
+				var item = history_list.Ticks[index];
 
 				switch (item.Type)
 				{

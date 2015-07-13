@@ -20,6 +20,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 
 			public EventListener(string connection_string)
 			{
+				connectionString = connection_string;
 				connection = new SqlConnection(connection_string);
 				connection.Open();
 			}

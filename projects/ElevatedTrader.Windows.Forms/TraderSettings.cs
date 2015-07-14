@@ -10,7 +10,15 @@ namespace ElevatedTrader.Windows.Forms
 {
 	public class TraderSettings
 	{
+		const string Filename = "settings.json";
+
 		public string ConnectionString
+		{
+			get;
+			set;
+		}
+
+		public bool GenerateTickData
 		{
 			get;
 			set;
@@ -21,8 +29,6 @@ namespace ElevatedTrader.Windows.Forms
 			get;
 			set;
 		}
-
-		const string Filename = "settings.json";
 
 		private TraderSettings()
 		{

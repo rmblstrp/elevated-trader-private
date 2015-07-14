@@ -55,5 +55,17 @@ namespace ElevatedTrader
 			get;
 			set;
 		}
+
+		double TickDeviation
+		{
+			get;
+			set;
+		}
+
+		int SpreadDeviation
+		{
+			get;
+			set;
+		}
 	}
 }

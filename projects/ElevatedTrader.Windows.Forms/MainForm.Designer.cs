@@ -54,6 +54,7 @@
 			this.StopLoadingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.SetDataCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.generateTicksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.RunSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.StopSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -173,7 +174,8 @@
             this.LoadDataMenuItem,
             this.StopLoadingMenuItem,
             this.toolStripSeparator2,
-            this.SetDataCountMenuItem});
+            this.SetDataCountMenuItem,
+            this.generateTicksMenuItem});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(43, 20);
 			this.toolStripMenuItem1.Text = "Data";
@@ -182,7 +184,7 @@
 			// 
 			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
 			this.LoadDataMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-			this.LoadDataMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(151, 22);
 			this.LoadDataMenuItem.Text = "Load";
 			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
 			// 
@@ -190,21 +192,28 @@
 			// 
 			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
 			this.StopLoadingMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.StopLoadingMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.StopLoadingMenuItem.Size = new System.Drawing.Size(151, 22);
 			this.StopLoadingMenuItem.Text = "Stop";
 			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(123, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(148, 6);
 			// 
 			// SetDataCountMenuItem
 			// 
 			this.SetDataCountMenuItem.Name = "SetDataCountMenuItem";
-			this.SetDataCountMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.SetDataCountMenuItem.Size = new System.Drawing.Size(151, 22);
 			this.SetDataCountMenuItem.Text = "Set Count";
 			this.SetDataCountMenuItem.Click += new System.EventHandler(this.SetDataCountMenuItem_Click);
+			// 
+			// generateTicksMenuItem
+			// 
+			this.generateTicksMenuItem.Name = "generateTicksMenuItem";
+			this.generateTicksMenuItem.Size = new System.Drawing.Size(151, 22);
+			this.generateTicksMenuItem.Text = "Generate Ticks";
+			this.generateTicksMenuItem.Click += new System.EventHandler(this.generateTicksMenuItem_Click);
 			// 
 			// simulationToolStripMenuItem
 			// 
@@ -284,7 +293,7 @@
             this.StateStatusLabel,
             this.toolStripStatusLabel1,
             this.TickCountStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 472);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 562);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(846, 22);
 			this.statusStrip1.TabIndex = 2;
@@ -327,7 +336,7 @@
 			this.panel1.Location = new System.Drawing.Point(0, 24);
 			this.panel1.Name = "panel1";
 			this.panel1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-			this.panel1.Size = new System.Drawing.Size(596, 448);
+			this.panel1.Size = new System.Drawing.Size(596, 538);
 			this.panel1.TabIndex = 3;
 			// 
 			// TradeInfoSplitContainer
@@ -345,8 +354,8 @@
 			// TradeInfoSplitContainer.Panel2
 			// 
 			this.TradeInfoSplitContainer.Panel2.Controls.Add(this.TradeResultGrid);
-			this.TradeInfoSplitContainer.Size = new System.Drawing.Size(586, 443);
-			this.TradeInfoSplitContainer.SplitterDistance = 223;
+			this.TradeInfoSplitContainer.Size = new System.Drawing.Size(586, 533);
+			this.TradeInfoSplitContainer.SplitterDistance = 268;
 			this.TradeInfoSplitContainer.TabIndex = 1;
 			// 
 			// TradeChart
@@ -390,7 +399,7 @@
 			series2.ShadowColor = System.Drawing.Color.Empty;
 			this.TradeChart.Series.Add(series1);
 			this.TradeChart.Series.Add(series2);
-			this.TradeChart.Size = new System.Drawing.Size(586, 223);
+			this.TradeChart.Size = new System.Drawing.Size(586, 268);
 			this.TradeChart.TabIndex = 3;
 			this.TradeChart.Text = "chart1";
 			title1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -416,7 +425,7 @@
 			this.TradeResultGrid.Name = "TradeResultGrid";
 			this.TradeResultGrid.ReadOnly = true;
 			this.TradeResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.TradeResultGrid.Size = new System.Drawing.Size(586, 216);
+			this.TradeResultGrid.Size = new System.Drawing.Size(586, 261);
 			this.TradeResultGrid.TabIndex = 3;
 			// 
 			// typeDataGridViewTextBoxColumn
@@ -474,7 +483,7 @@
 			this.panel2.Location = new System.Drawing.Point(596, 24);
 			this.panel2.Name = "panel2";
 			this.panel2.Padding = new System.Windows.Forms.Padding(0, 0, 5, 5);
-			this.panel2.Size = new System.Drawing.Size(250, 448);
+			this.panel2.Size = new System.Drawing.Size(250, 538);
 			this.panel2.TabIndex = 4;
 			// 
 			// groupBox2
@@ -483,9 +492,9 @@
 			this.groupBox2.Controls.Add(this.StrategiesComboBox);
 			this.groupBox2.Controls.Add(this.StrategySettings);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox2.Location = new System.Drawing.Point(0, 200);
+			this.groupBox2.Location = new System.Drawing.Point(0, 250);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(245, 243);
+			this.groupBox2.Size = new System.Drawing.Size(245, 283);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Strategy";
@@ -511,7 +520,7 @@
 			this.StrategySettings.Location = new System.Drawing.Point(6, 46);
 			this.StrategySettings.Name = "StrategySettings";
 			this.StrategySettings.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-			this.StrategySettings.Size = new System.Drawing.Size(231, 191);
+			this.StrategySettings.Size = new System.Drawing.Size(231, 231);
 			this.StrategySettings.TabIndex = 0;
 			this.StrategySettings.ToolbarVisible = false;
 			// 
@@ -523,7 +532,7 @@
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(245, 200);
+			this.groupBox1.Size = new System.Drawing.Size(245, 250);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Symbol";
@@ -550,7 +559,7 @@
 			this.SymbolProperties.Location = new System.Drawing.Point(6, 47);
 			this.SymbolProperties.Name = "SymbolProperties";
 			this.SymbolProperties.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-			this.SymbolProperties.Size = new System.Drawing.Size(231, 147);
+			this.SymbolProperties.Size = new System.Drawing.Size(231, 197);
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
@@ -558,7 +567,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(846, 494);
+			this.ClientSize = new System.Drawing.Size(846, 584);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.MainMenu);
@@ -634,6 +643,7 @@
 		private System.Windows.Forms.ToolStripMenuItem SetDataCountMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem ShowGraphMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem generateTicksMenuItem;
 	}
 }
 

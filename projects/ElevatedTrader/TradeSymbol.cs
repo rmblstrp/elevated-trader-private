@@ -58,6 +58,18 @@ namespace ElevatedTrader
 			set;
 		}
 
+		public double TickDeviation
+		{
+			get;
+			set;
+		}
+
+		public int SpreadDeviation
+		{
+			get;
+			set;
+		}
+
 		public override string ToString()
 		{
 			return string.Format("{0} - {1}", Symbol, string.IsNullOrWhiteSpace(Description) ? "(no description)" : Description);

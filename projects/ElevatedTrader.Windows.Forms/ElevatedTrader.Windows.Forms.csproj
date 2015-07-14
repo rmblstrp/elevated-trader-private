@@ -114,6 +114,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PriceTickSimulator.cs" />
     <Compile Include="SolutionSettings.cs" />
     <Compile Include="TraderSettings.cs" />
     <None Include="..\ElevatedTrader.Scripts\Strategies\HullStrategy.cs">

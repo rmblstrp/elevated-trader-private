@@ -38,6 +38,7 @@
 		private BindingSource symbolsBindingSource = new BindingSource();
 		private BindingList<TradeSymbol> symbols = new BindingList<TradeSymbol>();
 		private TradeSymbol symbol;
+		private double? symbolPrice;
 
 		private BindingSource strategyBindingSource = new BindingSource();
 		private BindingList<string> strategies = new BindingList<string>();
@@ -169,6 +170,8 @@
 			StrategiesComboBox.DataSource = strategies;
 			SetShowGraphCheckedState();
 
+			generateTicksMenuItem.Checked = settings.GenerateTickData;
+
 			FormClosing += delegate { TraderSettings.Save(settings); };
 		}
 
@@ -295,6 +298,8 @@
 			{
 				history.Add(symbol.Symbol, new HistoryList());
 			}
+
+			symbolPrice = null;
 		}
 		#endregion
 
@@ -516,7 +521,7 @@
 
 			var length = Math.Min(history_list.Ticks.Count, settings.TickDataCount);
 
-			if (history_list.Ticks.Count == 0)
+			if (history_list.Ticks.Count == 0 && !settings.GenerateTickData)
 			{
 				if (MessageBox.Show("Would you like to load tick data?", "Tick Data", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
 				{
@@ -578,27 +583,74 @@
 
 			var history_list = history[symbol.Symbol];
 
-			var length = Math.Min(history_list.Ticks.Count, settings.TickDataCount);
+			var length = settings.GenerateTickData ? settings.TickDataCount : Math.Min(history_list.Ticks.Count, settings.TickDataCount);
 
 			this.Invoke(set_maximum, length, StepValue);
 
-			strategy.Initialize();			
+			strategy.Initialize();
+
+			var tick_simulator = new PriceTickSimulator()
+			{
+				Interval = 1,
+				TickDeviation = symbol.TickDeviation,
+				TickRate = symbol.TickRate
+			};
+
+			if (settings.GenerateTickData)
+			{
+				if (symbolPrice.HasValue)
+				{
+					tick_simulator.Price = symbolPrice.Value;
+				}
+				else
+				{
+					var input = Microsoft.VisualBasic.Interaction.InputBox("What is the starting price?", "Symbol Price", string.Empty, -1, -1);
+
+					try
+					{
+						symbolPrice = double.Parse(input);
+						tick_simulator.Price = symbolPrice.Value;
+					}
+					catch
+					{
+						return;
+					}
+				}
+			}
+
+			var spread = symbol.TickRate * symbol.SpreadDeviation;
 
 			for (int index = 0; index < length; index++)
 			{
-				var item = history_list.Ticks[index];
-
-				switch (item.Type)
+				if (settings.GenerateTickData)
 				{
-					case TradeHistoryType.Quote:
-						strategy.AddQuote((ITradeQuote)item.Item);
-						break;
-					case TradeHistoryType.TimeAndSale:
-						strategy.AddTick((ITradeTick)item.Item);
-						break;
-				}
+					tick_simulator.Step();
+					var price = tick_simulator.Price;					
+					
+					var tick = new TradeTick()
+					{
+						Ask = price + spread,
+						Bid = price - spread,
+						Price = price,
+						Size = 1
+					};
 
-				
+					strategy.AddTick(tick);
+				}
+				else
+				{
+					var item = history_list.Ticks[index];
+
+					switch (item.Type)
+					{
+						case TradeHistoryType.Quote:
+							strategy.AddQuote((ITradeQuote)item.Item);
+							break;
+						case TradeHistoryType.TimeAndSale:
+							strategy.AddTick((ITradeTick)item.Item);
+							break;
+					}
+				}
 
 				if ((index + 1) % StepValue == 0)
 				{
@@ -837,6 +889,12 @@
 		{
 			ShowGraphMenuItem.Checked = !TradeInfoSplitContainer.Panel1Collapsed;
 			ShowGraphMenuItem.CheckState = ShowGraphMenuItem.Checked ? CheckState.Checked : CheckState.Unchecked;
+		}
+
+		private void generateTicksMenuItem_Click(object sender, EventArgs e)
+		{
+			generateTicksMenuItem.Checked = !generateTicksMenuItem.Checked;
+			settings.GenerateTickData = generateTicksMenuItem.Checked;
 		}
 	}
 }

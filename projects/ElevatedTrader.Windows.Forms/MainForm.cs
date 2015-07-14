@@ -78,6 +78,12 @@
 		private class HistoryList
 		{
 			private List<HistoryContainer> ticks = new List<HistoryContainer>(10000000);
+			private List<double> differences = new List<double>(10000000);
+
+			public List<double> Differences
+			{
+				get { return differences; }
+			}
 
 			public List<HistoryContainer> Ticks
 			{
@@ -173,6 +179,9 @@
 			generateTicksMenuItem.Checked = settings.GenerateTickData;
 
 			FormClosing += delegate { TraderSettings.Save(settings); };
+
+			MathNet.Numerics.Control.UseMultiThreading();
+			MathNet.Numerics.Control.UseNativeMKL();
 		}
 
 		#region -- Strategies --
@@ -437,7 +446,7 @@
 				connection.Open();
 
 				using (var command = connection.CreateCommand())
-				{					
+				{
 					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
 					command.CommandText = "select top(@count) json, type, id from symbolhistory where symbol = @symbol and type = 3 and id > @id order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
@@ -446,7 +455,7 @@
 
 					using (var reader = command.ExecuteReader())
 					{
-						int count = 0;						
+						int count = 0;
 
 						while (reader.Read())
 						{
@@ -477,7 +486,7 @@
 
 								case TradeHistoryType.TimeAndSale:
 									history_list.MaxId = Math.Max(history_list.MaxId, reader.GetInt64(2));
-									
+
 									var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
 
 									history_list.Ticks.Add
@@ -510,6 +519,19 @@
 
 				connection.Close();
 			}
+
+			double last_price = 0;
+
+
+			foreach (var item in (from x in history_list.Ticks where x.Type == TradeHistoryType.TimeAndSale select (ITradeTick)x.Item))
+			{
+				if (last_price > 0)
+				{
+					history_list.Differences.Add(item.Price - last_price);					
+				}
+
+				last_price = item.Price;
+			}
 		}
 
 		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
@@ -534,7 +556,7 @@
 
 					if (!busy) return;
 				}
-			}			
+			}
 
 			TradeChart.Series.Clear();
 			periodSeries.Clear();
@@ -555,7 +577,7 @@
 
 			try
 			{
-				
+
 				SetState(ApplicationState.Running);
 				await Task.Run(() => RunSimulation());
 				SetState(ApplicationState.Idle);
@@ -591,9 +613,7 @@
 
 			var tick_simulator = new PriceTickSimulator()
 			{
-				Interval = 1,
-				TickDeviation = symbol.TickDeviation,
-				TickRate = symbol.TickRate
+				Differences = history_list.Differences
 			};
 
 			if (settings.GenerateTickData)
@@ -625,8 +645,8 @@
 				if (settings.GenerateTickData)
 				{
 					tick_simulator.Step();
-					var price = tick_simulator.Price;					
-					
+					var price = tick_simulator.Price;
+
 					var tick = new TradeTick()
 					{
 						Ask = price + spread,

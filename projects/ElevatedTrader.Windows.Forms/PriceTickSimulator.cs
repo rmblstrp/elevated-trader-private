@@ -43,7 +43,6 @@ namespace ElevatedTrader.Windows.Forms
 
 			public void Step()
 			{
-				var adjustment = Price * Mean * Interval;
 				var movement = Math.Round(TickDeviation * distribution.Sample()) * TickRate;
 				Price += movement;
 			}

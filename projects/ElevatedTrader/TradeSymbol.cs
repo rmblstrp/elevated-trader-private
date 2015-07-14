@@ -64,6 +64,12 @@ namespace ElevatedTrader
 			set;
 		}
 
+		public double TickMean
+		{
+			get;
+			set;
+		}
+
 		public int SpreadDeviation
 		{
 			get;

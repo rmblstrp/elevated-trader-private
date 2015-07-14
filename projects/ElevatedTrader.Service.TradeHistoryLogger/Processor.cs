@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NLog;
 using com.dxfeed.api;
+using com.dxfeed.api.events;
 using com.dxfeed.native;
 
 namespace ElevatedTrader.Service.TradeHistoryLogger
@@ -33,7 +34,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 
 			public void OnFundamental<TB, TE>(TB buf)
 				where TB : IDxEventBuf<TE>
-				where TE : IDxFundamental
+				where TE : IDxSummary
 			{
 
 			}
@@ -86,7 +87,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 						BidTime = item.BidTime
 					};
 
-					LogEvent<TradeHistoryQuote>(TradeHistoryType.Quote, buf.Symbol.ToString(), obj, item.BidTime > item.AskTime ?  item.BidTime : item.AskTime);
+					LogEvent<TradeHistoryQuote>(TradeHistoryType.Quote, buf.Symbol.ToString(), obj, item.BidTime > item.AskTime ? item.BidTime : item.AskTime);
 				}
 			}
 
@@ -107,7 +108,7 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 						Price = item.Price,
 						Size = item.Size,
 						Time = item.Time,
-						Type = item.Type
+						Type = (int)item.Type
 					};
 
 					LogEvent<TradeHistoryTimeAndSale>(TradeHistoryType.TimeAndSale, buf.Symbol.ToString(), obj, item.Time);
@@ -142,11 +143,11 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 					try
 					{
 						connection.Dispose();
+
+						connection = new SqlConnection(connectionString);
+						connection.Open();
 					}
 					catch { }
-
-					connection = new SqlConnection(connectionString);
-					connection.Open();
 				}
 
 				try
@@ -181,16 +182,10 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 			{
 				var host = ConfigurationManager.AppSettings["dxfeed"];
 
-				logger.Info("Connecting to feed: " + host);
-				feed = new NativeConnection();
-				feed.Connect(host);
-
 				logger.Info("Creating event listener");
 				listener = new EventListener(ConfigurationManager.ConnectionStrings["trader"].ConnectionString);
 
-				logger.Info("Creating feed subscription");
-				subscription = feed.CreateSubscription(EventType.Quote | EventType.Trade | EventType.TimeAndSale, listener);
-				subscription.SetSymbols(ConfigurationManager.AppSettings["symbols"].Split(','));
+				CreateConnection();
 			}
 			catch (Exception ex)
 			{
@@ -198,6 +193,30 @@ namespace ElevatedTrader.Service.TradeHistoryLogger
 
 				throw;
 			}
+		}
+
+		private void OnDisconnect(IDxConnection connection)
+		{
+			logger.Info("Connection lost.");
+
+			Task.Run(() => CreateConnection());	
+		}
+
+		private void CreateConnection()
+		{
+			var host = ConfigurationManager.AppSettings["dxfeed"];
+
+			logger.Info("Connecting to feed: " + host);
+			feed = new NativeConnection(host, OnDisconnect);
+
+			CreateSubscription(feed);
+		}
+
+		private void CreateSubscription(IDxConnection connection)
+		{
+			logger.Info("Creating feed subscription");
+			subscription = feed.CreateSubscription(EventType.Quote | EventType.Trade | EventType.TimeAndSale, listener);
+			subscription.SetSymbols(ConfigurationManager.AppSettings["symbols"].Split(','));
 		}
 
 		public void Stop()

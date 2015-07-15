@@ -61,6 +61,8 @@
 			this.symbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.CalculateStatisticsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.ShowGraphMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.TradesBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -244,7 +246,9 @@
 			// 
 			this.symbolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddSymbolMenuItem,
-            this.SaveSymbolMenuItem});
+            this.SaveSymbolMenuItem,
+            this.toolStripSeparator3,
+            this.CalculateStatisticsMenuItem});
 			this.symbolsToolStripMenuItem.Name = "symbolsToolStripMenuItem";
 			this.symbolsToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
 			this.symbolsToolStripMenuItem.Text = "Symbols";
@@ -264,6 +268,18 @@
 			this.SaveSymbolMenuItem.Size = new System.Drawing.Size(217, 22);
 			this.SaveSymbolMenuItem.Text = "Save Selected";
 			this.SaveSymbolMenuItem.Click += new System.EventHandler(this.SaveSymbolMenuItem_Click);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(214, 6);
+			// 
+			// CalculateStatisticsMenuItem
+			// 
+			this.CalculateStatisticsMenuItem.Name = "CalculateStatisticsMenuItem";
+			this.CalculateStatisticsMenuItem.Size = new System.Drawing.Size(217, 22);
+			this.CalculateStatisticsMenuItem.Text = "Calculate Statistics";
+			this.CalculateStatisticsMenuItem.Click += new System.EventHandler(this.CalculateStatisticsMenuItem_Click);
 			// 
 			// viewToolStripMenuItem
 			// 
@@ -492,9 +508,9 @@
 			this.groupBox2.Controls.Add(this.StrategiesComboBox);
 			this.groupBox2.Controls.Add(this.StrategySettings);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox2.Location = new System.Drawing.Point(0, 250);
+			this.groupBox2.Location = new System.Drawing.Point(0, 275);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(245, 283);
+			this.groupBox2.Size = new System.Drawing.Size(245, 258);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Strategy";
@@ -520,7 +536,7 @@
 			this.StrategySettings.Location = new System.Drawing.Point(6, 46);
 			this.StrategySettings.Name = "StrategySettings";
 			this.StrategySettings.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-			this.StrategySettings.Size = new System.Drawing.Size(231, 231);
+			this.StrategySettings.Size = new System.Drawing.Size(231, 206);
 			this.StrategySettings.TabIndex = 0;
 			this.StrategySettings.ToolbarVisible = false;
 			// 
@@ -532,7 +548,7 @@
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(245, 250);
+			this.groupBox1.Size = new System.Drawing.Size(245, 275);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Symbol";
@@ -559,7 +575,7 @@
 			this.SymbolProperties.Location = new System.Drawing.Point(6, 47);
 			this.SymbolProperties.Name = "SymbolProperties";
 			this.SymbolProperties.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-			this.SymbolProperties.Size = new System.Drawing.Size(231, 197);
+			this.SymbolProperties.Size = new System.Drawing.Size(231, 222);
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
@@ -644,6 +660,8 @@
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem ShowGraphMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem generateTicksMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripMenuItem CalculateStatisticsMenuItem;
 	}
 }
 

@@ -62,6 +62,12 @@ namespace ElevatedTrader
 			set;
 		}
 
+		double TickVariance
+		{
+			get;
+			set;
+		}
+
 		int QuoteSpreadTicks
 		{
 			get;

@@ -17,6 +17,7 @@
 	using CSScriptLibrary;
 	using Newtonsoft.Json;
 	using System.Windows.Forms.DataVisualization.Charting;
+	using MathNet.Numerics.Distributions;
 
 	public partial class MainForm : Form
 	{
@@ -456,6 +457,8 @@
 					{
 						int count = 0;
 
+						double? last_price = null;
+
 						while (reader.Read())
 						{
 							//var item = JsonConvert.DeserializeObject<OldDataFormat>(reader.GetString(0));							
@@ -501,6 +504,13 @@
 											}
 										}
 									);
+
+									if (last_price.HasValue)
+									{
+										history_list.Differences.Add((ts.Price - last_price.Value) / symbol.TickRate);
+									}
+
+									last_price = ts.Price;
 									break;
 							}
 
@@ -517,19 +527,6 @@
 				}
 
 				connection.Close();
-			}
-
-			double last_price = 0;
-
-
-			foreach (var item in (from x in history_list.Ticks where x.Type == TradeHistoryType.TimeAndSale select (ITradeTick)x.Item))
-			{
-				if (last_price > 0)
-				{
-					history_list.Differences.Add(item.Price - last_price);
-				}
-
-				last_price = item.Price;
 			}
 		}
 
@@ -572,6 +569,7 @@
 			try
 			{
 				SimulationProgress.Value = 0;
+				SimulationProgress.Maximum = settings.TickDataCount;
 				SetState(ApplicationState.Running);
 
 				await Task.Run(() => RunSimulation());
@@ -599,9 +597,9 @@
 		{
 			var runner = new TradingStrategyRunner();
 
-			ITradeTickProvider tick_provider = settings.GenerateTickData
-				? new MonteCarloTickProvider()
-				: null
+			var tick_provider = settings.GenerateTickData
+				? (ITradeTickProvider)new MonteCarloTickProvider()
+				: (ITradeTickProvider)new HistoricalTickProvider()
 				;
 
 			runner.Tick += (sender, index) =>
@@ -613,6 +611,11 @@
 				if ((index + 1) % StepValue == 0)
 				{
 					this.Invoke(step);
+				}
+
+				if (index >= settings.TickDataCount || !busy)
+				{
+					((ITradingStrategyRunner)sender).Stop();
 				}
 			};
 
@@ -682,7 +685,12 @@
 
 					for (int idx = 0; idx < indicator.Results.Count; idx++)
 					{
-						series.Points.Add(CreateIndicatorDataPoint(idx, indicator.Results[idx]));
+						var point = CreateIndicatorDataPoint(idx, indicator.Results[idx]);
+
+						if (point != null)
+						{
+							series.Points.Add(point);
+						}
 					}
 
 					indicatorSeries.Add(indicator, series);
@@ -700,7 +708,10 @@
 
 				var item = strategy.Aggregator.Periods[size];
 
-				series.Points.Add(CreatePeriodDataPoint(item));
+				for (var index = 0; index < item.Count; index++)
+				{
+					series.Points.Add(CreatePeriodDataPoint(index, item[index]));
+				}
 
 				periodSeries.Add(size, series);
 
@@ -751,13 +762,11 @@
 			return item;
 		}
 
-		private DataPoint CreatePeriodDataPoint(IList<ITradingPeriod> periods)
+		private DataPoint CreatePeriodDataPoint(int index, ITradingPeriod period)
 		{
-			var period = periods[periods.Count - 1];
-
 			var item = new DataPoint()
 			{
-				XValue = periods.Count,
+				XValue = index + 1,
 				YValues = new double[] { period.High, period.Low, period.Open, period.Close }
 			};
 
@@ -810,6 +819,20 @@
 		{
 			generateTicksMenuItem.Checked = !generateTicksMenuItem.Checked;
 			settings.GenerateTickData = generateTicksMenuItem.Checked;
+		}
+
+		private void CalculateStatisticsMenuItem_Click(object sender, EventArgs e)
+		{
+			var history_list = history[symbol.Symbol];
+
+			if (history_list.Differences.Count < 1000) return;
+
+			var distribution = Normal.Estimate(history_list.Differences);
+
+			symbol.TickDeviation = distribution.StdDev;
+			symbol.TickVariance = distribution.Variance;
+
+			SymbolProperties.Refresh();
 		}
 	}
 }

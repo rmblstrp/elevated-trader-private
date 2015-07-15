@@ -11,7 +11,8 @@ namespace ElevatedTrader
 	public class MonteCarloTickProvider : ITradeTickProvider
 	{
 		protected double price;
-		protected Normal distribution;
+		protected Normal movement;
+		protected Normal shock;
 		protected TradeTick tick;
 
 		public ITradeSymbol Symbol
@@ -30,7 +31,8 @@ namespace ElevatedTrader
 			Symbol = symbol;
 			tick = new TradeTick();
 			
-			distribution = new Normal(0, symbol.TickDeviation, new CryptoRandomSource());
+			movement = new Normal(0, 1, new CryptoRandomSource());
+			shock = new Normal(0, Symbol.TickDeviation, new CryptoRandomSource());
 
 			Reset();
 			
@@ -38,9 +40,11 @@ namespace ElevatedTrader
 
 		public TickProviderResult Next()
 		{
-			var delta = Symbol.TickDeviation / Symbol.TickRate * distribution.Sample() * Symbol.TickRate;
+			var drift = Symbol.TickVariance * movement.Sample();
+			var volatility = Symbol.TickDeviation / Symbol.TickRate * shock.Sample();
+			var delta = Math.Round(drift + volatility);
 
-			price += delta;
+			price += delta * Symbol.TickRate;
 
 			tick.Price = price;
 			tick.Bid = price + Symbol.QuoteSpreadTicks;

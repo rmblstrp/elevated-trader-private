@@ -535,7 +535,7 @@
 			}
 		}
 
-		const int ProgressStepValue = 250000;
+		const int ProgressStepValue = 1000000;
 
 		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
 		{

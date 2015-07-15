@@ -32,7 +32,7 @@ namespace ElevatedTrader
 			tick = new TradeTick();
 			
 			movement = new Normal(0, 1, new CryptoRandomSource());
-			shock = new Normal(0, Symbol.TickDeviation, new CryptoRandomSource());
+			shock = new Normal(0, 1, new CryptoRandomSource());
 
 			Reset();
 			
@@ -41,14 +41,15 @@ namespace ElevatedTrader
 		public TickProviderResult Next()
 		{
 			var drift = Symbol.TickVariance * movement.Sample();
-			var volatility = Symbol.TickDeviation / Symbol.TickRate * shock.Sample();
+			//var drift = 0;
+			var volatility = Symbol.TickDeviation * shock.Sample();
 			var delta = Math.Round(drift + volatility);
 
 			price += delta * Symbol.TickRate;
 
 			tick.Price = price;
-			tick.Bid = price + Symbol.QuoteSpreadTicks;
-			tick.Ask = price - Symbol.QuoteSpreadTicks;
+			tick.Bid = price - Symbol.QuoteSpreadTicks;
+			tick.Ask = price + Symbol.QuoteSpreadTicks;
 
 			return TickProviderResult.Ticked;
 		}

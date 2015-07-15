@@ -317,6 +317,11 @@
 		{
 			var input = Microsoft.VisualBasic.Interaction.InputBox("Add a new ticker symbol", "New Symbol", string.Empty, -1, -1);
 
+			if (string.IsNullOrWhiteSpace(input))
+			{
+				return;
+			}
+
 			symbol = new TradeSymbol() { Symbol = input };
 			symbols.Add(symbol);
 
@@ -530,7 +535,7 @@
 			}
 		}
 
-		const int ProgressStepValue = 250;
+		const int ProgressStepValue = 250000;
 
 		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
 		{

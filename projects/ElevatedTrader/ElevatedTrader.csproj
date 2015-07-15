@@ -73,6 +73,7 @@
     <Compile Include="ITradingStrategyExaminer.cs" />
     <Compile Include="ITradingStrategyResult.cs" />
     <Compile Include="ITradingStrategyRunner.cs" />
+    <Compile Include="MonteCarloTickProvider.cs" />
     <Compile Include="TickProviderResult.cs" />
     <Compile Include="TradeHistoryOrder.cs" />
     <Compile Include="TradeHistoryQuote.cs" />

@@ -185,7 +185,6 @@
 		}
 
 		#region -- Strategies --
-
 		int indicator_notify_count = 0;
 		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
 		{
@@ -527,7 +526,7 @@
 			{
 				if (last_price > 0)
 				{
-					history_list.Differences.Add(item.Price - last_price);					
+					history_list.Differences.Add(item.Price - last_price);
 				}
 
 				last_price = item.Price;
@@ -540,8 +539,6 @@
 			busy = true;
 
 			var history_list = history[symbol.Symbol];
-
-			var length = Math.Min(history_list.Ticks.Count, settings.TickDataCount);
 
 			if (history_list.Ticks.Count == 0 && !settings.GenerateTickData)
 			{
@@ -570,117 +567,62 @@
 				TradesBindingSource.DataSource = null;
 			}
 
-			LinkSession();
-			LinkAggregrator();
-
 			TradeChart.Visible = false;
 
 			try
 			{
-
+				SimulationProgress.Value = 0;
 				SetState(ApplicationState.Running);
-				await Task.Run(() => RunSimulation());
-				SetState(ApplicationState.Idle);
 
-				trades = new BindingList<ITrade>(tradeBuffer);
+				await Task.Run(() => RunSimulation());
+
+				SetState(ApplicationState.Idle);
+				SimulationProgress.Value = 0;
+
+				trades = new BindingList<ITrade>(strategy.Session.Trades);
 				TradesBindingSource.DataSource = trades;
+
+				PopulateTickSeries();
+
+				PopulateIndicatorSeries();
+
+				PopulateTradeSeries();
 			}
 			finally
 			{
 				busy = false;
 				TradeChart.Visible = true;
-				UnlinkSession();
-				UnlinkAggregator();
 			}
 		}
 
 		private void RunSimulation()
 		{
-			const int StepValue = 250;
+			var runner = new TradingStrategyRunner();
 
-			Action<int, int> set_maximum = (max, inc) => { SimulationProgress.Maximum = max; SimulationProgress.Step = inc; };
-			Action set_value = () => { SimulationProgress.Value = 0; };
-			Action increment = () => { SimulationProgress.Increment(1); };
-			Action step = () => { SimulationProgress.PerformStep(); };
+			ITradeTickProvider tick_provider = settings.GenerateTickData
+				? new MonteCarloTickProvider()
+				: null
+				;
 
-			var history_list = history[symbol.Symbol];
-
-			var length = settings.GenerateTickData ? settings.TickDataCount : Math.Min(history_list.Ticks.Count, settings.TickDataCount);
-
-			this.Invoke(set_maximum, length, StepValue);
-
-			strategy.Initialize();
-
-			var tick_simulator = new PriceTickSimulator()
+			runner.Tick += (sender, index) =>
 			{
-				Differences = history_list.Differences
-			};
+				const int StepValue = 250;
 
-			if (settings.GenerateTickData)
-			{
-				if (symbolPrice.HasValue)
-				{
-					tick_simulator.Price = symbolPrice.Value;
-				}
-				else
-				{
-					var input = Microsoft.VisualBasic.Interaction.InputBox("What is the starting price?", "Symbol Price", string.Empty, -1, -1);
-
-					try
-					{
-						symbolPrice = double.Parse(input);
-						tick_simulator.Price = symbolPrice.Value;
-					}
-					catch
-					{
-						return;
-					}
-				}
-			}
-
-			var spread = symbol.TickRate * symbol.QuoteSpreadTicks;
-
-			for (int index = 0; index < length; index++)
-			{
-				if (settings.GenerateTickData)
-				{
-					tick_simulator.Step();
-					var price = tick_simulator.Price;
-
-					var tick = new TradeTick()
-					{
-						Ask = price + spread,
-						Bid = price - spread,
-						Price = price,
-						Size = 1
-					};
-
-					strategy.AddTick(tick);
-				}
-				else
-				{
-					var item = history_list.Ticks[index];
-
-					switch (item.Type)
-					{
-						case TradeHistoryType.Quote:
-							strategy.AddQuote((ITradeQuote)item.Item);
-							break;
-						case TradeHistoryType.TimeAndSale:
-							strategy.AddTick((ITradeTick)item.Item);
-							break;
-					}
-				}
+				Action step = () => { SimulationProgress.PerformStep(); };
 
 				if ((index + 1) % StepValue == 0)
 				{
 					this.Invoke(step);
 				}
+			};
 
-				if (!busy) break;
-			}
+			var history_list = history[symbol.Symbol];
 
-			this.Invoke(set_value);
+			var ticks = from x in history_list.Ticks where x.Type == TradeHistoryType.TimeAndSale select (ITradeTick)x.Item;
+
+			tick_provider.Initialize(symbol, ticks.ToList());
+
+			runner.Run(strategy, tick_provider);
 		}
 
 		private void StopSimulationMenuItem_Click(object sender, EventArgs e)
@@ -691,56 +633,6 @@
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			busy = false;
-		}
-		#endregion
-
-		#region -- Session Data --
-		private bool session_ontrade = false;
-		private void LinkSession()
-		{
-			if (strategy.Session.Trades is BindingList<ITrade>)
-			{
-				TradesBindingSource.DataSource = strategy.Session.Trades as BindingList<ITrade>;
-			}
-			else
-			{
-				strategy.Session.Trade += OnTrade;
-				session_ontrade = true;
-			}
-		}
-
-		private void UnlinkSession()
-		{
-			if (session_ontrade)
-			{
-				strategy.Session.Trade -= OnTrade;
-				session_ontrade = false;
-			}
-		}
-
-		private void OnTrade(object sender, ITrade trade)
-		{
-			Action<ITrade> a = (order) =>
-			{
-				tradeBuffer.Add(order);
-
-				foreach (var kv in periodSeries)
-				{
-					if (!tradeSeries.ContainsKey(kv.Key))
-					{
-						var ts = CreateTradeSeries();
-
-						tradeSeries.Add(kv.Key, ts);
-						TradeChart.Series.Add(ts);
-					}
-
-					tradeSeries[kv.Key].Points.Add(CreateTradeDataPoint(kv.Key, order));
-				}
-
-				TickCountStatusLabel.Text = tradeBuffer.Count.ToString();
-			};
-
-			this.Invoke(a, trade);
 		}
 
 		private void SetDataCountMenuItem_Click(object sender, EventArgs e)
@@ -755,61 +647,65 @@
 			}
 			catch { }
 		}
+		#endregion
 
-		private void LinkAggregrator()
+		#region -- Chart Setup --
+		private void PopulateTradeSeries()
 		{
-			periodSeries.Clear();
-			strategy.Aggregator.BeforeNewPeriod += Aggregator_BeforeNewPeriod;
-		}
+			var ts = CreateTradeSeries();
 
-		private void UnlinkAggregator()
-		{
-			strategy.Aggregator.BeforeNewPeriod -= Aggregator_BeforeNewPeriod;
-		}
-
-		private void Aggregator_BeforeNewPeriod(int size)
-		{
-			if (!periodSeries.ContainsKey(size))
+			foreach (var kv in periodSeries)
 			{
-				var ps = CreatePeriodSeries();
-				periodSeries.Add(size, ps);
+				tradeSeries.Add(kv.Key, ts);
+				TradeChart.Series.Add(ts);
 
-				Action<Series> psa = psx =>
+				for (int index = 0; index < strategy.Session.Trades.Count; index++)
 				{
-					TradeChart.Series.Add(psx);
-				};
-
-				this.Invoke(psa, ps);
-			}
-
-			var ind = strategy.Indicators[size][0];
-
-			if (!indicatorSeries.ContainsKey(ind))
-			{
-				var series = CreateIndicatorSeries();
-
-				Action<IIndicator, Series> inda = (inds, indx) =>
-				{
-					indicatorSeries.Add(inds, indx);
-					TradeChart.Series.Add(indx);
-				};
-
-				this.Invoke(inda, ind, series);
-			}
-
-			var item = strategy.Aggregator.Periods[size];
-
-			Action<int, DataPoint, IIndicator, DataPoint> pda = (idx, pdx, indx, indp) =>
-			{
-				periodSeries[idx].Points.Add(pdx);
-
-				if (indp != null)
-				{
-					indicatorSeries[indx].Points.Add(indp);
+					tradeSeries[kv.Key].Points.Add(CreateTradeDataPoint(kv.Key, strategy.Session.Trades[index]));
 				}
-			};
+			}
 
-			this.Invoke(pda, size, CreatePeriodDataPoint(item), ind, CreateIndicatorDataPoint(ind));
+			TickCountStatusLabel.Text = strategy.Session.Trades.Count.ToString();
+		}
+
+		private void PopulateIndicatorSeries()
+		{
+			foreach (var size in strategy.Indicators.Keys)
+			{
+				var item = strategy.Indicators[size];
+
+				for (int index = 0; index < item.Count; index++)
+				{
+					var series = CreateIndicatorSeries();
+
+					var indicator = item[index];
+
+					for (int idx = 0; idx < indicator.Results.Count; idx++)
+					{
+						series.Points.Add(CreateIndicatorDataPoint(idx, indicator.Results[idx]));
+					}
+
+					indicatorSeries.Add(indicator, series);
+
+					TradeChart.Series.Add(series);
+				}
+			}
+		}
+
+		private void PopulateTickSeries()
+		{
+			foreach (var size in strategy.Aggregator.Periods.Keys)
+			{
+				var series = CreatePeriodSeries();
+
+				var item = strategy.Aggregator.Periods[size];
+
+				series.Points.Add(CreatePeriodDataPoint(item));
+
+				periodSeries.Add(size, series);
+
+				TradeChart.Series.Add(series);
+			}
 		}
 
 		private Series CreatePeriodSeries()
@@ -879,20 +775,19 @@
 
 			return item;
 		}
-		private DataPoint CreateIndicatorDataPoint(IIndicator indicator)
-		{
-			var last = indicator.Results[indicator.Results.Count - 1];
 
-			if (last.Values.Count == 0)
+		private DataPoint CreateIndicatorDataPoint(int index, IIndicatorResult result)
+		{
+			if (result.Values.Count == 0)
 			{
 				return null;
 			}
 
 			var item = new DataPoint()
 			{
-				XValue = indicator.Results.Count,
-				YValues = new double[] { last.Values[0] },
-				Color = last.Direction == TrendDirection.Rising ? Color.LightGreen : Color.LightPink
+				XValue = index + 1,
+				YValues = new double[] { result.Values[0] },
+				Color = result.Direction == TrendDirection.Rising ? Color.LightGreen : Color.LightPink
 			};
 
 			return item;

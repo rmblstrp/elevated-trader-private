@@ -67,5 +67,11 @@ namespace ElevatedTrader
 			get;
 			set;
 		}
+
+		double CurrentPrice
+		{
+			get;
+			set;
+		}
 	}
 }

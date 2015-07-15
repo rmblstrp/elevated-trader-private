@@ -62,13 +62,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		double TickMean
-		{
-			get;
-			set;
-		}
-
-		int SpreadDeviation
+		int QuoteSpreadTicks
 		{
 			get;
 			set;

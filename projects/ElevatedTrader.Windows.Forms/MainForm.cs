@@ -638,7 +638,7 @@
 				}
 			}
 
-			var spread = symbol.TickRate * symbol.SpreadDeviation;
+			var spread = symbol.TickRate * symbol.QuoteSpreadTicks;
 
 			for (int index = 0; index < length; index++)
 			{

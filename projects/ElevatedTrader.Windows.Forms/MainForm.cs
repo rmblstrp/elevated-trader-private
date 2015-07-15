@@ -530,6 +530,8 @@
 			}
 		}
 
+		const int ProgressStepValue = 250;
+
 		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
 		{
 			if (busy) return;
@@ -570,6 +572,7 @@
 			{
 				SimulationProgress.Value = 0;
 				SimulationProgress.Maximum = settings.TickDataCount;
+				SimulationProgress.Step = ProgressStepValue;
 				SetState(ApplicationState.Running);
 
 				await Task.Run(() => RunSimulation());
@@ -604,11 +607,9 @@
 
 			runner.Tick += (sender, index) =>
 			{
-				const int StepValue = 250;
-
 				Action step = () => { SimulationProgress.PerformStep(); };
 
-				if ((index + 1) % StepValue == 0)
+				if ((index + 1) % ProgressStepValue == 0)
 				{
 					this.Invoke(step);
 				}

@@ -19,6 +19,7 @@ namespace Kalman
 		private double measurementNoiseMultiplier = 1;
 		private double plantNoiseMultiplier = 1;
 		private double sidewaysTicks = 1;
+		private int? kalmanResetPeriods = null;
 
 		public double TransitionValue
 		{
@@ -60,6 +61,12 @@ namespace Kalman
 		{
 			get { return timeInterval; }
 			set { timeInterval = value; }
+		}
+
+		public int? KalmanResetPeriods
+		{
+			get { return kalmanResetPeriods; }
+			set { kalmanResetPeriods = value; }
 		}
 
 		public bool OrderCorrection
@@ -173,6 +180,11 @@ namespace Kalman
 			PerformKalman(current);
 
 			UpdateResult();
+		}
+
+		public void ResetKalman()
+		{
+			kalman = null;
 		}
 
 		private void UpdateResult()
@@ -310,6 +322,11 @@ namespace Kalman
 			base.AfterNewPeriod(size);
 
 			kalman.AfterNewPeriod();
+
+			if (settings.KalmanResetPeriods.HasValue && aggregator.Periods[size].Count % settings.KalmanResetPeriods.Value == 0)
+			{
+				kalman.ResetKalman();
+			}
 		}
 
 		protected override void BeforeNewPeriod(int size)

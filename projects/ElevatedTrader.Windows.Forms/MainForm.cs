@@ -178,6 +178,7 @@
 			SetShowGraphCheckedState();
 
 			generateTicksMenuItem.Checked = settings.GenerateTickData;
+			ShuffleLoadedDataMenuItem.Checked = settings.ShuffleGeneratedTickData;
 
 			FormClosing += delegate { TraderSettings.Save(settings); };
 
@@ -629,7 +630,9 @@
 
 			var ticks = from x in history_list.Ticks where x.Type == TradeHistoryType.TimeAndSale select (ITradeTick)x.Item;
 
-			tick_provider.Initialize(symbol, ticks.ToList());
+			var tick_list = settings.ShuffleGeneratedTickData || !settings.GenerateTickData ? ticks.ToList() : null;
+
+			tick_provider.Initialize(symbol, tick_list);
 
 			runner.Run(strategy, tick_provider);
 		}
@@ -836,9 +839,15 @@
 			var distribution = Normal.Estimate(history_list.Differences);
 
 			symbol.TickDeviation = distribution.StdDev;
-			symbol.TickVariance = distribution.Variance;
+			symbol.TickMean = distribution.Mean;
 
 			SymbolProperties.Refresh();
+		}
+
+		private void ShuffleLoadedDataMenuItem_Click(object sender, EventArgs e)
+		{
+			ShuffleLoadedDataMenuItem.Checked = !ShuffleLoadedDataMenuItem.Checked;
+			settings.ShuffleGeneratedTickData = ShuffleLoadedDataMenuItem.Checked;
 		}
 	}
 }

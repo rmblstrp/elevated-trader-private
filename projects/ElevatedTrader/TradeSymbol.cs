@@ -64,7 +64,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		public double TickVariance
+		public double TickMean
 		{
 			get;
 			set;

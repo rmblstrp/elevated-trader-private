@@ -62,7 +62,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		double TickVariance
+		double TickMean
 		{
 			get;
 			set;

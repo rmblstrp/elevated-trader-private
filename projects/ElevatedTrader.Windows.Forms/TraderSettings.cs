@@ -24,6 +24,12 @@ namespace ElevatedTrader.Windows.Forms
 			set;
 		}
 
+		public bool ShuffleGeneratedTickData
+		{
+			get;
+			set;
+		}
+
 		public int TickDataCount
 		{
 			get;

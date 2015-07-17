@@ -536,7 +536,7 @@
 			}
 		}
 
-		const int ProgressStepValue = 1000000;
+		const int ProgressStepValue = 100000;
 
 		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
 		{
@@ -577,7 +577,7 @@
 			try
 			{
 				SimulationProgress.Value = 0;
-				SimulationProgress.Maximum = settings.TickDataCount;
+				SimulationProgress.Maximum = settings.GenerateTickData ? settings.TickDataCount : history_list.Ticks.Count;
 				SimulationProgress.Step = ProgressStepValue;
 				SetState(ApplicationState.Running);
 
@@ -597,6 +597,9 @@
 			}
 			finally
 			{
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
+
 				busy = false;
 				TradeChart.Visible = true;
 			}
@@ -613,7 +616,10 @@
 
 			runner.Tick += (sender, index) =>
 			{
-				Action step = () => { SimulationProgress.PerformStep(); };
+				Action step = () =>
+				{
+					SimulationProgress.PerformStep();
+				};
 
 				if ((index + 1) % ProgressStepValue == 0)
 				{

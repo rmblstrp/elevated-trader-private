@@ -16,8 +16,9 @@ namespace ElevatedTrader
 		protected TradeTick tick;
 		protected Action internalNext;
 		protected Random random = new Random();
+		//protected CryptoRandomSource random = new CryptoRandomSource();
 		protected TickData[] tickData;
-		protected int index = 0;
+		protected int index = 0, length = 0, count = 0;
 
 		protected struct TickData
 		{
@@ -72,9 +73,11 @@ namespace ElevatedTrader
 					};
 				}
 
-				Shuffle<TickData>(tickData);
 
-				internalNext = ShuffleTicks;
+				//Shuffle<TickData>(tickData);
+				//internalNext = ShuffleTicks;
+
+				internalNext = RandomTicks;
 			}
 
 			Reset();
@@ -86,6 +89,28 @@ namespace ElevatedTrader
 			internalNext();
 
 			return TickProviderResult.Ticked;
+		}
+
+		protected void RandomTicks()
+		{
+			if (count == length)
+			{
+				index = random.Next(tickData.Length - 1);
+				length = random.Next((tickData.Length / 10) - 1);
+
+				count = 0;
+			}
+
+			var item = tickData[index];
+
+			price += item.Delta;
+
+			tick.Price = price;
+			tick.Bid = price - item.Bid;
+			tick.Ask = price + item.Ask;
+
+			index = ++index % tickData.Length;
+			count++;
 		}
 
 		protected void ShuffleTicks()

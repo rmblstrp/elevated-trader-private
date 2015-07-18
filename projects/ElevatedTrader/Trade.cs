@@ -6,52 +6,53 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class Trade : ITrade
+	public struct Trade : ITrade
 	{
-		public virtual TradeType Type
+		private TradeType type;
+		private int quantity;
+		private double price;
+		private double equity;
+		private double profit;
+		private IDictionary<int, int> indexes;
+
+		public TradeType Type
 		{
-			get;
-			protected set;
+			get { return type; }
 		}
 
-		public virtual int Quantity
+		public int Quantity
 		{
-			get;
-			protected set;
+			get { return quantity; }
 		}
 
-		public virtual  double Price
+		public  double Price
 		{
-			get;
-			protected set;
+			get { return price; }
 		}
 
-		public virtual double Equity
+		public double Equity
 		{
-			get;
-			protected set;
+			get { return equity; }
 		}
 
-		public virtual double Profit
+		public double Profit
 		{
-			get;
-			protected set;
+			get { return profit; }
 		}
 
-		public virtual IDictionary<int, int> Indexes
+		public IDictionary<int, int> Indexes
 		{
-			get;
-			protected set;
+			get { return indexes; }
 		}
 
 		public Trade(TradeType type, int quantity, double price, double equity, double profit, IDictionary<int, int> indexes)
 		{
-			Type = type;
-			Quantity = quantity;
-			Price = price;
-			Equity = equity;
-			Profit = profit;
-			Indexes = indexes;
+			this.type = type;
+			this.quantity = quantity;
+			this.price = price;
+			this.equity = equity;
+			this.profit = profit;
+			this.indexes = indexes;
 		}
 	}
 }

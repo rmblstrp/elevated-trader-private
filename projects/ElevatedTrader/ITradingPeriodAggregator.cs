@@ -26,6 +26,6 @@ namespace ElevatedTrader
 
 		IDictionary<int, int> Indexes();
 
-		void Reset();
+		void Clear();
 	}
 }

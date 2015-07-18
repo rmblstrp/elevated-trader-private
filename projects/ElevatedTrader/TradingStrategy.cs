@@ -109,12 +109,21 @@ namespace ElevatedTrader
 		{
 		}
 
-		public virtual void Initialize()
+		public virtual void FreeResources()
+		{
+		}
+
+		public virtual void Clear()
 		{
 			session.Reset();
-			aggregator.Reset();
+			aggregator.Clear();
 			indicators.Clear();
 			periodTriggered.Clear();
+		}
+
+		public virtual void Initialize()
+		{
+			Clear();
 
 			for (int index = 0; index < settings.PeriodTicks.Length; index++)
 			{

@@ -314,6 +314,7 @@ namespace Kalman
 				settings.TimeInterval = (double)obj.TimeInterval;
 				settings.MeasurementNoiseMultiplier = (double)obj.MeasurementNoiseMultiplier;
 				settings.PlantNoiseMultiplier = (double)obj.PlantNoiseMultiplier;
+				settings.SidewaysTicks = (int)obj.SidewaysTicks;
 			}
 		}
 

@@ -397,7 +397,7 @@
 			SymbolComboBox.SelectedIndex = symbolIndex;
 			StrategiesComboBox.SelectedIndex = strategyIndex;
 
-			strategy.Settings = (TradingStrategySettings)JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
+			strategy.Settings = JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
 			StrategySettings.SelectedObject = strategy.Settings;
 			solution = obj;
 		}
@@ -586,7 +586,7 @@
 				SetState(ApplicationState.Idle);
 				SimulationProgress.Value = 0;
 
-				trades = new BindingList<ITrade>(strategy.Session.Trades);
+				trades = new BindingList<ITrade>(strategy.Session.Trades.ToList());
 				TradesBindingSource.DataSource = trades;
 
 				PopulateTickSeries();
@@ -597,6 +597,8 @@
 			}
 			finally
 			{
+				strategy.Clear();
+
 				GC.Collect();
 				GC.WaitForPendingFinalizers();
 

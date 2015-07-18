@@ -22,6 +22,10 @@ namespace ElevatedTrader
 
 		void AddTick(ITradeTick tick);
 
-		void Initialize();
+		void Clear();
+
+		void FreeResources();		
+
+		void Initialize();	
 	}
 }

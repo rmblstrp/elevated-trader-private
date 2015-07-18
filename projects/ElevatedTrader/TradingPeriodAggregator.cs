@@ -107,7 +107,7 @@ namespace ElevatedTrader
 			return result;
 		}
 
-		public void Reset()
+		public void Clear()
 		{
 			periods.Clear();
 			sizes.Clear();

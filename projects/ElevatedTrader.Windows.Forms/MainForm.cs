@@ -39,7 +39,6 @@
 		private BindingSource symbolsBindingSource = new BindingSource();
 		private BindingList<TradeSymbol> symbols = new BindingList<TradeSymbol>();
 		private TradeSymbol symbol;
-		private double? symbolPrice;
 
 		private BindingSource strategyBindingSource = new BindingSource();
 		private BindingList<string> strategies = new BindingList<string>();
@@ -78,17 +77,23 @@
 
 		private class HistoryList
 		{
-			private List<HistoryContainer> ticks = new List<HistoryContainer>(10000000);
-			private List<double> differences = new List<double>(10000000);
+			private List<TickDelta> differences = new List<TickDelta>(50000000);
 
-			public List<double> Differences
+			public int TickCount
+			{
+				get;
+				set;
+			}
+
+			public List<TickDelta> Differences
 			{
 				get { return differences; }
 			}
 
-			public List<HistoryContainer> Ticks
+			public ITradeTick Tick
 			{
-				get { return ticks; }
+				get;
+				set;
 			}
 
 			public long MaxId
@@ -308,8 +313,6 @@
 			{
 				history.Add(symbol.Symbol, new HistoryList());
 			}
-
-			symbolPrice = null;
 		}
 		#endregion
 
@@ -361,11 +364,18 @@
 				filename = saveDialog.FileName;
 				openDialog.InitialDirectory = Path.GetDirectoryName(filename);
 				saveDialog.InitialDirectory = Path.GetDirectoryName(filename);
+
+				SetTitle(Path.GetFileName(filename));
 			}
 
 			solution.Settings = JsonConvert.SerializeObject(strategy.Settings);
 
 			File.WriteAllText(filename, JsonConvert.SerializeObject(solution));
+		}
+
+		private void SetTitle(string solution)
+		{
+			Text = string.Format("Elevated Trader ({0})", solution);
 		}
 
 		private void OpenMenuItem_Click(object sender, EventArgs e)
@@ -393,6 +403,8 @@
 				MessageBox.Show("The selected strategy is not currently available");
 				return;
 			}
+
+			SetTitle(Path.GetFileName(filename));
 
 			SymbolComboBox.SelectedIndex = symbolIndex;
 			StrategiesComboBox.SelectedIndex = strategyIndex;
@@ -444,79 +456,48 @@
 
 			var history_list = history[symbol.Symbol];
 
-			if (settings.TickDataCount < history_list.Ticks.Count) return;
+			if (settings.TickDataCount < history_list.TickCount) return;
 
-			//{"AskPrice":1.111,"BidPrice":1.1109,"EventId":6157792271241579016,"ExchangeCode":"\u0000","IsTrade":true,"Price":1.1109,"Size":1,"Time":"2015-06-08T00:18:58Z","Type":0}
 			using (var connection = new SqlConnection(settings.ConnectionString))
 			{
 				connection.Open();
 
 				using (var command = connection.CreateCommand())
 				{
-					//command.CommandText = "select top(@count) json from quotedata where symbol = @symbol";
 					command.CommandText = "select top(@count) json, type, id from symbolhistory where symbol = @symbol and type = 3 and id > @id order by id asc";
 					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
-					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount - history_list.Ticks.Count));
+					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount - history_list.TickCount));
 					command.Parameters.Add(new SqlParameter("@id", history_list.MaxId));
 
 					using (var reader = command.ExecuteReader())
 					{
 						int count = 0;
 
-						double? last_price = null;
-
 						while (reader.Read())
 						{
-							//var item = JsonConvert.DeserializeObject<OldDataFormat>(reader.GetString(0));							
-
 							var type = (TradeHistoryType)reader.GetInt32(1);
 
 							switch (type)
 							{
-								case TradeHistoryType.Quote:
-									var quote = JsonConvert.DeserializeObject<TradeHistoryQuote>(reader.GetString(0));
-
-									history_list.MaxId = Math.Max(history_list.MaxId, reader.GetInt64(2));
-
-									history_list.Ticks.Add
-									(
-										new HistoryContainer()
-										{
-											Type = TradeHistoryType.Quote,
-											Item = new TradeQuote()
-											{
-												Ask = quote.AskPrice,
-												Bid = quote.BidPrice
-											}
-										}
-									);
-									break;
-
 								case TradeHistoryType.TimeAndSale:
 									history_list.MaxId = Math.Max(history_list.MaxId, reader.GetInt64(2));
 
 									var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
 
-									history_list.Ticks.Add
-									(
-										new HistoryContainer()
-										{
-											Type = TradeHistoryType.TimeAndSale,
-											Item = new TradeTick()
-											{
-												Ask = ts.AskPrice,
-												Bid = ts.BidPrice,
-												Price = ts.Price
-											}
-										}
-									);
-
-									if (last_price.HasValue)
+									var tick = new TradeTick()
 									{
-										history_list.Differences.Add((ts.Price - last_price.Value) / symbol.TickRate);
+										Ask = ts.AskPrice,
+										Bid = ts.BidPrice,
+										Price = ts.Price
+									};
+
+									if (history_list.Tick != null)
+									{
+										history_list.Differences.Add(tick - history_list.Tick);
 									}
 
-									last_price = ts.Price;
+									history_list.Tick = tick;
+									history_list.TickCount++;
 									break;
 							}
 
@@ -545,7 +526,7 @@
 
 			var history_list = history[symbol.Symbol];
 
-			if (history_list.Ticks.Count == 0 && !settings.GenerateTickData)
+			if (history_list.TickCount == 0 && !settings.GenerateTickData)
 			{
 				if (MessageBox.Show("Would you like to load tick data?", "Tick Data", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
 				{
@@ -577,7 +558,7 @@
 			try
 			{
 				SimulationProgress.Value = 0;
-				SimulationProgress.Maximum = settings.GenerateTickData ? settings.TickDataCount : history_list.Ticks.Count;
+				SimulationProgress.Maximum = settings.GenerateTickData ? settings.TickDataCount : history_list.TickCount;
 				SimulationProgress.Step = ProgressStepValue;
 				SetState(ApplicationState.Running);
 
@@ -612,8 +593,8 @@
 			var runner = new TradingStrategyRunner();
 
 			var tick_provider = settings.GenerateTickData
-				? (ITradeTickProvider)new MonteCarloTickProvider()
-				: (ITradeTickProvider)new HistoricalTickProvider()
+				? (ITradeTickProvider<TickDelta>)new MonteCarloTickProvider()
+				: (ITradeTickProvider<TickDelta>)new HistoricalTickProvider()
 				;
 
 			runner.Tick += (sender, index) =>
@@ -636,11 +617,7 @@
 
 			var history_list = history[symbol.Symbol];
 
-			var ticks = from x in history_list.Ticks where x.Type == TradeHistoryType.TimeAndSale select (ITradeTick)x.Item;
-
-			var tick_list = settings.ShuffleGeneratedTickData || !settings.GenerateTickData ? ticks.ToList() : null;
-
-			tick_provider.Initialize(symbol, tick_list);
+			tick_provider.Initialize(history_list.Tick.Price, history_list.Differences);
 
 			runner.Run(strategy, tick_provider);
 		}
@@ -840,16 +817,16 @@
 
 		private void CalculateStatisticsMenuItem_Click(object sender, EventArgs e)
 		{
-			var history_list = history[symbol.Symbol];
+			//var history_list = history[symbol.Symbol];
 
-			if (history_list.Differences.Count < 1000) return;
+			//if (history_list.Differences.Count < 1000) return;
 
-			var distribution = Normal.Estimate(history_list.Differences);
+			//var distribution = Normal.Estimate(history_list.Differences);
 
-			symbol.TickDeviation = distribution.StdDev;
-			symbol.TickMean = distribution.Mean;
+			//symbol.TickDeviation = distribution.StdDev;
+			//symbol.TickMean = distribution.Mean;
 
-			SymbolProperties.Refresh();
+			//SymbolProperties.Refresh();
 		}
 
 		private void ShuffleLoadedDataMenuItem_Click(object sender, EventArgs e)

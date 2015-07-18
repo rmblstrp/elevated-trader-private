@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class HistoricalTickProvider : ITradeTickProvider
+	public class HistoricalTickProvider : ITradeTickProvider<TickDelta>
 	{
-		private IList<ITradeTick> ticks;
+		protected IList<TickDelta> deltas;
+		protected TradeTick tick;
+		protected double price;
 
 		private int index = 0;
 
@@ -20,20 +22,33 @@ namespace ElevatedTrader
 
 		public ITradeTick Tick
 		{
-			get { return ticks[index]; }
+			get { return tick; }
 		}
 
-		public void Initialize(ITradeSymbol symbol, IList<ITradeTick> ticks = null)
+		public void Initialize()
 		{
-			Symbol = symbol;
-			this.ticks = ticks;
+			throw new NotImplementedException();
+		}
+
+		public void Initialize(double price, IList<TickDelta> ticks)
+		{
+			this.deltas = ticks;
+			this.price = price;
 		}
 
 		public TickProviderResult Next()
 		{
-			index++;
+			var item = deltas[index];
 
-			return index < ticks.Count ? TickProviderResult.Ticked : TickProviderResult.Done;
+			price += item.Price;
+
+			tick.Price = price;
+			tick.Bid = price - item.Bid;
+			tick.Ask = price - item.Ask;
+
+			index++;			
+
+			return index < deltas.Count ? TickProviderResult.Ticked : TickProviderResult.Done;
 		}
 
 		public void Reset()

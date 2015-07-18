@@ -37,5 +37,15 @@ namespace ElevatedTrader
 			get;
 			set;
 		}
+
+		public static TickDelta operator -(TradeTick a, ITradeTick b)
+		{
+			return new TickDelta()
+			{
+				Price = a.Price - b.Price,
+				Bid = a.Price - a.Bid,
+				Ask = a.Price - a.Ask
+			};
+		}
 	}
 }

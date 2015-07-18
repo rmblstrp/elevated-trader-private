@@ -18,10 +18,15 @@ namespace ElevatedTrader
 			get;
 		}
 
-		void Initialize(ITradeSymbol symbol, IList<ITradeTick> ticks = null);
+		void Initialize();		
 
 		TickProviderResult Next();
 
 		void Reset();		
+	}
+
+	public interface ITradeTickProvider<T> : ITradeTickProvider
+	{
+		void Initialize(double price, IList<T> ticks);
 	}
 }

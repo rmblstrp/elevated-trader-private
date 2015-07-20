@@ -78,6 +78,7 @@ namespace ElevatedTrader.DataSources
 
 		public void Clear()
 		{
+			lastId = 0;
 			deltas.Clear();
 			ticks.Clear();
 		}

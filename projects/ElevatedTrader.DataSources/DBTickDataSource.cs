@@ -72,6 +72,8 @@ namespace ElevatedTrader.DataSources
 			get { return ticks; }
 		}
 
+		public event EventHandler<ITick> TickAdded;
+
 		public DBTickDataSource()
 		{
 		}
@@ -153,6 +155,11 @@ namespace ElevatedTrader.DataSources
 							if (Ticks.Count > 1)
 							{
 								deltas.Add(tick - ticks[ticks.Count - 2]);
+							}
+
+							if (TickAdded != null)
+							{
+								TickAdded(this, tick);
 							}
 						}
 

@@ -18,10 +18,12 @@ namespace ElevatedTrader
 			get;
 		}
 
+		event EventHandler<ITick> TickAdded;
+
 		void Clear();
 
 		void Configure(string json);
 
-		void Load(int? count = null);
+		void Load(string symbol, int? count = null);
 	}
 }

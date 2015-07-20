@@ -60,6 +60,7 @@ namespace ElevatedTrader.DataSources
 		private List<TickDelta> deltas = new List<TickDelta>(InitialCapacity);
 		private List<ITick> ticks = new List<ITick>(InitialCapacity);
 		private ISessionFactory factory;
+		private long lastId = 0;
 
 		public IList<TickDelta> Deltas
 		{
@@ -112,8 +113,10 @@ namespace ElevatedTrader.DataSources
 			using (var session = factory.OpenStatelessSession())
 			{
 				var criteria = session.CreateCriteria<HistoryEntry>()
+					.Add(Expression.Gt("id", lastId))
 					.Add(Expression.Eq("symbol", symbol))
 					.Add(Expression.Eq("type", (int)TradeHistoryType.TimeAndSale))
+					.AddOrder(Order.Asc("id"));
 					;
 
 				if (count.HasValue)
@@ -125,6 +128,7 @@ namespace ElevatedTrader.DataSources
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = GetGeneratedSql(criteria);
+					command.Parameters.Add(lastId);
 					command.Parameters.Add(symbol);
 					command.Parameters.Add((int)TradeHistoryType.TimeAndSale);
 
@@ -133,6 +137,7 @@ namespace ElevatedTrader.DataSources
 						while (reader.Read())
 						{
 							var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(4));
+							lastId = reader.GetInt64(0);
 
 							var tick = new Tick()
 							{

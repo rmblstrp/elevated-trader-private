@@ -13,12 +13,6 @@ namespace ElevatedTrader
 			get;
 		}
 
-		int? MaxTicks
-		{
-			get;
-			set;
-		}
-
 		IList<ITick> Ticks
 		{
 			get;
@@ -26,6 +20,6 @@ namespace ElevatedTrader
 
 		void Clear();
 
-		void Load();
+		void Load(int? count = null);
 	}
 }

@@ -18,12 +18,6 @@ namespace ElevatedTrader.DataSources
 			get { return deltas; }
 		}
 
-		public int? MaxTicks
-		{
-			get;
-			set;
-		}
-
 		public IList<ITick> Ticks
 		{
 			get { return ticks; }
@@ -39,7 +33,7 @@ namespace ElevatedTrader.DataSources
 			ticks.Clear();
 		}
 
-		public void Load()
+		public void Load(int? count = null)
 		{
 			
 		}

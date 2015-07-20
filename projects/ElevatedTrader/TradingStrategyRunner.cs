@@ -12,24 +12,31 @@ namespace ElevatedTrader
 
 		public event EventHandler<int> Tick;
 
-		public void Run(ITradingStrategy strategy, ITickProvider ticks)
+		public void Run(ITradingStrategy strategy, ITickProvider ticks, int? iterations = null)
 		{			
 			ticks.Initialize();
 			strategy.Initialize();
 
 			running = true;
 
-			int count = 1;
+			int count = 0;
 
 			while (running)
 			{
-				if (ticks.Next() == TickProviderResult.Ticked)
-				{
-					strategy.AddTick(ticks.Tick);
+				var result = ticks.Next();
 
-					DoOnTick(count++);
+				switch (result)
+				{
+					case TickProviderResult.Ticked:
+						strategy.AddTick(ticks.Tick);
+						DoOnTick(count + 1);
+						break;
+					case TickProviderResult.Done:
+						Stop();
+						break;
 				}
-				else
+
+				if (running && iterations.HasValue && count >= iterations)
 				{
 					Stop();
 				}

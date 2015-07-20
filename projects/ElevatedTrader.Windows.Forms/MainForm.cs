@@ -608,7 +608,7 @@
 					this.Invoke(step);
 				}
 
-				if (index >= settings.TickDataCount || !busy)
+				if (!busy)
 				{
 					((ITradingStrategyRunner)sender).Stop();
 				}
@@ -618,7 +618,7 @@
 
 			//tick_provider.DataSource = <ITickDataSource>;
 
-			runner.Run(strategy, tick_provider);
+			runner.Run(strategy, tick_provider, settings.TickDataCount);
 		}
 
 		private void StopSimulationMenuItem_Click(object sender, EventArgs e)

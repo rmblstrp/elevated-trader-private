@@ -55,7 +55,6 @@
 		private string[] reference_assemblies = new string[]
 		{
 			"ElevatedTrader",
-			"ElevatedTrader.Math",
 			"MathNet.Numerics",
 			"MathNet.Filtering",
 			"MathNet.Filtering.Kalman",

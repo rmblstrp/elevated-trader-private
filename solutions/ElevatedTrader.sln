@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.Service.Trad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.Scripts", "..\projects\ElevatedTrader.Scripts\ElevatedTrader.Scripts.csproj", "{04E95530-EE2E-4A8B-8366-E22C66A7F472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.Math", "..\projects\ElevatedTrader.Math\ElevatedTrader.Math.csproj", "{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,16 +70,6 @@ Global
 		{04E95530-EE2E-4A8B-8366-E22C66A7F472}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{04E95530-EE2E-4A8B-8366-E22C66A7F472}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{04E95530-EE2E-4A8B-8366-E22C66A7F472}.Release|x64.ActiveCfg = Release|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C43A1534-CC2C-44DB-BD0A-4CCBF30C193D}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

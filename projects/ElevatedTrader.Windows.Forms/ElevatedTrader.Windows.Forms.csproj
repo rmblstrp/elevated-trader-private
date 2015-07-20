@@ -172,10 +172,6 @@
     <Folder Include="Indicators\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">
-      <Project>{c43a1534-cc2c-44db-bd0a-4ccbf30c193d}</Project>
-      <Name>ElevatedTrader.Math</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ElevatedTrader\ElevatedTrader.csproj">
       <Project>{18a39e37-5244-418f-9fd9-b1d024e15421}</Project>
       <Name>ElevatedTrader</Name>

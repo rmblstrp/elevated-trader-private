@@ -48,13 +48,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Filtering">
-      <HintPath>..\..\solutions\packages\MathNet.Filtering.0.2.0-alpha\lib\net40\MathNet.Filtering.dll</HintPath>
-    </Reference>
-    <Reference Include="MathNet.Filtering.Kalman">
-      <HintPath>..\..\solutions\packages\MathNet.Filtering.Kalman.0.2.0-alpha\lib\net40\MathNet.Filtering.Kalman.dll</HintPath>
-    </Reference>
-    <Reference Include="MathNet.Numerics">
+    <Reference Include="MathNet.Numerics, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solutions\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -74,6 +69,7 @@
     <Compile Include="ITradingStrategyExaminer.cs" />
     <Compile Include="ITradingStrategyResult.cs" />
     <Compile Include="ITradingStrategyRunner.cs" />
+    <Compile Include="Math\MathHelper.cs" />
     <Compile Include="MonteCarloTickProvider.cs" />
     <Compile Include="TickDelta.cs" />
     <Compile Include="TickProviderResult.cs" />
@@ -111,12 +107,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ElevatedTrader.Math\ElevatedTrader.Math.csproj">
-      <Project>{c43a1534-cc2c-44db-bd0a-4ccbf30c193d}</Project>
-      <Name>ElevatedTrader.Math</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

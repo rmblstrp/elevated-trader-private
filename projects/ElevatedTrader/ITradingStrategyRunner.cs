@@ -10,7 +10,7 @@ namespace ElevatedTrader
 	{
 		event EventHandler<int> Tick;
 
-		void Run(ITradingStrategy strategy, ITradeTickProvider ticks);
+		void Run(ITradingStrategy strategy, ITickProvider ticks);
 
 		void Stop();
 	}

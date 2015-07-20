@@ -12,7 +12,7 @@ namespace ElevatedTrader
 
 		public event EventHandler<int> Tick;
 
-		public void Run(ITradingStrategy strategy, ITradeTickProvider ticks)
+		public void Run(ITradingStrategy strategy, ITickProvider ticks)
 		{			
 			ticks.Reset();
 

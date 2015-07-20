@@ -68,9 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HistoricalTickProvider.cs" />
-    <Compile Include="ITradeTickLoader.cs" />
-    <Compile Include="ITradeTickProvider.cs" />
-    <Compile Include="ITradeQuote.cs" />
+    <Compile Include="ITickDataSource.cs" />
+    <Compile Include="ITickProvider.cs" />
+    <Compile Include="IQuote.cs" />
     <Compile Include="ITradingStrategyExaminer.cs" />
     <Compile Include="ITradingStrategyResult.cs" />
     <Compile Include="ITradingStrategyRunner.cs" />
@@ -90,17 +90,17 @@
     <Compile Include="ITradingPeriod.cs" />
     <Compile Include="ITradeSymbol.cs" />
     <Compile Include="ITrade.cs" />
-    <Compile Include="ITradeTick.cs" />
+    <Compile Include="ITick.cs" />
     <Compile Include="ITradingSession.cs" />
     <Compile Include="ITradingStrategy.cs" />
     <Compile Include="PeriodValueType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TradeQuote.cs" />
+    <Compile Include="Quote.cs" />
     <Compile Include="TradingStrategyRunner.cs" />
     <Compile Include="TradingStrategySettings.cs" />
     <Compile Include="Trade.cs" />
     <Compile Include="TradeSymbol.cs" />
-    <Compile Include="TradeTick.cs" />
+    <Compile Include="Tick.cs" />
     <Compile Include="TradingPeriodAggregator.cs" />
     <Compile Include="TradeType.cs" />
     <Compile Include="TradingPeriod.cs" />

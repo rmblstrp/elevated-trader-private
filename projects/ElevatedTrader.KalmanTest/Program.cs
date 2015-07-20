@@ -42,7 +42,7 @@ namespace ElevatedTrader.KalmanTest
 							{
 								case TradeHistoryType.Quote:
 									var quote = JsonConvert.DeserializeObject<TradeHistoryQuote>(reader.GetString(0));
-									var quote_item = new TradeQuote()
+									var quote_item = new Quote()
 									{
 										Ask = quote.AskPrice,
 										Bid = quote.BidPrice
@@ -51,7 +51,7 @@ namespace ElevatedTrader.KalmanTest
 
 								case TradeHistoryType.TimeAndSale:
 									var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
-									var ts_item = new TradeTick()
+									var ts_item = new Tick()
 									{
 										Ask = ts.AskPrice,
 										Bid = ts.BidPrice,

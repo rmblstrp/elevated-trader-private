@@ -26,9 +26,9 @@ namespace ElevatedTrader
 
 		double EfficiencyRatio { get; }
 
-		void AddQuote(ITradeQuote quote);
+		void AddQuote(IQuote quote);
 
-		void AddTick(ITradeTick tick);		
+		void AddTick(ITick tick);		
 
 		double PeriodValue(PeriodValueType type);
 

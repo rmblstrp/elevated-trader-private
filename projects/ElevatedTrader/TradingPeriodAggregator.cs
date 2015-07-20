@@ -8,11 +8,11 @@ namespace ElevatedTrader
 {
 	public class TradingPeriodAggregator : ITradingPeriodAggregator
 	{
-		protected ITradeTick last;
+		protected ITick last;
 		protected Dictionary<int, IList<ITradingPeriod>> periods = new Dictionary<int, IList<ITradingPeriod>>();
 		protected List<int> sizes = new List<int>();
 
-		public ITradeTick Last
+		public ITick Last
 		{
 			get { return last; }
 		}
@@ -33,7 +33,7 @@ namespace ElevatedTrader
 			AddNewPeriod(size);
 		}
 
-		public void AddQuote(ITradeQuote quote)
+		public void AddQuote(IQuote quote)
 		{
 			foreach (var item in periods)
 			{
@@ -43,7 +43,7 @@ namespace ElevatedTrader
 			}
 		}
 
-		public void AddTick(ITradeTick tick)
+		public void AddTick(ITick tick)
 		{
 			last = tick;
 

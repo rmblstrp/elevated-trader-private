@@ -18,9 +18,9 @@ namespace ElevatedTrader
 
 		Type SettingsType { get; }
 
-		void AddQuote(ITradeQuote quote);
+		void AddQuote(IQuote quote);
 
-		void AddTick(ITradeTick tick);
+		void AddTick(ITick tick);
 
 		void Clear();
 

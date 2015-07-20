@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradeTickProvider
+	public interface ITickProvider
 	{
 		ITradeSymbol Symbol
 		{
 			get;
 		}
 
-		ITradeTick Tick
+		ITick Tick
 		{
 			get;
 		}
@@ -25,7 +25,7 @@ namespace ElevatedTrader
 		void Reset();		
 	}
 
-	public interface ITradeTickProvider<T> : ITradeTickProvider
+	public interface ITickProvider<T> : ITickProvider
 	{
 		void Initialize(double price, IList<T> ticks);
 	}

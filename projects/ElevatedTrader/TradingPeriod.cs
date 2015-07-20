@@ -79,7 +79,7 @@ namespace ElevatedTrader
 			quotes = new List<double>(capacity * 2);
 		}
 
-		public virtual void AddQuote(ITradeQuote quote)
+		public virtual void AddQuote(IQuote quote)
 		{
 			var average = (quote.Bid - quote.Ask) / 2;
 
@@ -87,7 +87,7 @@ namespace ElevatedTrader
 			quotes.Add(average);
 		}
 
-		public virtual void AddTick(ITradeTick tick)
+		public virtual void AddTick(ITick tick)
 		{
 			if (TickCount == 0)
 			{

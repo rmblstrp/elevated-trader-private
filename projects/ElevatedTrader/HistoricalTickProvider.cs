@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class HistoricalTickProvider : ITradeTickProvider<TickDelta>
+	public class HistoricalTickProvider : ITickProvider<TickDelta>
 	{
 		protected IList<TickDelta> deltas;
-		protected TradeTick tick;
+		protected Tick tick;
 		protected double price;
 
 		private int index = 0;
@@ -20,7 +20,7 @@ namespace ElevatedTrader
 			protected set;
 		}
 
-		public ITradeTick Tick
+		public ITick Tick
 		{
 			get { return tick; }
 		}

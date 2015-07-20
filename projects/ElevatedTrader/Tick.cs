@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public struct TradeTick : ITradeTick
+	public class Tick : ITick
 	{
 		public DateTime Time
 		{
@@ -38,7 +38,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		public static TickDelta operator -(TradeTick a, ITradeTick b)
+		public static TickDelta operator -(Tick a, ITick b)
 		{
 			return new TickDelta()
 			{

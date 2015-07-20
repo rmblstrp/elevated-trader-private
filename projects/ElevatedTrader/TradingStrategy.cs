@@ -73,12 +73,12 @@ namespace ElevatedTrader
 			aggregator.BeforeNewPeriod += BeforeNewPeriod;
 		}
 
-		public virtual void AddQuote(ITradeQuote quote)
+		public virtual void AddQuote(IQuote quote)
 		{
 			aggregator.AddQuote(quote);
 		}
 
-		public virtual void AddTick(ITradeTick tick)
+		public virtual void AddTick(ITick tick)
 		{
 			aggregator.AddTick(tick);
 

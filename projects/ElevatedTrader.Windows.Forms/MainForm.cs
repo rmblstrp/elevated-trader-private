@@ -90,7 +90,7 @@
 				get { return differences; }
 			}
 
-			public ITradeTick Tick
+			public ITick Tick
 			{
 				get;
 				set;
@@ -484,7 +484,7 @@
 
 									var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
 
-									var tick = new TradeTick()
+									var tick = new Tick()
 									{
 										Ask = ts.AskPrice,
 										Bid = ts.BidPrice,
@@ -593,8 +593,8 @@
 			var runner = new TradingStrategyRunner();
 
 			var tick_provider = settings.GenerateTickData
-				? (ITradeTickProvider<TickDelta>)new MonteCarloTickProvider()
-				: (ITradeTickProvider<TickDelta>)new HistoricalTickProvider()
+				? (ITickProvider<TickDelta>)new MonteCarloTickProvider()
+				: (ITickProvider<TickDelta>)new HistoricalTickProvider()
 				;
 
 			runner.Tick += (sender, index) =>

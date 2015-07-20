@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradeTickLoader
+	public interface ITickDataSource
 	{
-		IEnumerable<ITradeTick> Load(object configuration);
+		IEnumerable<ITick> Load(object configuration);
 	}
 }

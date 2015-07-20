@@ -8,12 +8,12 @@ using MathNet.Numerics.Random;
 
 namespace ElevatedTrader
 {
-	public class MonteCarloTickProvider : ITradeTickProvider<TickDelta>
+	public class MonteCarloTickProvider : ITickProvider<TickDelta>
 	{
 		protected double price;
 		protected Normal movement;
 		protected Normal shock;
-		protected TradeTick tick;
+		protected Tick tick;
 		protected Action internalNext;
 		//protected Random random = new Random();
 		protected CryptoRandomSource random = new CryptoRandomSource();
@@ -26,7 +26,7 @@ namespace ElevatedTrader
 			protected set;
 		}
 
-		public ITradeTick Tick
+		public ITick Tick
 		{
 			get { return tick; }
 		}

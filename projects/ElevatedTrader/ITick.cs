@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradeTick
+	public interface ITick
 	{
 		DateTime Time
 		{

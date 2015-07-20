@@ -20,6 +20,8 @@ namespace ElevatedTrader
 
 		void Clear();
 
+		void Configure(string json);
+
 		void Load(int? count = null);
 	}
 }

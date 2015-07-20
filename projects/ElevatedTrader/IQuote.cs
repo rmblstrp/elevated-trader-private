@@ -6,18 +6,10 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class TradeQuote : ITradeQuote
+	public interface IQuote
 	{
-		public virtual double Bid
-		{
-			get;
-			set;
-		}
+		double Bid { get; }
 
-		public virtual double Ask
-		{
-			get;
-			set;
-		}
+		double Ask { get; }
 	}
 }

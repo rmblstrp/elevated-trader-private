@@ -592,8 +592,8 @@
 			var runner = new TradingStrategyRunner();
 
 			var tick_provider = settings.GenerateTickData
-				? (ITickProvider<TickDelta>)new MonteCarloTickProvider()
-				: (ITickProvider<TickDelta>)new HistoricalTickProvider()
+				? (ITickProvider)new MonteCarloTickProvider()
+				: (ITickProvider)new HistoricalTickProvider()
 				;
 
 			runner.Tick += (sender, index) =>
@@ -616,7 +616,7 @@
 
 			var history_list = history[symbol.Symbol];
 
-			tick_provider.Initialize(history_list.Tick.Price, history_list.Differences);
+			//tick_provider.DataSource = <ITickDataSource>;
 
 			runner.Run(strategy, tick_provider);
 		}

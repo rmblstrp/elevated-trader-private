@@ -56,24 +56,6 @@ namespace ElevatedTrader
 			set;
 		}
 
-		double TickDeviation
-		{
-			get;
-			set;
-		}
-
-		double TickMean
-		{
-			get;
-			set;
-		}
-
-		int QuoteSpreadTicks
-		{
-			get;
-			set;
-		}
-
 		double CurrentPrice
 		{
 			get;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public struct TickDelta
+	public class TickDelta
 	{
 		public double Price;
 		public double Bid;

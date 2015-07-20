@@ -8,22 +8,18 @@ using MathNet.Numerics.Random;
 
 namespace ElevatedTrader
 {
-	public class MonteCarloTickProvider : ITickProvider<TickDelta>
+	public class MonteCarloTickProvider : ITickProvider
 	{
-		protected double price;
-		protected Normal movement;
-		protected Normal shock;
-		protected Tick tick;
-		protected Action internalNext;
-		//protected Random random = new Random();
-		protected CryptoRandomSource random = new CryptoRandomSource();
-		protected IList<TickDelta> deltas;
-		protected int index = 0, length = 0, count = 0;
+		private double price;
+		private Tick tick;
+		private CryptoRandomSource random = new CryptoRandomSource();
+		private int index = 0, length = 0, count = 0;
+		private ITickDataSource source;
 
-		public ITradeSymbol Symbol
+		public ITickDataSource DataSource
 		{
-			get;
-			protected set;
+			get { return source; }
+			set { source = value; }
 		}
 
 		public ITick Tick
@@ -33,16 +29,7 @@ namespace ElevatedTrader
 
 		public void Initialize()
 		{
-			throw new NotImplementedException();
-		}
-
-		public void Initialize(double price, IList<TickDelta> ticks)
-		{
-			deltas = ticks;
-			this.price = price;
-
-			Reset();
-
+			price = source.Ticks.First().Price;
 		}
 
 		public TickProviderResult Next()
@@ -56,13 +43,13 @@ namespace ElevatedTrader
 		{
 			if (count == length)
 			{
-				index = random.Next(deltas.Count - 1);
-				length = random.Next((deltas.Count / 10) - 1);
+				index = random.Next(source.Deltas.Count - 1);
+				length = random.Next((source.Deltas.Count / 10) - 1);
 
 				count = 0;
 			}
 
-			var item = deltas[index];
+			var item = source.Deltas[index];
 
 			price += item.Price;
 
@@ -70,13 +57,8 @@ namespace ElevatedTrader
 			tick.Bid = price - item.Bid;
 			tick.Ask = price - item.Ask;
 
-			index = ++index % deltas.Count;
+			index = ++index % source.Deltas.Count;
 			count++;
-		}
-
-		public void Reset()
-		{
-			
 		}
 	}
 }

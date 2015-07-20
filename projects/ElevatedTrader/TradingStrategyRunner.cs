@@ -14,8 +14,7 @@ namespace ElevatedTrader
 
 		public void Run(ITradingStrategy strategy, ITickProvider ticks)
 		{			
-			ticks.Reset();
-
+			ticks.Initialize();
 			strategy.Initialize();
 
 			running = true;

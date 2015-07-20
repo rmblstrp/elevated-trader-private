@@ -8,6 +8,24 @@ namespace ElevatedTrader
 {
 	public interface ITickDataSource
 	{
-		IEnumerable<ITick> Load(object configuration);
+		IList<TickDelta> Deltas
+		{
+			get;
+		}
+
+		int? MaxTicks
+		{
+			get;
+			set;
+		}
+
+		IList<ITick> Ticks
+		{
+			get;
+		}
+
+		void Clear();
+
+		void Load();
 	}
 }

@@ -125,8 +125,8 @@ namespace ElevatedTrader.DataSources
 					.Add(Expression.Gt("id", lastId))
 					.Add(Expression.Eq("symbol", symbol))
 					.Add(Expression.Eq("type", (int)TradeHistoryType.TimeAndSale))
-					.AddOrder(Order.Asc("id"));
-				;
+					.AddOrder(Order.Asc("id"))
+					;
 
 				if (count.HasValue)
 				{

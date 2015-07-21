@@ -15,7 +15,7 @@ namespace ElevatedTrader.DataSources
 {
 	public class DBTickDataSource : ITickDataSource
 	{
-		private enum DatabaseType
+		public enum DatabaseType
 		{
 			Unknown,
 			SqlServer,
@@ -23,7 +23,7 @@ namespace ElevatedTrader.DataSources
 			MySql
 		}
 
-		private class ConfigurationSettings
+		public class ConfigurationSettings
 		{
 			public string ConnectionString { get; set; }
 
@@ -61,18 +61,24 @@ namespace ElevatedTrader.DataSources
 		private List<ITick> ticks = new List<ITick>(InitialCapacity);
 		private ISessionFactory factory;
 		private long lastId = 0;
+		private ConfigurationSettings configuration;
+
+		public event EventHandler<ITick> TickAdded;
 
 		public IList<TickDelta> Deltas
 		{
 			get { return deltas; }
 		}
 
+		public Type ConfigurationType
+		{
+			get { return typeof(ConfigurationSettings); }
+		}
+
 		public IList<ITick> Ticks
 		{
 			get { return ticks; }
-		}
-
-		public event EventHandler<ITick> TickAdded;
+		}		
 
 		public DBTickDataSource()
 		{
@@ -85,9 +91,9 @@ namespace ElevatedTrader.DataSources
 			ticks.Clear();
 		}
 
-		public void Configure(string json)
+		public void Configure(object configuration)
 		{
-			var settings = JsonConvert.DeserializeObject<ConfigurationSettings>(json);
+			var settings = (ConfigurationSettings)configuration;
 
 			factory = Fluently.Configure()
 				.Database(ConfigureDatabase(settings.DatabaseType, settings.ConnectionString))
@@ -120,7 +126,7 @@ namespace ElevatedTrader.DataSources
 					.Add(Expression.Eq("symbol", symbol))
 					.Add(Expression.Eq("type", (int)TradeHistoryType.TimeAndSale))
 					.AddOrder(Order.Asc("id"));
-					;
+				;
 
 				if (count.HasValue)
 				{

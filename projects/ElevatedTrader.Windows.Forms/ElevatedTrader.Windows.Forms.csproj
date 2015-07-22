@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SolutionSettings.cs" />
+    <Compile Include="SymbolContainer.cs" />
     <Compile Include="TraderSettings.cs" />
     <None Include="..\ElevatedTrader.Scripts\Strategies\HullStrategy.cs">
       <Link>Strategies\HullStrategy.cs</Link>
@@ -165,6 +166,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="datasources.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\ElevatedTrader.ITrade.datasource" />
     <None Include="Properties\Settings.settings">

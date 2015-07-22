@@ -33,12 +33,10 @@
 		#region -- Private Fields --
 		private string filename = null;
 		private bool busy = false;
-		private TraderSettings settings;
-		// "Data Source=localhost\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
+		private TraderSettings settings;		
 
 		private BindingSource symbolsBindingSource = new BindingSource();
-		private BindingList<TradeSymbol> symbols = new BindingList<TradeSymbol>();
-		private TradeSymbol symbol;
+		private BindingList<SymbolContainer> symbols = new BindingList<SymbolContainer>();
 
 		private BindingSource strategyBindingSource = new BindingSource();
 		private BindingList<string> strategies = new BindingList<string>();
@@ -68,42 +66,6 @@
 			"AForge.Math"
 		};
 
-		class HistoryContainer
-		{
-			public TradeHistoryType Type;
-			public object Item;
-		}
-
-		private class HistoryList
-		{
-			private List<TickDelta> differences = new List<TickDelta>(50000000);
-
-			public int TickCount
-			{
-				get;
-				set;
-			}
-
-			public List<TickDelta> Differences
-			{
-				get { return differences; }
-			}
-
-			public ITick Tick
-			{
-				get;
-				set;
-			}
-
-			public long MaxId
-			{
-				get;
-				set;
-			}
-		}
-
-		private Dictionary<string, HistoryList> history = new Dictionary<string, HistoryList>(10);
-
 		private BindingList<ITrade> trades;
 		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
@@ -126,6 +88,22 @@
 		const string SolutionExtension = ".json";
 		const string SolutionFilter = "JSON Solution|*" + SolutionExtension;
 		#endregion
+
+		private TradeSymbol Symbol
+		{
+			get
+			{
+				return SelectedSymbol.Symbol;
+			}
+		}
+
+		private SymbolContainer SelectedSymbol
+		{
+			get
+			{
+				return symbols[SymbolComboBox.SelectedIndex];
+			}
+		}
 
 		public MainForm()
 		{
@@ -269,7 +247,7 @@
 
 			strategy = (ITradingStrategy)scripts_assembly.CreateInstance(name);
 			StrategySettings.SelectedObject = strategy.Settings;
-			strategy.Session.Symbol = symbol;
+			strategy.Session.Symbol = Symbol;
 
 			solution.Strategy = name;
 			solution.Settings = null;
@@ -292,26 +270,31 @@
 			{
 				var item = JsonConvert.DeserializeObject<TradeSymbol>(File.ReadAllText(file));
 
-				symbols.Add(item);
+				symbols.Add(CreateSymbolContainer(item));
 			}
 
 			//symbols.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
 			symbolsBindingSource.DataSource = symbols;
+			symbolsBindingSource.DataMember = "Symbol";
 			SymbolComboBox.DataSource = symbolsBindingSource;
+		}
+
+		private SymbolContainer CreateSymbolContainer(TradeSymbol symbol)
+		{
+			var container = new SymbolContainer()
+			{
+				Symbol = symbol
+			};
+
+			return container;
 		}
 
 		private void SymbolComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			symbol = symbols[SymbolComboBox.SelectedIndex];
-			SymbolProperties.SelectedObject = symbol;
+			SymbolProperties.SelectedObject = Symbol;
 
-			solution.Symbol = symbol.Symbol;
-			strategy.Session.Symbol = symbol;
-
-			if (!history.ContainsKey(symbol.Symbol))
-			{
-				history.Add(symbol.Symbol, new HistoryList());
-			}
+			solution.Symbol = Symbol.Symbol;
+			strategy.Session.Symbol = Symbol;
 		}
 		#endregion
 
@@ -325,18 +308,17 @@
 				return;
 			}
 
-			symbol = new TradeSymbol() { Symbol = input };
-			symbols.Add(symbol);
+			symbols.Add(CreateSymbolContainer(new TradeSymbol() { Symbol = input }));
 
 			//symbols.Sort((a, b) => a.Symbol.CompareTo(b.Symbol));
-			SymbolComboBox.SelectedIndex = symbols.IndexOf(symbol);
+			SymbolComboBox.SelectedIndex = symbols.Count - 1;
 		}
 
 		private void SaveSymbolMenuItem_Click(object sender, EventArgs e)
 		{
-			var file = symbol.Symbol.Replace("/", string.Empty);
+			var file = Symbol.Symbol.Replace("/", string.Empty);
 
-			File.WriteAllText(SymbolsPath + file + SymbolsExtension, JsonConvert.SerializeObject(symbol));
+			File.WriteAllText(SymbolsPath + file + SymbolsExtension, JsonConvert.SerializeObject(Symbol));
 		}
 
 		private void SaveMenuItem_Click(object sender, EventArgs e)
@@ -394,7 +376,7 @@
 
 			var obj = JsonConvert.DeserializeObject<SolutionSettings>(File.ReadAllText(filename));
 
-			var symbolIndex = symbols.IndexOf((from x in symbols where x.Symbol == obj.Symbol select x).Single());
+			var symbolIndex = symbols.IndexOf((from x in symbols where x.Symbol.Symbol == obj.Symbol select x).Single());
 			var strategyIndex = strategies.IndexOf(obj.Strategy);
 
 			if (strategyIndex < 0)
@@ -449,96 +431,12 @@
 			public double Price { get; set; }
 		}
 
-		private void LoadTickData()
-		{
-			Action<int> update_count = count => { TickCountStatusLabel.Text = count.ToString(); };
-
-			var history_list = history[symbol.Symbol];
-
-			if (settings.TickDataCount < history_list.TickCount) return;
-
-			using (var connection = new SqlConnection(settings.ConnectionString))
-			{
-				connection.Open();
-
-				using (var command = connection.CreateCommand())
-				{
-					command.CommandText = "select top(@count) json, type, id from symbolhistory where symbol = @symbol and type = 3 and id > @id order by id asc";
-					command.Parameters.Add(new SqlParameter("@symbol", symbol.Symbol));
-					command.Parameters.Add(new SqlParameter("@count", settings.TickDataCount - history_list.TickCount));
-					command.Parameters.Add(new SqlParameter("@id", history_list.MaxId));
-
-					using (var reader = command.ExecuteReader())
-					{
-						int count = 0;
-
-						while (reader.Read())
-						{
-							var type = (TradeHistoryType)reader.GetInt32(1);
-
-							switch (type)
-							{
-								case TradeHistoryType.TimeAndSale:
-									history_list.MaxId = Math.Max(history_list.MaxId, reader.GetInt64(2));
-
-									var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(0));
-
-									var tick = new Tick()
-									{
-										Ask = ts.AskPrice,
-										Bid = ts.BidPrice,
-										Price = ts.Price
-									};
-
-									if (history_list.Tick != null)
-									{
-										history_list.Differences.Add(tick - history_list.Tick);
-									}
-
-									history_list.Tick = tick;
-									history_list.TickCount++;
-									break;
-							}
-
-							if (++count % 25000 == 0)
-							{
-								this.Invoke(update_count, count);
-							}
-
-							if (!busy) break;
-						}
-
-						this.Invoke(update_count, count);
-					}
-				}
-
-				connection.Close();
-			}
-		}
-
 		const int ProgressStepValue = 100000;
 
 		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
 		{
 			if (busy) return;
 			busy = true;
-
-			var history_list = history[symbol.Symbol];
-
-			if (history_list.TickCount == 0 && !settings.GenerateTickData)
-			{
-				if (MessageBox.Show("Would you like to load tick data?", "Tick Data", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
-				{
-					busy = false;
-					return;
-				}
-				else
-				{
-					await ExecuteLoadTickData();
-
-					if (!busy) return;
-				}
-			}
 
 			TradeChart.Series.Clear();
 			periodSeries.Clear();
@@ -613,8 +511,6 @@
 					((ITradingStrategyRunner)sender).Stop();
 				}
 			};
-
-			var history_list = history[symbol.Symbol];
 
 			//tick_provider.DataSource = <ITickDataSource>;
 

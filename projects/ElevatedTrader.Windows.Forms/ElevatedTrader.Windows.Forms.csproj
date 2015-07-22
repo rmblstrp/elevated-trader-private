@@ -136,6 +136,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSourceConfiguration.cs" />
     <Compile Include="SolutionSettings.cs" />
     <Compile Include="SymbolContainer.cs" />
     <Compile Include="TraderSettings.cs" />

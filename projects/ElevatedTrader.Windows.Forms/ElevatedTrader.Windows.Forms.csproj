@@ -101,16 +101,8 @@
       <HintPath>..\..\solutions\packages\Microsoft.Framework.Configuration.Abstractions.1.0.0-beta5\lib\net45\Microsoft.Framework.Configuration.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Framework.ConfigurationModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\solutions\packages\Microsoft.Framework.ConfigurationModel.1.0.0-beta4\lib\net45\Microsoft.Framework.ConfigurationModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Framework.ConfigurationModel.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\solutions\packages\Microsoft.Framework.ConfigurationModel.Interfaces.1.0.0-beta4\lib\net45\Microsoft.Framework.ConfigurationModel.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Framework.ConfigurationModel.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\solutions\packages\Microsoft.Framework.ConfigurationModel.Json.1.0.0-beta4\lib\net45\Microsoft.Framework.ConfigurationModel.Json.dll</HintPath>
+    <Reference Include="Microsoft.Framework.Configuration.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\solutions\packages\Microsoft.Framework.Configuration.Json.1.0.0-beta5\lib\net45\Microsoft.Framework.Configuration.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
@@ -118,8 +110,8 @@
       <HintPath>..\..\solutions\packages\CS-Script.3.9.10.0\lib\net45\Mono.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\solutions\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -136,7 +128,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSourceConfiguration.cs" />
+    <Compile Include="TickDataSource.cs" />
     <Compile Include="SolutionSettings.cs" />
     <Compile Include="SymbolContainer.cs" />
     <Compile Include="TraderSettings.cs" />
@@ -199,6 +191,10 @@
     <Folder Include="Indicators\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ElevatedTrader.DataSources\ElevatedTrader.DataSources.csproj">
+      <Project>{f67446f0-831e-4969-9df8-191e1474d5af}</Project>
+      <Name>ElevatedTrader.DataSources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ElevatedTrader\ElevatedTrader.csproj">
       <Project>{18a39e37-5244-418f-9fd9-b1d024e15421}</Project>
       <Name>ElevatedTrader</Name>
@@ -211,6 +207,9 @@
     <None Include="MathNet.Numerics.MKL.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

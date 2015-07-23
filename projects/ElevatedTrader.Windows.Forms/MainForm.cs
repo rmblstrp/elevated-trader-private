@@ -18,6 +18,7 @@
 	using Newtonsoft.Json;
 	using System.Windows.Forms.DataVisualization.Charting;
 	using MathNet.Numerics.Distributions;
+	using Microsoft.Framework.Configuration;
 
 	public partial class MainForm : Form
 	{
@@ -108,8 +109,6 @@
 		public MainForm()
 		{
 			InitializeComponent();
-
-			settings = TraderSettings.Load();
 
 			LoadScripts();
 
@@ -415,7 +414,7 @@
 		private async Task ExecuteLoadTickData()
 		{
 			SetState(ApplicationState.Loading);
-			await Task.Run(() => LoadTickData());
+			//await Task.Run(() => LoadTickData());
 			SetState(ApplicationState.Idle);
 		}
 
@@ -455,7 +454,7 @@
 			try
 			{
 				SimulationProgress.Value = 0;
-				SimulationProgress.Maximum = settings.GenerateTickData ? settings.TickDataCount : history_list.TickCount;
+				//SimulationProgress.Maximum = settings.GenerateTickData ? settings.TickDataCount : history_list.TickCount;
 				SimulationProgress.Step = ProgressStepValue;
 				SetState(ApplicationState.Running);
 

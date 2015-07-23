@@ -61,7 +61,6 @@ namespace ElevatedTrader.DataSources
 		private List<ITick> ticks = new List<ITick>(InitialCapacity);
 		private ISessionFactory factory;
 		private long lastId = 0;
-		private ConfigurationSettings configuration;
 
 		public event EventHandler<ITick> TickAdded;
 

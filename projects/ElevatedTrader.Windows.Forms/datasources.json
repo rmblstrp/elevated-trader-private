@@ -2,8 +2,7 @@
 	{
 		"Name": "DemoTickData",
 		"Type": "ElevatedTrader.DataSources.DBTickDataSource, ElevatedTrader.DataSources",
-		"Settings": 
-		{
+		"Settings": {
 			"Database": "SqlServer",
 			"ConnectionString": "localhost\\sqlexpress;Initial Catalog=AutomatedTrader;Integrated Security=True"
 		}
@@ -11,8 +10,7 @@
 	{
 		"Name": "LiveTickData",
 		"Type": "ElevatedTrader.DataSources.DBTickDataSource, ElevatedTrader.DataSources",
-		"Settings": 
-		{
+		"Settings": {
 			"Database": "SqlServer",
 			"ConnectionString": "localhost\\sqlexpress;Initial Catalog=AutomatedTraderLive;Integrated Security=True"
 		}
@@ -20,8 +18,7 @@
 	{
 		"Name": "HistoricalTickData",
 		"Type": "ElevatedTrader.DataSources.DBTickDataSource, ElevatedTrader.DataSources",
-		"Settings": 
-		{
+		"Settings": {
 			"Database": "SqlServer",
 			"ConnectionString": "localhost\\sqlexpress;Initial Catalog=DevExperts;Integrated Security=True"
 		}

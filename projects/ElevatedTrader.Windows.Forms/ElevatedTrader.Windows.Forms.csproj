@@ -131,7 +131,16 @@
     <Compile Include="TickDataSource.cs" />
     <Compile Include="SolutionSettings.cs" />
     <Compile Include="SymbolContainer.cs" />
+    <Compile Include="ToolstripResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ToolstripResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TraderSettings.cs" />
+    <EmbeddedResource Include="ToolstripResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ToolstripResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="..\ElevatedTrader.Scripts\Strategies\HullStrategy.cs">
       <Link>Strategies\HullStrategy.cs</Link>
     </None>
@@ -210,6 +219,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\control_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\control_stop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

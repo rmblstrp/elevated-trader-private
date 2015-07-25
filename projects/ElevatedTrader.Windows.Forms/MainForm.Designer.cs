@@ -54,8 +54,10 @@
 			this.StopLoadingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.SetDataCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.generateTicksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.simulationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ShuffleLoadedDataMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.SimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.RunSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.StopSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.symbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,7 +74,16 @@
 			this.StateStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.TickCountStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.traderToolStrip = new System.Windows.Forms.ToolStrip();
+			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+			this.DataSourceComboBox = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+			this.MaxTickTextBox = new System.Windows.Forms.ToolStripTextBox();
+			this.RunSimulationButton = new System.Windows.Forms.ToolStripButton();
+			this.MainPanel = new System.Windows.Forms.Panel();
+			this.ResultsPanel = new System.Windows.Forms.Panel();
 			this.TradeInfoSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.TradeChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.TradeResultGrid = new System.Windows.Forms.DataGridView();
@@ -81,26 +92,27 @@
 			this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.equityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.panel2 = new System.Windows.Forms.Panel();
+			this.PropertiesPanel = new System.Windows.Forms.Panel();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.StrategiesComboBox = new System.Windows.Forms.ComboBox();
 			this.StrategySettings = new System.Windows.Forms.PropertyGrid();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.ShuffleLoadedDataMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.StopSimulationButton = new System.Windows.Forms.ToolStripButton();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).BeginInit();
 			this.statusStrip1.SuspendLayout();
-			this.panel1.SuspendLayout();
+			this.traderToolStrip.SuspendLayout();
+			this.MainPanel.SuspendLayout();
+			this.ResultsPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradeInfoSplitContainer)).BeginInit();
 			this.TradeInfoSplitContainer.Panel1.SuspendLayout();
 			this.TradeInfoSplitContainer.Panel2.SuspendLayout();
 			this.TradeInfoSplitContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).BeginInit();
-			this.panel2.SuspendLayout();
+			this.PropertiesPanel.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -111,12 +123,12 @@
 			this.MainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenuItem,
             this.toolStripMenuItem1,
-            this.simulationToolStripMenuItem,
+            this.SimulationMenuItem,
             this.symbolsToolStripMenuItem,
             this.viewToolStripMenuItem});
 			this.MainMenu.Location = new System.Drawing.Point(0, 0);
 			this.MainMenu.Name = "MainMenu";
-			this.MainMenu.Size = new System.Drawing.Size(846, 24);
+			this.MainMenu.Size = new System.Drawing.Size(1183, 24);
 			this.MainMenu.TabIndex = 0;
 			this.MainMenu.Text = "menuStrip1";
 			// 
@@ -214,6 +226,11 @@
 			this.SetDataCountMenuItem.Text = "Set Count";
 			this.SetDataCountMenuItem.Click += new System.EventHandler(this.SetDataCountMenuItem_Click);
 			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+			// 
 			// generateTicksMenuItem
 			// 
 			this.generateTicksMenuItem.Name = "generateTicksMenuItem";
@@ -221,14 +238,21 @@
 			this.generateTicksMenuItem.Text = "Generate Ticks";
 			this.generateTicksMenuItem.Click += new System.EventHandler(this.generateTicksMenuItem_Click);
 			// 
-			// simulationToolStripMenuItem
+			// ShuffleLoadedDataMenuItem
 			// 
-			this.simulationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.ShuffleLoadedDataMenuItem.Name = "ShuffleLoadedDataMenuItem";
+			this.ShuffleLoadedDataMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.ShuffleLoadedDataMenuItem.Text = "Shuffle Loaded Data";
+			this.ShuffleLoadedDataMenuItem.Click += new System.EventHandler(this.ShuffleLoadedDataMenuItem_Click);
+			// 
+			// SimulationMenuItem
+			// 
+			this.SimulationMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RunSimulationMenuItem,
             this.StopSimulationMenuItem});
-			this.simulationToolStripMenuItem.Name = "simulationToolStripMenuItem";
-			this.simulationToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
-			this.simulationToolStripMenuItem.Text = "Simulation";
+			this.SimulationMenuItem.Name = "SimulationMenuItem";
+			this.SimulationMenuItem.Size = new System.Drawing.Size(76, 20);
+			this.SimulationMenuItem.Text = "Simulation";
 			// 
 			// RunSimulationMenuItem
 			// 
@@ -313,9 +337,9 @@
             this.StateStatusLabel,
             this.toolStripStatusLabel1,
             this.TickCountStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 562);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 677);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(846, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(1183, 22);
 			this.statusStrip1.TabIndex = 2;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -349,15 +373,88 @@
 			this.TickCountStatusLabel.Size = new System.Drawing.Size(13, 17);
 			this.TickCountStatusLabel.Text = "0";
 			// 
-			// panel1
+			// traderToolStrip
 			// 
-			this.panel1.Controls.Add(this.TradeInfoSplitContainer);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 24);
-			this.panel1.Name = "panel1";
-			this.panel1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-			this.panel1.Size = new System.Drawing.Size(596, 538);
-			this.panel1.TabIndex = 3;
+			this.traderToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.DataSourceComboBox,
+            this.toolStripLabel2,
+            this.toolStripComboBox1,
+            this.toolStripLabel3,
+            this.MaxTickTextBox,
+            this.RunSimulationButton,
+            this.StopSimulationButton});
+			this.traderToolStrip.Location = new System.Drawing.Point(0, 24);
+			this.traderToolStrip.Name = "traderToolStrip";
+			this.traderToolStrip.Size = new System.Drawing.Size(1183, 25);
+			this.traderToolStrip.TabIndex = 6;
+			this.traderToolStrip.Text = "toolStrip1";
+			// 
+			// toolStripLabel1
+			// 
+			this.toolStripLabel1.Name = "toolStripLabel1";
+			this.toolStripLabel1.Size = new System.Drawing.Size(76, 22);
+			this.toolStripLabel1.Text = "Data Source: ";
+			// 
+			// DataSourceComboBox
+			// 
+			this.DataSourceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.DataSourceComboBox.Name = "DataSourceComboBox";
+			this.DataSourceComboBox.Size = new System.Drawing.Size(121, 25);
+			// 
+			// toolStripLabel2
+			// 
+			this.toolStripLabel2.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new System.Drawing.Size(82, 22);
+			this.toolStripLabel2.Text = "Tick Provider: ";
+			// 
+			// toolStripComboBox1
+			// 
+			this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.toolStripComboBox1.Name = "toolStripComboBox1";
+			this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+			// 
+			// toolStripLabel3
+			// 
+			this.toolStripLabel3.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
+			this.toolStripLabel3.Name = "toolStripLabel3";
+			this.toolStripLabel3.Size = new System.Drawing.Size(80, 22);
+			this.toolStripLabel3.Text = "Max Records: ";
+			// 
+			// MaxTickTextBox
+			// 
+			this.MaxTickTextBox.Name = "MaxTickTextBox";
+			this.MaxTickTextBox.Size = new System.Drawing.Size(100, 25);
+			// 
+			// RunSimulationButton
+			// 
+			this.RunSimulationButton.Image = global::ElevatedTrader.Windows.Forms.ToolstripResources.control_play;
+			this.RunSimulationButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.RunSimulationButton.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
+			this.RunSimulationButton.Name = "RunSimulationButton";
+			this.RunSimulationButton.Size = new System.Drawing.Size(108, 22);
+			this.RunSimulationButton.Text = "Run Simulation";
+			// 
+			// MainPanel
+			// 
+			this.MainPanel.Controls.Add(this.ResultsPanel);
+			this.MainPanel.Controls.Add(this.PropertiesPanel);
+			this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.MainPanel.Location = new System.Drawing.Point(0, 49);
+			this.MainPanel.Name = "MainPanel";
+			this.MainPanel.Size = new System.Drawing.Size(1183, 628);
+			this.MainPanel.TabIndex = 7;
+			// 
+			// ResultsPanel
+			// 
+			this.ResultsPanel.Controls.Add(this.TradeInfoSplitContainer);
+			this.ResultsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ResultsPanel.Location = new System.Drawing.Point(0, 0);
+			this.ResultsPanel.Name = "ResultsPanel";
+			this.ResultsPanel.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
+			this.ResultsPanel.Size = new System.Drawing.Size(933, 628);
+			this.ResultsPanel.TabIndex = 4;
 			// 
 			// TradeInfoSplitContainer
 			// 
@@ -374,8 +471,8 @@
 			// TradeInfoSplitContainer.Panel2
 			// 
 			this.TradeInfoSplitContainer.Panel2.Controls.Add(this.TradeResultGrid);
-			this.TradeInfoSplitContainer.Size = new System.Drawing.Size(586, 533);
-			this.TradeInfoSplitContainer.SplitterDistance = 268;
+			this.TradeInfoSplitContainer.Size = new System.Drawing.Size(923, 623);
+			this.TradeInfoSplitContainer.SplitterDistance = 312;
 			this.TradeInfoSplitContainer.TabIndex = 1;
 			// 
 			// TradeChart
@@ -419,7 +516,7 @@
 			series4.ShadowColor = System.Drawing.Color.Empty;
 			this.TradeChart.Series.Add(series3);
 			this.TradeChart.Series.Add(series4);
-			this.TradeChart.Size = new System.Drawing.Size(586, 268);
+			this.TradeChart.Size = new System.Drawing.Size(923, 312);
 			this.TradeChart.TabIndex = 3;
 			this.TradeChart.Text = "chart1";
 			title2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -445,7 +542,7 @@
 			this.TradeResultGrid.Name = "TradeResultGrid";
 			this.TradeResultGrid.ReadOnly = true;
 			this.TradeResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.TradeResultGrid.Size = new System.Drawing.Size(586, 261);
+			this.TradeResultGrid.Size = new System.Drawing.Size(923, 307);
 			this.TradeResultGrid.TabIndex = 3;
 			// 
 			// typeDataGridViewTextBoxColumn
@@ -495,16 +592,16 @@
 			this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
 			this.profitDataGridViewTextBoxColumn.ReadOnly = true;
 			// 
-			// panel2
+			// PropertiesPanel
 			// 
-			this.panel2.Controls.Add(this.groupBox2);
-			this.panel2.Controls.Add(this.groupBox1);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel2.Location = new System.Drawing.Point(596, 24);
-			this.panel2.Name = "panel2";
-			this.panel2.Padding = new System.Windows.Forms.Padding(0, 0, 5, 5);
-			this.panel2.Size = new System.Drawing.Size(250, 538);
-			this.panel2.TabIndex = 4;
+			this.PropertiesPanel.Controls.Add(this.groupBox2);
+			this.PropertiesPanel.Controls.Add(this.groupBox1);
+			this.PropertiesPanel.Dock = System.Windows.Forms.DockStyle.Right;
+			this.PropertiesPanel.Location = new System.Drawing.Point(933, 0);
+			this.PropertiesPanel.Name = "PropertiesPanel";
+			this.PropertiesPanel.Padding = new System.Windows.Forms.Padding(0, 0, 5, 5);
+			this.PropertiesPanel.Size = new System.Drawing.Size(250, 628);
+			this.PropertiesPanel.TabIndex = 5;
 			// 
 			// groupBox2
 			// 
@@ -514,7 +611,7 @@
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox2.Location = new System.Drawing.Point(0, 275);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(245, 258);
+			this.groupBox2.Size = new System.Drawing.Size(245, 348);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Strategy";
@@ -529,18 +626,18 @@
 			this.StrategiesComboBox.Name = "StrategiesComboBox";
 			this.StrategiesComboBox.Size = new System.Drawing.Size(231, 21);
 			this.StrategiesComboBox.TabIndex = 1;
-			this.StrategiesComboBox.SelectedIndexChanged += new System.EventHandler(this.StrategiesComboBox_SelectedIndexChanged);
 			// 
 			// StrategySettings
 			// 
 			this.StrategySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.StrategySettings.CategoryForeColor = System.Drawing.SystemColors.InactiveCaptionText;
 			this.StrategySettings.HelpVisible = false;
 			this.StrategySettings.Location = new System.Drawing.Point(6, 46);
 			this.StrategySettings.Name = "StrategySettings";
 			this.StrategySettings.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-			this.StrategySettings.Size = new System.Drawing.Size(231, 206);
+			this.StrategySettings.Size = new System.Drawing.Size(231, 296);
 			this.StrategySettings.TabIndex = 0;
 			this.StrategySettings.ToolbarVisible = false;
 			// 
@@ -568,13 +665,13 @@
 			this.SymbolComboBox.Name = "SymbolComboBox";
 			this.SymbolComboBox.Size = new System.Drawing.Size(231, 21);
 			this.SymbolComboBox.TabIndex = 1;
-			this.SymbolComboBox.SelectedIndexChanged += new System.EventHandler(this.SymbolComboBox_SelectedIndexChanged);
 			// 
 			// SymbolProperties
 			// 
 			this.SymbolProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.SymbolProperties.CategoryForeColor = System.Drawing.SystemColors.InactiveCaptionText;
 			this.SymbolProperties.HelpVisible = false;
 			this.SymbolProperties.Location = new System.Drawing.Point(6, 47);
 			this.SymbolProperties.Name = "SymbolProperties";
@@ -583,25 +680,22 @@
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
-			// ShuffleLoadedDataMenuItem
+			// StopSimulationButton
 			// 
-			this.ShuffleLoadedDataMenuItem.Name = "ShuffleLoadedDataMenuItem";
-			this.ShuffleLoadedDataMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.ShuffleLoadedDataMenuItem.Text = "Shuffle Loaded Data";
-			this.ShuffleLoadedDataMenuItem.Click += new System.EventHandler(this.ShuffleLoadedDataMenuItem_Click);
-			// 
-			// toolStripSeparator4
-			// 
-			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+			this.StopSimulationButton.Image = global::ElevatedTrader.Windows.Forms.ToolstripResources.control_stop;
+			this.StopSimulationButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.StopSimulationButton.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
+			this.StopSimulationButton.Name = "StopSimulationButton";
+			this.StopSimulationButton.Size = new System.Drawing.Size(111, 22);
+			this.StopSimulationButton.Text = "Stop Simulation";
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(846, 584);
-			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.panel2);
+			this.ClientSize = new System.Drawing.Size(1183, 699);
+			this.Controls.Add(this.MainPanel);
+			this.Controls.Add(this.traderToolStrip);
 			this.Controls.Add(this.MainMenu);
 			this.Controls.Add(this.statusStrip1);
 			this.MainMenuStrip = this.MainMenu;
@@ -614,14 +708,17 @@
 			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).EndInit();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
-			this.panel1.ResumeLayout(false);
+			this.traderToolStrip.ResumeLayout(false);
+			this.traderToolStrip.PerformLayout();
+			this.MainPanel.ResumeLayout(false);
+			this.ResultsPanel.ResumeLayout(false);
 			this.TradeInfoSplitContainer.Panel1.ResumeLayout(false);
 			this.TradeInfoSplitContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.TradeInfoSplitContainer)).EndInit();
 			this.TradeInfoSplitContainer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).EndInit();
-			this.panel2.ResumeLayout(false);
+			this.PropertiesPanel.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -636,28 +733,12 @@
 		private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SaveMenuItem;
 		private System.Windows.Forms.BindingSource TradesBindingSource;
-		private System.Windows.Forms.ToolStripMenuItem simulationToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem SimulationMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem RunSimulationMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.SplitContainer TradeInfoSplitContainer;
-		private System.Windows.Forms.DataVisualization.Charting.Chart TradeChart;
-		private System.Windows.Forms.DataGridView TradeResultGrid;
-		private System.Windows.Forms.DataGridViewTextBoxColumn typeDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn priceDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn equityDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn profitDataGridViewTextBoxColumn;
-		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.GroupBox groupBox2;
-		public System.Windows.Forms.PropertyGrid StrategySettings;
-		private System.Windows.Forms.GroupBox groupBox1;
-		public System.Windows.Forms.PropertyGrid SymbolProperties;
-		private System.Windows.Forms.ComboBox StrategiesComboBox;
-		private System.Windows.Forms.ComboBox SymbolComboBox;
 		private System.Windows.Forms.ToolStripMenuItem NewSolutionMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem symbolsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem AddSymbolMenuItem;
@@ -680,6 +761,32 @@
 		private System.Windows.Forms.ToolStripMenuItem CalculateStatisticsMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripMenuItem ShuffleLoadedDataMenuItem;
+		private System.Windows.Forms.ToolStrip traderToolStrip;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+		private System.Windows.Forms.ToolStripComboBox DataSourceComboBox;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+		private System.Windows.Forms.ToolStripTextBox MaxTickTextBox;
+		private System.Windows.Forms.Panel MainPanel;
+		private System.Windows.Forms.Panel ResultsPanel;
+		private System.Windows.Forms.SplitContainer TradeInfoSplitContainer;
+		private System.Windows.Forms.DataVisualization.Charting.Chart TradeChart;
+		private System.Windows.Forms.DataGridView TradeResultGrid;
+		private System.Windows.Forms.DataGridViewTextBoxColumn typeDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn priceDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn equityDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn profitDataGridViewTextBoxColumn;
+		private System.Windows.Forms.Panel PropertiesPanel;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.ComboBox StrategiesComboBox;
+		public System.Windows.Forms.PropertyGrid StrategySettings;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.ComboBox SymbolComboBox;
+		public System.Windows.Forms.PropertyGrid SymbolProperties;
+		private System.Windows.Forms.ToolStripButton RunSimulationButton;
+		private System.Windows.Forms.ToolStripButton StopSimulationButton;
 	}
 }
 

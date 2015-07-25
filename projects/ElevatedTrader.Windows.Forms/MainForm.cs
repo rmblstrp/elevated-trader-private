@@ -34,7 +34,6 @@
 		#region -- Private Fields --
 		private string filename = null;
 		private bool busy = false;
-		private TraderSettings settings;		
 
 		private BindingSource symbolsBindingSource = new BindingSource();
 		private BindingList<SymbolContainer> symbols = new BindingList<SymbolContainer>();
@@ -158,13 +157,18 @@
 			StrategiesComboBox.DataSource = strategies;
 			SetShowGraphCheckedState();
 
-			generateTicksMenuItem.Checked = settings.GenerateTickData;
-			ShuffleLoadedDataMenuItem.Checked = settings.ShuffleGeneratedTickData;
-
-			FormClosing += delegate { TraderSettings.Save(settings); };
+			FormClosing += delegate { ApplicationSettings.Save(); };
 
 			MathNet.Numerics.Control.UseMultiThreading();
 			MathNet.Numerics.Control.UseNativeMKL();
+
+			DataSourceComboBox.Items.AddRange(TickDataSource.Sources.ToArray());
+			TickProviderComboBox.Items.AddRange(TickProvider.Providers.ToArray());
+
+			DataSourceComboBox.SelectedIndex = 0;
+			TickProviderComboBox.SelectedIndex = 0;
+
+			MaxTickTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
 		}
 
 		#region -- Strategies --
@@ -488,10 +492,7 @@
 		{
 			var runner = new TradingStrategyRunner();
 
-			var tick_provider = settings.GenerateTickData
-				? (ITickProvider)new MonteCarloTickProvider()
-				: (ITickProvider)new HistoricalTickProvider()
-				;
+			var tick_provider = TickProvider.Create(TickProviderComboBox.Text);
 
 			runner.Tick += (sender, index) =>
 			{
@@ -513,7 +514,7 @@
 
 			//tick_provider.DataSource = <ITickDataSource>;
 
-			runner.Run(strategy, tick_provider, settings.TickDataCount);
+			runner.Run(strategy, tick_provider, ApplicationSettings.MaxTickCount);
 		}
 
 		private void StopSimulationMenuItem_Click(object sender, EventArgs e)
@@ -528,15 +529,6 @@
 
 		private void SetDataCountMenuItem_Click(object sender, EventArgs e)
 		{
-			var input = Microsoft.VisualBasic.Interaction.InputBox("Set the number of ticks you want to load", "Data Count", settings.TickDataCount.ToString(), -1, -1);
-
-			if (string.IsNullOrWhiteSpace(input)) return;
-
-			try
-			{
-				settings.TickDataCount = int.Parse(input);
-			}
-			catch { }
 		}
 		#endregion
 
@@ -703,30 +695,34 @@
 			ShowGraphMenuItem.CheckState = ShowGraphMenuItem.Checked ? CheckState.Checked : CheckState.Unchecked;
 		}
 
-		private void generateTicksMenuItem_Click(object sender, EventArgs e)
+		private void RunSimulationButton_Click(object sender, EventArgs e)
 		{
-			generateTicksMenuItem.Checked = !generateTicksMenuItem.Checked;
-			settings.GenerateTickData = generateTicksMenuItem.Checked;
+			//
 		}
 
-		private void CalculateStatisticsMenuItem_Click(object sender, EventArgs e)
+		private void StopSimulationButton_Click(object sender, EventArgs e)
 		{
-			//var history_list = history[symbol.Symbol];
-
-			//if (history_list.Differences.Count < 1000) return;
-
-			//var distribution = Normal.Estimate(history_list.Differences);
-
-			//symbol.TickDeviation = distribution.StdDev;
-			//symbol.TickMean = distribution.Mean;
-
-			//SymbolProperties.Refresh();
+			//
 		}
 
-		private void ShuffleLoadedDataMenuItem_Click(object sender, EventArgs e)
+		private void MaxTickTextBox_TextChanged(object sender, EventArgs e)
 		{
-			ShuffleLoadedDataMenuItem.Checked = !ShuffleLoadedDataMenuItem.Checked;
-			settings.ShuffleGeneratedTickData = ShuffleLoadedDataMenuItem.Checked;
+			try
+			{
+				var value = int.Parse(MaxTickTextBox.Text);
+
+				if (value < 0)
+				{
+					throw new ArgumentOutOfRangeException();
+				}
+
+				ApplicationSettings.MaxTickCount = value;
+			}
+			catch
+			{
+				MaxTickTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
+				MessageBox.Show("The maximum tick count may only be values greater than 0");
+			}
 		}
 	}
 }

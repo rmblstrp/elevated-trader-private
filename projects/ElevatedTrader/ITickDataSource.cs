@@ -13,11 +13,6 @@ namespace ElevatedTrader
 			get;
 		}
 
-		Type ConfigurationType
-		{
-			get;
-		}
-
 		IList<ITick> Ticks
 		{
 			get;
@@ -27,7 +22,7 @@ namespace ElevatedTrader
 
 		void Clear();
 
-		void Configure(object configuration);
+		void Configure(dynamic configuration);
 
 		void Load(string symbol, int? count = null);
 	}

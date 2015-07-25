@@ -128,15 +128,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationSettings.cs" />
     <Compile Include="TickDataSource.cs" />
     <Compile Include="SolutionSettings.cs" />
     <Compile Include="SymbolContainer.cs" />
+    <Compile Include="TickProvider.cs" />
     <Compile Include="ToolstripResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ToolstripResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TraderSettings.cs" />
     <EmbeddedResource Include="ToolstripResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ToolstripResources.Designer.cs</LastGenOutput>

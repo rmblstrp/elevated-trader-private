@@ -52,19 +52,12 @@
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.LoadDataMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.StopLoadingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.SetDataCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-			this.generateTicksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.ShuffleLoadedDataMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.RunSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.StopSimulationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.symbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.AddSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveSymbolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			this.CalculateStatisticsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.ShowGraphMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.TradesBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -78,10 +71,11 @@
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.DataSourceComboBox = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+			this.TickProviderComboBox = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
 			this.MaxTickTextBox = new System.Windows.Forms.ToolStripTextBox();
 			this.RunSimulationButton = new System.Windows.Forms.ToolStripButton();
+			this.StopSimulationButton = new System.Windows.Forms.ToolStripButton();
 			this.MainPanel = new System.Windows.Forms.Panel();
 			this.ResultsPanel = new System.Windows.Forms.Panel();
 			this.TradeInfoSplitContainer = new System.Windows.Forms.SplitContainer();
@@ -99,7 +93,6 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.StopSimulationButton = new System.Windows.Forms.ToolStripButton();
 			this.MainMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).BeginInit();
 			this.statusStrip1.SuspendLayout();
@@ -188,12 +181,7 @@
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LoadDataMenuItem,
-            this.StopLoadingMenuItem,
-            this.toolStripSeparator2,
-            this.SetDataCountMenuItem,
-            this.toolStripSeparator4,
-            this.generateTicksMenuItem,
-            this.ShuffleLoadedDataMenuItem});
+            this.StopLoadingMenuItem});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(43, 20);
 			this.toolStripMenuItem1.Text = "Data";
@@ -202,7 +190,7 @@
 			// 
 			this.LoadDataMenuItem.Name = "LoadDataMenuItem";
 			this.LoadDataMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-			this.LoadDataMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.LoadDataMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.LoadDataMenuItem.Text = "Load";
 			this.LoadDataMenuItem.Click += new System.EventHandler(this.LoadDataMenuItem_Click);
 			// 
@@ -210,40 +198,9 @@
 			// 
 			this.StopLoadingMenuItem.Name = "StopLoadingMenuItem";
 			this.StopLoadingMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.StopLoadingMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.StopLoadingMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.StopLoadingMenuItem.Text = "Stop";
 			this.StopLoadingMenuItem.Click += new System.EventHandler(this.StopLoadingMenuItem_Click);
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-			// 
-			// SetDataCountMenuItem
-			// 
-			this.SetDataCountMenuItem.Name = "SetDataCountMenuItem";
-			this.SetDataCountMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.SetDataCountMenuItem.Text = "Set Count";
-			this.SetDataCountMenuItem.Click += new System.EventHandler(this.SetDataCountMenuItem_Click);
-			// 
-			// toolStripSeparator4
-			// 
-			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
-			// 
-			// generateTicksMenuItem
-			// 
-			this.generateTicksMenuItem.Name = "generateTicksMenuItem";
-			this.generateTicksMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.generateTicksMenuItem.Text = "Generate Ticks";
-			this.generateTicksMenuItem.Click += new System.EventHandler(this.generateTicksMenuItem_Click);
-			// 
-			// ShuffleLoadedDataMenuItem
-			// 
-			this.ShuffleLoadedDataMenuItem.Name = "ShuffleLoadedDataMenuItem";
-			this.ShuffleLoadedDataMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.ShuffleLoadedDataMenuItem.Text = "Shuffle Loaded Data";
-			this.ShuffleLoadedDataMenuItem.Click += new System.EventHandler(this.ShuffleLoadedDataMenuItem_Click);
 			// 
 			// SimulationMenuItem
 			// 
@@ -258,7 +215,7 @@
 			// 
 			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
 			this.RunSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.RunSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.RunSimulationMenuItem.Text = "Run";
 			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulationMenuItem_Click);
 			// 
@@ -266,7 +223,7 @@
 			// 
 			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
 			this.StopSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.StopSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.StopSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.StopSimulationMenuItem.Text = "Stop";
 			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulationMenuItem_Click);
 			// 
@@ -274,9 +231,7 @@
 			// 
 			this.symbolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddSymbolMenuItem,
-            this.SaveSymbolMenuItem,
-            this.toolStripSeparator3,
-            this.CalculateStatisticsMenuItem});
+            this.SaveSymbolMenuItem});
 			this.symbolsToolStripMenuItem.Name = "symbolsToolStripMenuItem";
 			this.symbolsToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
 			this.symbolsToolStripMenuItem.Text = "Symbols";
@@ -296,18 +251,6 @@
 			this.SaveSymbolMenuItem.Size = new System.Drawing.Size(217, 22);
 			this.SaveSymbolMenuItem.Text = "Save Selected";
 			this.SaveSymbolMenuItem.Click += new System.EventHandler(this.SaveSymbolMenuItem_Click);
-			// 
-			// toolStripSeparator3
-			// 
-			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(214, 6);
-			// 
-			// CalculateStatisticsMenuItem
-			// 
-			this.CalculateStatisticsMenuItem.Name = "CalculateStatisticsMenuItem";
-			this.CalculateStatisticsMenuItem.Size = new System.Drawing.Size(217, 22);
-			this.CalculateStatisticsMenuItem.Text = "Calculate Statistics";
-			this.CalculateStatisticsMenuItem.Click += new System.EventHandler(this.CalculateStatisticsMenuItem_Click);
 			// 
 			// viewToolStripMenuItem
 			// 
@@ -379,7 +322,7 @@
             this.toolStripLabel1,
             this.DataSourceComboBox,
             this.toolStripLabel2,
-            this.toolStripComboBox1,
+            this.TickProviderComboBox,
             this.toolStripLabel3,
             this.MaxTickTextBox,
             this.RunSimulationButton,
@@ -401,6 +344,7 @@
 			this.DataSourceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.DataSourceComboBox.Name = "DataSourceComboBox";
 			this.DataSourceComboBox.Size = new System.Drawing.Size(121, 25);
+			this.DataSourceComboBox.Sorted = true;
 			// 
 			// toolStripLabel2
 			// 
@@ -409,11 +353,12 @@
 			this.toolStripLabel2.Size = new System.Drawing.Size(82, 22);
 			this.toolStripLabel2.Text = "Tick Provider: ";
 			// 
-			// toolStripComboBox1
+			// TickProviderComboBox
 			// 
-			this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.toolStripComboBox1.Name = "toolStripComboBox1";
-			this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+			this.TickProviderComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.TickProviderComboBox.Name = "TickProviderComboBox";
+			this.TickProviderComboBox.Size = new System.Drawing.Size(121, 25);
+			this.TickProviderComboBox.Sorted = true;
 			// 
 			// toolStripLabel3
 			// 
@@ -426,6 +371,7 @@
 			// 
 			this.MaxTickTextBox.Name = "MaxTickTextBox";
 			this.MaxTickTextBox.Size = new System.Drawing.Size(100, 25);
+			this.MaxTickTextBox.TextChanged += new System.EventHandler(this.MaxTickTextBox_TextChanged);
 			// 
 			// RunSimulationButton
 			// 
@@ -435,6 +381,18 @@
 			this.RunSimulationButton.Name = "RunSimulationButton";
 			this.RunSimulationButton.Size = new System.Drawing.Size(108, 22);
 			this.RunSimulationButton.Text = "Run Simulation";
+			this.RunSimulationButton.Click += new System.EventHandler(this.RunSimulationButton_Click);
+			// 
+			// StopSimulationButton
+			// 
+			this.StopSimulationButton.Image = global::ElevatedTrader.Windows.Forms.ToolstripResources.control_stop;
+			this.StopSimulationButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.StopSimulationButton.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
+			this.StopSimulationButton.Name = "StopSimulationButton";
+			this.StopSimulationButton.Size = new System.Drawing.Size(111, 22);
+			this.StopSimulationButton.Text = "Stop Simulation";
+			this.StopSimulationButton.Visible = false;
+			this.StopSimulationButton.Click += new System.EventHandler(this.StopSimulationButton_Click);
 			// 
 			// MainPanel
 			// 
@@ -680,15 +638,6 @@
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
-			// StopSimulationButton
-			// 
-			this.StopSimulationButton.Image = global::ElevatedTrader.Windows.Forms.ToolstripResources.control_stop;
-			this.StopSimulationButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.StopSimulationButton.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
-			this.StopSimulationButton.Name = "StopSimulationButton";
-			this.StopSimulationButton.Size = new System.Drawing.Size(111, 22);
-			this.StopSimulationButton.Text = "Stop Simulation";
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -752,20 +701,13 @@
 		private System.Windows.Forms.ToolStripMenuItem StopSimulationMenuItem;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
 		private System.Windows.Forms.ToolStripStatusLabel StateStatusLabel;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripMenuItem SetDataCountMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem ShowGraphMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem generateTicksMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-		private System.Windows.Forms.ToolStripMenuItem CalculateStatisticsMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-		private System.Windows.Forms.ToolStripMenuItem ShuffleLoadedDataMenuItem;
 		private System.Windows.Forms.ToolStrip traderToolStrip;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
 		private System.Windows.Forms.ToolStripComboBox DataSourceComboBox;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+		private System.Windows.Forms.ToolStripComboBox TickProviderComboBox;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel3;
 		private System.Windows.Forms.ToolStripTextBox MaxTickTextBox;
 		private System.Windows.Forms.Panel MainPanel;

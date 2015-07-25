@@ -23,13 +23,6 @@ namespace ElevatedTrader.DataSources
 			MySql
 		}
 
-		public class ConfigurationSettings
-		{
-			public string ConnectionString { get; set; }
-
-			public DatabaseType DatabaseType { get; set; }
-		}
-
 		private class HistoryEntry
 		{
 			public virtual long Id { get; set; }
@@ -69,11 +62,6 @@ namespace ElevatedTrader.DataSources
 			get { return deltas; }
 		}
 
-		public Type ConfigurationType
-		{
-			get { return typeof(ConfigurationSettings); }
-		}
-
 		public IList<ITick> Ticks
 		{
 			get { return ticks; }
@@ -90,12 +78,12 @@ namespace ElevatedTrader.DataSources
 			ticks.Clear();
 		}
 
-		public void Configure(object configuration)
+		public void Configure(dynamic configuration)
 		{
-			var settings = (ConfigurationSettings)configuration;
+			var db = ConfigureDatabase((DatabaseType)Enum.Parse(typeof(DatabaseType), configuration.DatabaseType), (string)configuration.ConnectionString);
 
 			factory = Fluently.Configure()
-				.Database(ConfigureDatabase(settings.DatabaseType, settings.ConnectionString))
+				.Database(db)
 				.Mappings(m => m.FluentMappings.Add<HistoryEntry.Mapping>())
 				.BuildSessionFactory()
 				;

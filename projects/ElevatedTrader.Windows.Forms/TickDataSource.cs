@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -69,7 +70,7 @@ namespace ElevatedTrader.Windows.Forms
 
 			var instance = (ITickDataSource)Activator.CreateInstance(config.Type);
 
-			instance.Configure(config.Settings.ToObject(instance.ConfigurationType));
+			instance.Configure(config.Settings.ToObject<ExpandoObject>());
 
 			return instance;
 		}

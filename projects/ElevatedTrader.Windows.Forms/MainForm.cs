@@ -38,33 +38,11 @@
 		private BindingSource symbolsBindingSource = new BindingSource();
 		private BindingList<SymbolContainer> symbols = new BindingList<SymbolContainer>();
 
-		private BindingSource strategyBindingSource = new BindingSource();
-		private BindingList<string> strategies = new BindingList<string>();
 		private ITradingStrategy strategy;
-
 		private SolutionSettings solution = new SolutionSettings();
-		private FileSystemWatcher indicatorsWatcher;
-		private FileSystemWatcher strategiesWatcher;
 
 		private OpenFileDialog openDialog;
-		private SaveFileDialog saveDialog;
-
-		private Assembly scripts_assembly = null;
-		private string[] reference_assemblies = new string[]
-		{
-			"ElevatedTrader",
-			"MathNet.Numerics",
-			"MathNet.Filtering",
-			"MathNet.Filtering.Kalman",
-			"Accord",
-			"Accord.Extensions.Core",
-			"Accord.Extensions.Math",
-			"Accord.Extensions.Statistics",
-			"Accord.Math",
-			"Accord.Statistics",
-			"AForge",
-			"AForge.Math"
-		};
+		private SaveFileDialog saveDialog;		
 
 		private BindingList<ITrade> trades;
 		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
@@ -74,13 +52,9 @@
 		#endregion
 
 		#region -- Constants --
-		const string PathBase = @"library\";
 		const string SymbolsPath = @"symbols\";
-		const string IndicatorsPath = PathBase + @"indicators\";
-		const string StrategiesPath = PathBase + @"strategies\";
-		const string SolutionsPath = PathBase + @"solutions\";
-
-		const string ScriptsFilter = "*.cs";
+		
+		const string SolutionsPath = @"solutions\";		
 
 		const string SymbolsExtension = ".json";
 		const string SymbolsFilter = "*" + SymbolsExtension;
@@ -109,53 +83,10 @@
 		{
 			InitializeComponent();
 
-			LoadScripts();
+			InitializeDialogs();
 
-			indicatorsWatcher = new FileSystemWatcher(IndicatorsPath, ScriptsFilter)
-			{
-				NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
-			};
-			strategiesWatcher = new FileSystemWatcher(StrategiesPath, ScriptsFilter)
-			{
-				NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
-			};
-
-			indicatorsWatcher.Changed += indicatorsWatcher_Changed;
-			indicatorsWatcher.Created += indicatorsWatcher_Changed;
-			indicatorsWatcher.Deleted += indicatorsWatcher_Changed;
-			indicatorsWatcher.Renamed += indicatorsWatcher_Changed;
-
-			strategiesWatcher.Changed += strategiesWatcher_Changed;
-			strategiesWatcher.Created += strategiesWatcher_Changed;
-			strategiesWatcher.Deleted += strategiesWatcher_Changed;
-			strategiesWatcher.Renamed += strategiesWatcher_Changed;
-
-			indicatorsWatcher.EnableRaisingEvents = true;
-			strategiesWatcher.EnableRaisingEvents = true;
-
-			strategyBindingSource.DataSource = strategies;
-			StrategiesComboBox.DataSource = strategyBindingSource;
-
-			LoadSymbols();
-
-			openDialog = new OpenFileDialog()
-			{
-				DefaultExt = SolutionExtension,
-				FileName = string.Empty,
-				Filter = SolutionFilter,
-				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + SolutionsPath
-			};
-
-			saveDialog = new SaveFileDialog()
-			{
-				DefaultExt = SolutionExtension,
-				FileName = string.Empty,
-				Filter = SolutionFilter,
-				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + SolutionsPath
-			};
-
-			StrategiesComboBox.DataSource = strategies;
-			SetShowGraphCheckedState();
+			TradingStrategyScripts.ScriptsLoaded += ScriptsLoaded;
+			TradingStrategyScripts.Initialize();
 
 			FormClosing += delegate { ApplicationSettings.Save(); };
 
@@ -163,92 +94,49 @@
 			MathNet.Numerics.Control.UseNativeMKL();
 
 			DataSourceComboBox.Items.AddRange(TickDataSource.Sources.ToArray());
-			TickProviderComboBox.Items.AddRange(TickProvider.Providers.ToArray());
-
 			DataSourceComboBox.SelectedIndex = 0;
+
+			TickProviderComboBox.Items.AddRange(TickProvider.Providers.ToArray());
 			TickProviderComboBox.SelectedIndex = 0;
 
 			MaxTickTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
 		}
 
 		#region -- Strategies --
-		int indicator_notify_count = 0;
-		void indicatorsWatcher_Changed(object sender, FileSystemEventArgs e)
+		private void ScriptsLoaded()
 		{
-			Action a = () =>
+			StrategiesComboBox.SelectedIndexChanged -= StrategiesComboBox_SelectedIndexChanged;
+
+			var selected = StrategiesComboBox.SelectedItem;
+			var settings = strategy == null ? null : strategy.Settings;			
+
+			StrategiesComboBox.Items.Clear();
+			StrategiesComboBox.Items.AddRange(TradingStrategyScripts.Strategies.ToArray());
+
+			if (selected != null)
 			{
-				LoadScripts();
-			};
-
-			if (++indicator_notify_count == 3)
-			{
-				this.Invoke(a);
-				indicator_notify_count = 0;
-			}
-		}
-
-		int strategy_notify_count = 0;
-		void strategiesWatcher_Changed(object sender, FileSystemEventArgs e)
-		{
-			Action a = () =>
-			{
-				LoadScripts();
-			};
-
-			if (++strategy_notify_count == 3)
-			{
-				this.Invoke(a);
-				strategy_notify_count = 0;
-			}
-		}
-
-		private void LoadScripts()
-		{
-			var files = ListStrategyFiles().Union(ListIndicatorsFiles()).ToArray();
-
-			scripts_assembly = Assembly.LoadFile(CSScript.CompileFiles(files, null, true, reference_assemblies));
-
-			var implements = typeof(ITradingStrategy);
-			var types = scripts_assembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
-
-			var selected = (string)StrategiesComboBox.SelectedItem;
-			var settings = strategy == null ? null : strategy.Settings;
-
-			strategies.Clear();
-
-			foreach (var item in types)
-			{
-				strategies.Add(item.FullName);
-			}
-
-			if (!string.IsNullOrWhiteSpace(selected))
-			{
-				var index = strategies.IndexOf(selected);
+				var index = StrategiesComboBox.Items.IndexOf(selected);
 				StrategiesComboBox.SelectedIndex = -1;
-				StrategiesComboBox.SelectedIndex = index;
+
+				if (index >= 0)
+				{	
+					StrategiesComboBox.SelectedIndex = index;
+					InitializeStrategy((string)StrategiesComboBox.SelectedItem, settings);
+				}
+			}
+
+			StrategiesComboBox.SelectedIndexChanged += StrategiesComboBox_SelectedIndexChanged;
+		}
+
+		private void InitializeStrategy(string name, object settings = null)
+		{
+			strategy = TradingStrategyScripts.Create(name);
+
+			if (settings != null)
+			{
 				strategy.Settings = JsonConvert.DeserializeObject<ExpandoObject>(JsonConvert.SerializeObject(settings));
 			}
-		}
 
-		private IEnumerable<string> ListIndicatorsFiles()
-		{
-			return Directory.EnumerateFiles(IndicatorsPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
-		}
-
-		private IEnumerable<string> ListStrategyFiles()
-		{
-			return Directory.EnumerateFiles(StrategiesPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
-		}
-
-		private void InitializeStrategy(string name)
-		{
-			if (strategy != null)
-			{
-				// should probably do other cleanup here;
-				strategy = null;
-			}
-
-			strategy = (ITradingStrategy)scripts_assembly.CreateInstance(name);
 			StrategySettings.SelectedObject = strategy.Settings;
 			strategy.Session.Symbol = Symbol;
 
@@ -260,7 +148,7 @@
 		{
 			if (StrategiesComboBox.SelectedIndex < 0) return;
 
-			InitializeStrategy(StrategiesComboBox.Text);
+			InitializeStrategy((string)StrategiesComboBox.SelectedItem);
 		}
 		#endregion
 
@@ -302,6 +190,25 @@
 		#endregion
 
 		#region -- Dialogs --
+		private void InitializeDialogs()
+		{
+			openDialog = new OpenFileDialog()
+			{
+				DefaultExt = SolutionExtension,
+				FileName = string.Empty,
+				Filter = SolutionFilter,
+				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + SolutionsPath
+			};
+
+			saveDialog = new SaveFileDialog()
+			{
+				DefaultExt = SolutionExtension,
+				FileName = string.Empty,
+				Filter = SolutionFilter,
+				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + SolutionsPath
+			};
+		}
+
 		private void AddSymbolMenuItem_Click(object sender, EventArgs e)
 		{
 			var input = Microsoft.VisualBasic.Interaction.InputBox("Add a new ticker symbol", "New Symbol", string.Empty, -1, -1);
@@ -380,7 +287,7 @@
 			var obj = JsonConvert.DeserializeObject<SolutionSettings>(File.ReadAllText(filename));
 
 			var symbolIndex = symbols.IndexOf((from x in symbols where x.Symbol.Symbol == obj.Symbol select x).Single());
-			var strategyIndex = strategies.IndexOf(obj.Strategy);
+			var strategyIndex = StrategiesComboBox.Items.IndexOf(obj.Strategy);
 
 			if (strategyIndex < 0)
 			{
@@ -425,13 +332,6 @@
 		private void StopLoadingMenuItem_Click(object sender, EventArgs e)
 		{
 			busy = false;
-		}
-
-		public class OldDataFormat
-		{
-			public double AskPrice { get; set; }
-			public double BidPrice { get; set; }
-			public double Price { get; set; }
 		}
 
 		const int ProgressStepValue = 100000;

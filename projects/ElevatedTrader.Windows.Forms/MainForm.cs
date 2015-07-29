@@ -85,6 +85,8 @@
 
 			InitializeDialogs();
 
+			LoadSymbols();
+
 			TradingStrategyScripts.ScriptsLoaded += ScriptsLoaded;
 			TradingStrategyScripts.Initialize();
 
@@ -316,17 +318,15 @@
 		{
 			if (busy) return;
 			busy = true;
-
-			await ExecuteLoadTickData();
-
+			SetState(ApplicationState.Loading);
+			await Task.Run(() => ExecuteLoadTickData());
+			SetState(ApplicationState.Idle);
 			busy = false;
 		}
 
-		private async Task ExecuteLoadTickData()
+		private void ExecuteLoadTickData()
 		{
-			SetState(ApplicationState.Loading);
-			//await Task.Run(() => LoadTickData());
-			SetState(ApplicationState.Idle);
+			
 		}
 
 		private void StopLoadingMenuItem_Click(object sender, EventArgs e)

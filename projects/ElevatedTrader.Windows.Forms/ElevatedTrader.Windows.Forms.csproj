@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationSettings.cs" />
+    <Compile Include="Symbol.cs" />
     <Compile Include="TradingStrategyScripts.cs" />
     <Compile Include="TickDataSource.cs" />
     <Compile Include="SolutionSettings.cs" />
@@ -184,6 +185,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="symbols.json" />
     <None Include="Symbols\6A.json" />
     <None Include="Symbols\6B.json" />
     <None Include="Symbols\6C.json" />

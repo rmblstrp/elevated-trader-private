@@ -13,14 +13,14 @@ namespace ElevatedTrader.Windows.Forms
 	{
 		const string ScriptsFilter = "*.cs";
 		const string PathBase = @"library\";
-		const string IndicatorsPath = @"indicators\";
-		const string StrategiesPath = @"strategies\";
+		const string IndicatorsPath = PathBase + @"indicators\";
+		const string StrategiesPath = PathBase + @"strategies\";
 
-		private static Dictionary<string, Type> strategies = new Dictionary<string, Type>();
-		private static FileSystemWatcher indicatorsWatcher;
-		private static FileSystemWatcher strategiesWatcher;
-		private static Assembly scripts_assembly = null;
-		private static string[] reference_assemblies = new string[]
+		private static readonly Dictionary<string, Type> strategies = new Dictionary<string, Type>();
+		private static readonly FileSystemWatcher indicatorsWatcher;
+		private static readonly FileSystemWatcher strategiesWatcher;
+		private static Assembly scriptsAssembly = null;
+		private static readonly string[] referenceAssemblies = new string[]
 		{
 			"ElevatedTrader",
 			"MathNet.Numerics",
@@ -63,7 +63,7 @@ namespace ElevatedTrader.Windows.Forms
 
 		public static ITradingStrategy Create(string name)
 		{
-			return (ITradingStrategy)scripts_assembly.CreateInstance(name);
+			return (ITradingStrategy)scriptsAssembly.CreateInstance(name);
 		}
 
 		public static void Initialize()
@@ -76,14 +76,14 @@ namespace ElevatedTrader.Windows.Forms
 
 		public static void Load()
 		{
-			var indicator_files = Directory.EnumerateFiles(PathBase + IndicatorsPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
-			var strategy_files = Directory.EnumerateFiles(PathBase + StrategiesPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
+			var indicator_files = Directory.EnumerateFiles(IndicatorsPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
+			var strategy_files = Directory.EnumerateFiles(StrategiesPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
 			var files = indicator_files.Union(strategy_files).ToArray();
 
-			scripts_assembly = Assembly.LoadFile(CSScript.CompileFiles(files, null, true, reference_assemblies));
+			scriptsAssembly = Assembly.LoadFile(CSScript.CompileFiles(files, null, true, referenceAssemblies));
 
 			var implements = typeof(ITradingStrategy);
-			var types = scripts_assembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
+			var types = scriptsAssembly.GetTypes().Where(t => implements.IsAssignableFrom(t));
 
 			foreach (var item in types)
 			{

@@ -129,11 +129,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationSettings.cs" />
-    <Compile Include="Symbol.cs" />
+    <Compile Include="Instrument.cs" />
     <Compile Include="TradingStrategyScripts.cs" />
     <Compile Include="TickDataSource.cs" />
     <Compile Include="SolutionSettings.cs" />
-    <Compile Include="SymbolContainer.cs" />
     <Compile Include="TickProvider.cs" />
     <Compile Include="ToolstripResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -185,7 +184,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="symbols.json" />
+    <None Include="instruments.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Symbols\6A.json" />
     <None Include="Symbols\6B.json" />
     <None Include="Symbols\6C.json" />

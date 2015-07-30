@@ -11,13 +11,13 @@ using Newtonsoft.Json.Linq;
 
 namespace ElevatedTrader.Windows.Forms
 {
-	public static class Symbol
+	public static class Instrument
 	{
-		public class SymbolContainer
+		public class InstrumentContainer
 		{
 			private Dictionary<string, ITickDataSource> dataSources = new Dictionary<string, ITickDataSource>();
 
-			public TradeSymbol Symbol
+			public TradeInstrument Item
 			{
 				get;
 				set;
@@ -29,8 +29,8 @@ namespace ElevatedTrader.Windows.Forms
 			}
 		}
 
-		private const string Filename = "symbols.json";
-		private static Dictionary<string, SymbolContainer> symbols = new Dictionary<string, SymbolContainer>();
+		private const string Filename = "instruments.json";
+		private static Dictionary<string, InstrumentContainer> symbols = new Dictionary<string, InstrumentContainer>();
 
 		public static IList<string> Symbols
 		{
@@ -40,28 +40,33 @@ namespace ElevatedTrader.Windows.Forms
 			}
 		}
 
-		static Symbol()
+		static Instrument()
 		{
 			var filename = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\" + Filename;
 
 			if (!File.Exists(filename)) return;
 
-			foreach (var item in JsonConvert.DeserializeObject<List<TradeSymbol>>(File.ReadAllText(filename)))
+			foreach (var item in JsonConvert.DeserializeObject<List<TradeInstrument>>(File.ReadAllText(filename)))
 			{
-				Create(item);
+				Add(item);
 			}
 		}
 
-		public static void Create(string symbol)
+		public static void Add(string symbol)
 		{
 			if (symbols.ContainsKey(symbol)) return;
 
-			Create(new TradeSymbol() { Symbol = symbol });
+			Add(new TradeInstrument() { Symbol = symbol });
 		}
 
-		private static void Create(TradeSymbol symbol)
+		private static void Add(TradeInstrument symbol)
 		{
-			symbols.Add(symbol.Symbol, new SymbolContainer() { Symbol = symbol });
+			symbols.Add(symbol.Symbol, new InstrumentContainer() { Item = symbol });
+		}
+
+		public static InstrumentContainer Get(string symbol)
+		{
+			return symbols[symbol];
 		}
 	}
 }

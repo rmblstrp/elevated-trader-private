@@ -85,7 +85,7 @@
     <Compile Include="IndicatorResult.cs" />
     <Compile Include="ITradingPeriodAggregator.cs" />
     <Compile Include="ITradingPeriod.cs" />
-    <Compile Include="ITradeSymbol.cs" />
+    <Compile Include="IInstrument.cs" />
     <Compile Include="ITrade.cs" />
     <Compile Include="ITick.cs" />
     <Compile Include="ITradingSession.cs" />
@@ -96,7 +96,7 @@
     <Compile Include="TradingStrategyRunner.cs" />
     <Compile Include="TradingStrategySettings.cs" />
     <Compile Include="Trade.cs" />
-    <Compile Include="TradeSymbol.cs" />
+    <Compile Include="TradeInstrument.cs" />
     <Compile Include="Tick.cs" />
     <Compile Include="TradingPeriodAggregator.cs" />
     <Compile Include="TradeType.cs" />

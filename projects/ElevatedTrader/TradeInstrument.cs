@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class TradeSymbol : ITradeSymbol
+	public class TradeInstrument : IInstrument
 	{
 		private string symbol;
 
@@ -53,30 +53,6 @@ namespace ElevatedTrader
 		}
 
 		public int Slippage
-		{
-			get;
-			set;
-		}
-
-		public double TickDeviation
-		{
-			get;
-			set;
-		}
-
-		public double TickMean
-		{
-			get;
-			set;
-		}
-
-		public int QuoteSpreadTicks
-		{
-			get;
-			set;
-		}
-
-		public double CurrentPrice
 		{
 			get;
 			set;

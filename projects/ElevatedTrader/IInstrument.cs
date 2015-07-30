@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradeSymbol
+	public interface IInstrument
 	{
 		string Symbol
 		{
@@ -51,12 +51,6 @@ namespace ElevatedTrader
 		}
 
 		int Slippage
-		{
-			get;
-			set;
-		}
-
-		double CurrentPrice
 		{
 			get;
 			set;

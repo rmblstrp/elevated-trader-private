@@ -99,7 +99,7 @@ namespace Kalman
 			AfterNewPeriod();
 		}
 
-		public ITradeSymbol Symbol
+		public IInstrument Symbol
 		{
 			get;
 			set;

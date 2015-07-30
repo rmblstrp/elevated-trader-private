@@ -18,12 +18,10 @@ namespace ElevatedTrader
 			get;
 		}
 
-		event EventHandler<ITick> TickAdded;
-
 		void Clear();
 
 		void Configure(dynamic configuration);
 
-		void Load(string symbol, int? count = null);
+		void Load(string symbol, int? count = null, Func<ITick, bool> added = null);
 	}
 }

@@ -71,7 +71,7 @@
 			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
 			this.TickProviderComboBox = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-			this.MaxTickTextBox = new System.Windows.Forms.ToolStripTextBox();
+			this.MaxTicksTextBox = new System.Windows.Forms.ToolStripTextBox();
 			this.RunSimulationButton = new System.Windows.Forms.ToolStripButton();
 			this.StopSimulationButton = new System.Windows.Forms.ToolStripButton();
 			this.MainPanel = new System.Windows.Forms.Panel();
@@ -79,6 +79,12 @@
 			this.TradeInfoSplitContainer = new System.Windows.Forms.SplitContainer();
 			this.TradeChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.TradeResultGrid = new System.Windows.Forms.DataGridView();
+			this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.equityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.TradesBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.PropertiesPanel = new System.Windows.Forms.Panel();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.StrategiesComboBox = new System.Windows.Forms.ComboBox();
@@ -86,12 +92,6 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.equityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.profitDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.TradesBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.MainMenu.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.traderToolStrip.SuspendLayout();
@@ -103,10 +103,10 @@
 			this.TradeInfoSplitContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).BeginInit();
 			this.PropertiesPanel.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// MainMenu
@@ -239,7 +239,7 @@
 			// AddSymbolMenuItem
 			// 
 			this.AddSymbolMenuItem.Name = "AddSymbolMenuItem";
-			this.AddSymbolMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.AddSymbolMenuItem.Size = new System.Drawing.Size(139, 22);
 			this.AddSymbolMenuItem.Text = "Add Symbol";
 			this.AddSymbolMenuItem.Click += new System.EventHandler(this.AddSymbolMenuItem_Click);
 			// 
@@ -311,7 +311,7 @@
             this.toolStripLabel2,
             this.TickProviderComboBox,
             this.toolStripLabel3,
-            this.MaxTickTextBox,
+            this.MaxTicksTextBox,
             this.RunSimulationButton,
             this.StopSimulationButton});
 			this.traderToolStrip.Location = new System.Drawing.Point(0, 24);
@@ -351,14 +351,14 @@
 			// 
 			this.toolStripLabel3.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
 			this.toolStripLabel3.Name = "toolStripLabel3";
-			this.toolStripLabel3.Size = new System.Drawing.Size(80, 22);
-			this.toolStripLabel3.Text = "Max Records: ";
+			this.toolStripLabel3.Size = new System.Drawing.Size(65, 22);
+			this.toolStripLabel3.Text = "Max Ticks: ";
 			// 
-			// MaxTickTextBox
+			// MaxTicksTextBox
 			// 
-			this.MaxTickTextBox.Name = "MaxTickTextBox";
-			this.MaxTickTextBox.Size = new System.Drawing.Size(100, 25);
-			this.MaxTickTextBox.TextChanged += new System.EventHandler(this.MaxTickTextBox_TextChanged);
+			this.MaxTicksTextBox.Name = "MaxTicksTextBox";
+			this.MaxTicksTextBox.Size = new System.Drawing.Size(100, 25);
+			this.MaxTicksTextBox.TextChanged += new System.EventHandler(this.MaxTickTextBox_TextChanged);
 			// 
 			// RunSimulationButton
 			// 
@@ -490,6 +490,57 @@
 			this.TradeResultGrid.Size = new System.Drawing.Size(923, 307);
 			this.TradeResultGrid.TabIndex = 3;
 			// 
+			// typeDataGridViewTextBoxColumn
+			// 
+			this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
+			this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
+			this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
+			this.typeDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// quantityDataGridViewTextBoxColumn
+			// 
+			this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
+			dataGridViewCellStyle5.Format = "N0";
+			dataGridViewCellStyle5.NullValue = null;
+			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
+			this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
+			this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
+			this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// priceDataGridViewTextBoxColumn
+			// 
+			this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
+			dataGridViewCellStyle6.Format = "C2";
+			dataGridViewCellStyle6.NullValue = null;
+			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
+			this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
+			this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
+			this.priceDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// equityDataGridViewTextBoxColumn
+			// 
+			this.equityDataGridViewTextBoxColumn.DataPropertyName = "Equity";
+			dataGridViewCellStyle7.Format = "C2";
+			dataGridViewCellStyle7.NullValue = null;
+			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle7;
+			this.equityDataGridViewTextBoxColumn.HeaderText = "Equity";
+			this.equityDataGridViewTextBoxColumn.Name = "equityDataGridViewTextBoxColumn";
+			this.equityDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// profitDataGridViewTextBoxColumn
+			// 
+			this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
+			dataGridViewCellStyle8.Format = "C2";
+			dataGridViewCellStyle8.NullValue = null;
+			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle8;
+			this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
+			this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
+			this.profitDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// TradesBindingSource
+			// 
+			this.TradesBindingSource.DataSource = typeof(ElevatedTrader.ITrade);
+			// 
 			// PropertiesPanel
 			// 
 			this.PropertiesPanel.Controls.Add(this.groupBox2);
@@ -580,57 +631,6 @@
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
-			// typeDataGridViewTextBoxColumn
-			// 
-			this.typeDataGridViewTextBoxColumn.DataPropertyName = "Type";
-			this.typeDataGridViewTextBoxColumn.HeaderText = "Type";
-			this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
-			this.typeDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// quantityDataGridViewTextBoxColumn
-			// 
-			this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-			dataGridViewCellStyle5.Format = "N0";
-			dataGridViewCellStyle5.NullValue = null;
-			this.quantityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
-			this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
-			this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
-			this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// priceDataGridViewTextBoxColumn
-			// 
-			this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
-			dataGridViewCellStyle6.Format = "C2";
-			dataGridViewCellStyle6.NullValue = null;
-			this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
-			this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
-			this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
-			this.priceDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// equityDataGridViewTextBoxColumn
-			// 
-			this.equityDataGridViewTextBoxColumn.DataPropertyName = "Equity";
-			dataGridViewCellStyle7.Format = "C2";
-			dataGridViewCellStyle7.NullValue = null;
-			this.equityDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle7;
-			this.equityDataGridViewTextBoxColumn.HeaderText = "Equity";
-			this.equityDataGridViewTextBoxColumn.Name = "equityDataGridViewTextBoxColumn";
-			this.equityDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// profitDataGridViewTextBoxColumn
-			// 
-			this.profitDataGridViewTextBoxColumn.DataPropertyName = "Profit";
-			dataGridViewCellStyle8.Format = "C2";
-			dataGridViewCellStyle8.NullValue = null;
-			this.profitDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle8;
-			this.profitDataGridViewTextBoxColumn.HeaderText = "Profit";
-			this.profitDataGridViewTextBoxColumn.Name = "profitDataGridViewTextBoxColumn";
-			this.profitDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// TradesBindingSource
-			// 
-			this.TradesBindingSource.DataSource = typeof(ElevatedTrader.ITrade);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -659,10 +659,10 @@
 			this.TradeInfoSplitContainer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.TradeChart)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.TradeResultGrid)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).EndInit();
 			this.PropertiesPanel.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.TradesBindingSource)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -701,7 +701,7 @@
 		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
 		private System.Windows.Forms.ToolStripComboBox TickProviderComboBox;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel3;
-		private System.Windows.Forms.ToolStripTextBox MaxTickTextBox;
+		private System.Windows.Forms.ToolStripTextBox MaxTicksTextBox;
 		private System.Windows.Forms.Panel MainPanel;
 		private System.Windows.Forms.Panel ResultsPanel;
 		private System.Windows.Forms.SplitContainer TradeInfoSplitContainer;

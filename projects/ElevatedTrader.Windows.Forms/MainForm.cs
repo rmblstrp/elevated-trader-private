@@ -76,6 +76,22 @@
 			}
 		}
 
+		private string SelectedDataSource
+		{
+			get
+			{
+				return (string)DataSourceComboBox.SelectedItem;
+			}
+		}
+
+		public int MaximumTicks
+		{
+			get
+			{
+				return int.Parse(MaxTicksTextBox.Text);
+			}
+		}
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -95,7 +111,7 @@
 			TickProviderComboBox.Items.AddRange(TickProvider.Providers.ToArray());
 			TickProviderComboBox.SelectedIndex = 0;
 
-			MaxTickTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
+			MaxTicksTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
 		}
 
 		#region -- Strategies --
@@ -312,14 +328,46 @@
 			if (busy) return;
 			busy = true;
 			SetState(ApplicationState.Loading);
-			await Task.Run(() => ExecuteLoadTickData());
+
+			var instrument = Instrument.Get(SelectedSymbol);
+
+			if (!instrument.HasDataSource(SelectedDataSource))
+			{
+				instrument.DataSources.Add(SelectedDataSource, TickDataSource.Create(SelectedDataSource));
+			}
+
+			var source = instrument.DataSources[SelectedDataSource];
+
+			try
+			{
+				await Task.Run(() => ExecuteLoadTickData(source, instrument.Item.Symbol, MaximumTicks));
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Error");
+			}
+
 			SetState(ApplicationState.Idle);
 			busy = false;
 		}
 
-		private void ExecuteLoadTickData()
+		private void ExecuteLoadTickData(ITickDataSource source, string symbol, int ticks)
 		{
+			var tick_count = 0;
 
+			Func<ITick, bool> added = (tick) =>
+			{
+				if (++tick_count % 25000 == 0)
+				{
+					Action<int> update_count = count => { TickCountStatusLabel.Text = count.ToString(); };
+
+					this.Invoke(update_count, tick_count);
+				}
+
+				return busy;
+			};
+
+			source.Load(symbol, ticks, added);
 		}
 
 		private void StopLoadingMenuItem_Click(object sender, EventArgs e)
@@ -602,7 +650,7 @@
 		{
 			try
 			{
-				var value = int.Parse(MaxTickTextBox.Text);
+				var value = int.Parse(MaxTicksTextBox.Text);
 
 				if (value < 0)
 				{
@@ -613,7 +661,7 @@
 			}
 			catch
 			{
-				MaxTickTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
+				MaxTicksTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
 				MessageBox.Show("The maximum tick count may only be values greater than 0");
 			}
 		}

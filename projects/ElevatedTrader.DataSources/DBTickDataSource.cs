@@ -7,6 +7,8 @@ using NHibernate.Criterion;
 using NHibernate.Impl;
 using NHibernate.Loader.Criteria;
 using NHibernate.Persister.Entity;
+using NHibernate.SqlCommand;
+using NHibernate.SqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -39,9 +41,10 @@ namespace ElevatedTrader.DataSources
 			{
 				public Mapping()
 				{
+					Table("SymbolHistory");
 					Id(x => x.Id);
 					Map(x => x.Symbol);
-					Map(x => x.Recorded);
+					//Map(x => x.Recorded);
 					Map(x => x.Type).CustomType<int>();
 					Map(x => x.Json);
 				}
@@ -54,8 +57,6 @@ namespace ElevatedTrader.DataSources
 		private List<ITick> ticks = new List<ITick>(InitialCapacity);
 		private ISessionFactory factory;
 		private long lastId = 0;
-
-		public event EventHandler<ITick> TickAdded;
 
 		public IList<TickDelta> Deltas
 		{
@@ -104,15 +105,32 @@ namespace ElevatedTrader.DataSources
 			throw new NotSupportedException();
 		}
 
-		public void Load(string symbol, int? count = null)
+		public void Load(string symbol, int? count = null, Func<ITick, bool> added = null)
 		{
-			using (var session = factory.OpenStatelessSession())
+			try
+			{
+				InternalLoad(symbol, count, added);
+			}
+			catch (Exception ex)
+			{
+				while (ex.InnerException != null)
+				{
+					ex = ex.InnerException;
+				}
+
+				throw ex;
+			}
+		}
+
+		private void InternalLoad(string symbol, int? count = null, Func<ITick, bool> added = null)
+		{
+			using (var session = factory.OpenSession())
 			{
 				var criteria = session.CreateCriteria<HistoryEntry>()
-					.Add(Expression.Gt("id", lastId))
-					.Add(Expression.Eq("symbol", symbol))
-					.Add(Expression.Eq("type", (int)TradeHistoryType.TimeAndSale))
-					.AddOrder(Order.Asc("id"))
+					.Add(Expression.Gt("Id", lastId))
+					.Add(Expression.Eq("Symbol", symbol))
+					.Add(Expression.Eq("Type", (int)TradeHistoryType.TimeAndSale))
+					.AddOrder(Order.Asc("Id"))
 					;
 
 				if (count.HasValue)
@@ -120,19 +138,26 @@ namespace ElevatedTrader.DataSources
 					criteria.SetMaxResults(count.Value);
 				}
 
-				using (var command = session.Connection.CreateCommand())
-				{
-					command.CommandType = CommandType.Text;
-					command.CommandText = GetGeneratedSql(criteria);
-					command.Parameters.Add(lastId);
-					command.Parameters.Add(symbol);
-					command.Parameters.Add((int)TradeHistoryType.TimeAndSale);
+				var criteriaImpl = (CriteriaImpl)criteria;
+				var sessionImpl = (SessionImpl)criteriaImpl.Session;
+				var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;
+				var implementors = factory.GetImplementors(criteriaImpl.EntityOrClassName);
+				var loader = new CriteriaLoader((IOuterJoinLoadable)factory.GetEntityPersister(implementors[0]), factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
 
+				var sql_command = loader.CreateSqlCommand(loader.Translator.GetQueryParameters(), sessionImpl);
+				var sql = sql_command.Query;
+
+				var command = factory.ConnectionProvider.Driver.GenerateCommand(CommandType.Text, sql, sql_command.ParameterTypes);
+				command.Connection = factory.ConnectionProvider.GetConnection();
+				sql_command.Bind(command, sessionImpl);
+
+				using (command)
+				{
 					using (var reader = command.ExecuteReader())
 					{
 						while (reader.Read())
 						{
-							var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(4));
+							var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(3));
 							lastId = reader.GetInt64(0);
 
 							var tick = new Tick()
@@ -150,9 +175,9 @@ namespace ElevatedTrader.DataSources
 								deltas.Add(tick - ticks[ticks.Count - 2]);
 							}
 
-							if (TickAdded != null)
+							if (added != null && !added(tick))
 							{
-								TickAdded(this, tick);
+								break;
 							}
 						}
 
@@ -162,17 +187,6 @@ namespace ElevatedTrader.DataSources
 
 				session.Close();
 			}
-		}
-
-		private string GetGeneratedSql(ICriteria criteria)
-		{
-			var criteriaImpl = (CriteriaImpl)criteria;
-			var sessionImpl = (SessionImpl)criteriaImpl.Session;
-			var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;
-			var implementors = factory.GetImplementors(criteriaImpl.EntityOrClassName);
-			var loader = new CriteriaLoader((IOuterJoinLoadable)factory.GetEntityPersister(implementors[0]), factory, criteriaImpl, implementors[0], sessionImpl.EnabledFilters);
-
-			return loader.SqlString.ToString();
 		}
 	}
 }

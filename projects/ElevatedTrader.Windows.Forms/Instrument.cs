@@ -27,6 +27,11 @@ namespace ElevatedTrader.Windows.Forms
 			{
 				get { return dataSources; }
 			}
+
+			public bool HasDataSource(string name)
+			{
+				return dataSources.ContainsKey(name);
+			}
 		}
 
 		private const string Filename = "instruments.json";

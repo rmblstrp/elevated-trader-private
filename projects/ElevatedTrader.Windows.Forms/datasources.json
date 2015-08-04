@@ -1,26 +1,10 @@
 ﻿[
 	{
-		"Name": "DemoTickData",
+		"Name": "HistoricalTicks",
 		"Type": "ElevatedTrader.DataSources.DBTickDataSource, ElevatedTrader.DataSources",
 		"Settings": {
-			"DatabaseType": "SqlServer",
-			"ConnectionString": "Server=localhost\\sqlexpress;Initial Catalog=AutomatedTrading;Integrated Security=True"
-		}
-	},
-	{
-		"Name": "LiveTickData",
-		"Type": "ElevatedTrader.DataSources.DBTickDataSource, ElevatedTrader.DataSources",
-		"Settings": {
-			"DatabaseType": "SqlServer",
-			"ConnectionString": "Server=localhost\\sqlexpress;Initial Catalog=AutomatedTradingLive;Integrated Security=True"
-		}
-	},
-	{
-		"Name": "HistoricalTickData",
-		"Type": "ElevatedTrader.DataSources.DBTickDataSource, ElevatedTrader.DataSources",
-		"Settings": {
-			"DatabaseType": "SqlServer",
-			"ConnectionString": "Server=localhost\\sqlexpress;Initial Catalog=DevExperts;Integrated Security=True"
+			"DatabaseType": "Postgres",
+			"ConnectionString": "Server=localhost;Port=5432;Database=devexperts;User Id=trader;Password=development;"
 		}
 	}
 ]

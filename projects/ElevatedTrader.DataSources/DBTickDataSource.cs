@@ -27,7 +27,7 @@ namespace ElevatedTrader.DataSources
 
 		private class HistoryEntry
 		{
-			public virtual long Id { get; set; }
+			public virtual int Id { get; set; }
 
 			public virtual string Symbol { get; set; }
 
@@ -56,7 +56,7 @@ namespace ElevatedTrader.DataSources
 		private List<TickDelta> deltas = new List<TickDelta>(InitialCapacity);
 		private List<ITick> ticks = new List<ITick>(InitialCapacity);
 		private ISessionFactory factory;
-		private long lastId = 0;
+		private int lastId = 0;
 
 		public IList<TickDelta> Deltas
 		{
@@ -66,7 +66,7 @@ namespace ElevatedTrader.DataSources
 		public IList<ITick> Ticks
 		{
 			get { return ticks; }
-		}		
+		}
 
 		public DBTickDataSource()
 		{
@@ -150,35 +150,44 @@ namespace ElevatedTrader.DataSources
 				var command = factory.ConnectionProvider.Driver.GenerateCommand(CommandType.Text, sql, sql_command.ParameterTypes);
 				command.Connection = factory.ConnectionProvider.GetConnection();
 				sql_command.Bind(command, sessionImpl);
+				command.CommandTimeout = 60;
 
 				using (command)
 				{
 					using (var reader = command.ExecuteReader())
 					{
-						while (reader.Read())
+						try
 						{
-							var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(3));
-							lastId = reader.GetInt64(0);
-
-							var tick = new Tick()
+							while (reader.Read())
 							{
-								Time = ts.Time,
-								Price = ts.Price,
-								Bid = ts.BidPrice,
-								Ask = ts.AskPrice
-							};
+								//var ts = JsonConvert.DeserializeObject<TradeHistoryTimeAndSale>(reader.GetString(3));
+								var ts = new TradeHistoryTimeAndSale();
+								lastId = reader.GetInt32(0);
 
-							ticks.Add(tick);
+								var tick = new Tick()
+								{
+									Time = ts.Time,
+									Price = ts.Price,
+									Bid = ts.BidPrice,
+									Ask = ts.AskPrice
+								};
 
-							if (Ticks.Count > 1)
-							{
-								deltas.Add(tick - ticks[ticks.Count - 2]);
+								ticks.Add(tick);
+
+								if (Ticks.Count > 1)
+								{
+									deltas.Add(tick - ticks[ticks.Count - 2]);
+								}
+
+								if (added != null && !added(tick))
+								{
+									break;
+								}
 							}
-
-							if (added != null && !added(tick))
-							{
-								break;
-							}
+						}
+						catch (Exception ex)
+						{
+							throw ex;
 						}
 
 						reader.Close();

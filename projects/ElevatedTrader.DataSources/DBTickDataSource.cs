@@ -53,15 +53,9 @@ namespace ElevatedTrader.DataSources
 
 		const int InitialCapacity = 100000000;
 
-		private List<TickDelta> deltas = new List<TickDelta>(InitialCapacity);
 		private List<ITick> ticks = new List<ITick>(InitialCapacity);
 		private ISessionFactory factory;
 		private int lastId = 0;
-
-		public IList<TickDelta> Deltas
-		{
-			get { return deltas; }
-		}
 
 		public IList<ITick> Ticks
 		{
@@ -75,7 +69,6 @@ namespace ElevatedTrader.DataSources
 		public void Clear()
 		{
 			lastId = 0;
-			deltas.Clear();
 			ticks.Clear();
 		}
 
@@ -173,11 +166,6 @@ namespace ElevatedTrader.DataSources
 								};
 
 								ticks.Add(tick);
-
-								if (Ticks.Count > 1)
-								{
-									deltas.Add(tick - ticks[ticks.Count - 2]);
-								}
 
 								if (added != null && !added(tick))
 								{

@@ -8,11 +8,6 @@ namespace ElevatedTrader
 {
 	public interface ITickDataSource
 	{
-		IList<TickDelta> Deltas
-		{
-			get;
-		}
-
 		IList<ITick> Ticks
 		{
 			get;

@@ -1,10 +1,9 @@
 ﻿[
 	{
 		"Name": "HistoricalTicks",
-		"Type": "ElevatedTrader.DataSources.DBTickDataSource, ElevatedTrader.DataSources",
+		"Type": "ElevatedTrader.DataSources.FileTickDataSource, ElevatedTrader.DataSources",
 		"Settings": {
-			"DatabaseType": "Postgres",
-			"ConnectionString": "Server=localhost;Port=5432;Database=devexperts;User Id=trader;Password=development;"
+			"Path": "c:\\temp\\data"
 		}
 	}
 ]

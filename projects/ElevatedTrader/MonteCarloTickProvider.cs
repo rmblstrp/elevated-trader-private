@@ -11,8 +11,8 @@ namespace ElevatedTrader
 	public class MonteCarloTickProvider : ITickProvider, IDisposable
 	{
 		private double price;
-		private Tick tick = new Tick();
-		private CryptoRandomSource random = new CryptoRandomSource();
+		private readonly Tick tick = new Tick();
+		private readonly CryptoRandomSource random = new CryptoRandomSource();
 		private int index = 0, length = 0, count = 0;
 		private ITickDataSource source;
 
@@ -41,24 +41,36 @@ namespace ElevatedTrader
 
 		protected void RandomTicks()
 		{
-			if (count == length)
+			try
 			{
-				index = random.Next(source.Deltas.Count - 1);
-				length = random.Next((source.Deltas.Count / 10) - 1);
+				if (count == length)
+				{
+					index = random.Next(1, source.Ticks.Count - 2);
+					length = random.Next((source.Ticks.Count / 10) - 2);
 
-				count = 0;
+					count = 0;
+				}				
+
+				var item = (Tick)source.Ticks[index] - (Tick)source.Ticks[index - 1];
+
+				price += item.Price;
+
+				tick.Price = price;
+				tick.Bid = price - item.Bid;
+				tick.Ask = price - item.Ask;
+
+				index = ++index % (source.Ticks.Count - 1) + 1;
+				count++;
+
+				if (index == 0)
+				{
+					throw new IndexOutOfRangeException();
+				}
 			}
-
-			var item = source.Deltas[index];
-
-			price += item.Price;
-
-			tick.Price = price;
-			tick.Bid = price - item.Bid;
-			tick.Ask = price - item.Ask;
-
-			index = ++index % source.Deltas.Count;
-			count++;
+			catch (Exception ex)
+			{
+				throw;
+			}
 		}
 
 		#region IDisposable Support

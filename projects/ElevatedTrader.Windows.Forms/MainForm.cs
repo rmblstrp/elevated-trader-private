@@ -398,14 +398,20 @@
 
 			try
 			{
+				var symbol = SelectedSymbol;
+				var data_source = SelectedDataSource;
+				var provider = TickProviderComboBox.Text;
+				var tick_count = MaximumTicks;
+
 				SimulationProgress.Value = 0;
 				//SimulationProgress.Maximum = settings.GenerateTickData ? settings.TickDataCount : history_list.TickCount;
 				SimulationProgress.Step = ProgressStepValue;
-				SetState(ApplicationState.Running);
+				SimulationProgress.Maximum = tick_count;
 
-				await Task.Run(() => RunSimulation());
-
+				SetState(ApplicationState.Running);				
+				await Task.Run(() => RunSimulation(symbol, data_source, provider, tick_count));
 				SetState(ApplicationState.Idle);
+
 				SimulationProgress.Value = 0;
 
 				trades = new BindingList<ITrade>(strategy.Session.Trades.ToList());
@@ -429,11 +435,11 @@
 			}
 		}
 
-		private void RunSimulation()
+		private void RunSimulation(string symbol, string dataSource, string provider, int tickCount)
 		{
 			var runner = new TradingStrategyRunner();
 
-			var tick_provider = TickProvider.Create(TickProviderComboBox.Text);
+			var tick_provider = TickProvider.Create(provider);
 
 			runner.Tick += (sender, index) =>
 			{
@@ -453,9 +459,9 @@
 				}
 			};
 
-			//tick_provider.DataSource = <ITickDataSource>;
+			tick_provider.DataSource = Instrument.Get(symbol).DataSources[dataSource];
 
-			runner.Run(strategy, tick_provider, ApplicationSettings.MaxTickCount);
+			runner.Run(strategy, tick_provider, tickCount);
 		}
 
 		private void StopSimulationMenuItem_Click(object sender, EventArgs e)

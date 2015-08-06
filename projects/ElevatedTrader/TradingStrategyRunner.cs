@@ -29,7 +29,7 @@ namespace ElevatedTrader
 				{
 					case TickProviderResult.Ticked:
 						strategy.AddTick(ticks.Tick);
-						DoOnTick(count + 1);
+						DoOnTick(++count);
 						break;
 					case TickProviderResult.Done:
 						Stop();

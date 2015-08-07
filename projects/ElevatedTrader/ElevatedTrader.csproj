@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HistoricalTickProvider.cs" />
+    <Compile Include="IMultiSessionAnalyzer.cs" />
+    <Compile Include="ISessionAnalyzer.cs" />
     <Compile Include="ITickDataSource.cs" />
     <Compile Include="ITickProvider.cs" />
     <Compile Include="IQuote.cs" />

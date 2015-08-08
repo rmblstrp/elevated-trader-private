@@ -78,6 +78,7 @@
     <Compile Include="ITradingStrategyRunner.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="MonteCarloTickProvider.cs" />
+    <Compile Include="SessionAnalyzer.cs" />
     <Compile Include="TickDelta.cs" />
     <Compile Include="TickProviderResult.cs" />
     <Compile Include="TradeHistoryOrder.cs" />

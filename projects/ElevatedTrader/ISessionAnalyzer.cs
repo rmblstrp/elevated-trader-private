@@ -8,7 +8,9 @@ namespace ElevatedTrader
 {
 	public interface ISessionAnalyzer
 	{
-		double Equity { get; }
+		IList<double> Equity { get; }
+
+		double ProfitLoss { get; }
 
 		double TotalGain { get; }
 
@@ -33,6 +35,10 @@ namespace ElevatedTrader
 		int LongestStreakDuration { get; }
 
 		int TradeCount { get; }
+
+		int TradeWins { get; }
+
+		int TradeLosses { get; }
 
 		// average $ winners * win % + average $ losers * lose %
 		// (average $ winners * win % + average $ losers * lose %) / -(average $ losers)

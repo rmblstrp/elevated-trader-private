@@ -17,10 +17,12 @@ namespace ElevatedTrader
 
 		void AfterNewPeriod();
 
-		void Clear(int keep = 0);
+		void Clear();
+
+		void FreeResources();
 	}
 
-	public interface IIndicator<T> : ISymbolIndicator where T : TradingStrategySettings, new()
+	public interface ISymbolIndicator<T> : ISymbolIndicator where T : TradingStrategySettings, new()
 	{
 		T Settings { get; set; }
 	}

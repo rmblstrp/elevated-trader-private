@@ -41,7 +41,7 @@ namespace ElevatedTrader
 				if (settings == null) return;
 
 				dynamic obj = value;
-				settings.Capacity = (int)obj.Capacity;				
+				settings.Capacity = (int)obj.Capacity;
 				settings.PeriodValue = (PeriodValueType)obj.PeriodValue;
 				settings.ReversePositions = obj.ReversePositions;
 				settings.PeriodCorrection = obj.PeriodCorrection;
@@ -107,10 +107,21 @@ namespace ElevatedTrader
 
 		protected virtual void OnPeriodTrigger(int size)
 		{
+
 		}
 
 		public virtual void FreeResources()
 		{
+			aggregator.FreeResources(50);
+
+			foreach (var key in indicators.Keys)
+			{
+				var list = indicators[key];
+				for (int index = 0; index < list.Count; index++)
+				{
+					list[index].FreeResources();
+				}
+			}
 		}
 
 		public virtual void Clear()

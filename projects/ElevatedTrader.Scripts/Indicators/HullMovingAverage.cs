@@ -83,12 +83,19 @@ public class HullMovingAverage : ISymbolIndicator
 		Results.Add(new IndicatorResult());
 	}
 
-	public void Clear(int keep = 0)
+	public void Clear()
+	{
+		results.Clear();
+	}
+
+	public void FreeResources()
 	{
 		var list = new List<ISymbolIndicatorResult>();
 
-		for (int index = results.Count - keep - 1; index < results.Count; index++)
+		for (int index = results.Count - 5; index < results.Count; index++)
 		{
+			if (index < 0) continue;
+
 			list.Add(results[index]);
 		}
 

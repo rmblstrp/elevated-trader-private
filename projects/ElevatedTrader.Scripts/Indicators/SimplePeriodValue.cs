@@ -21,7 +21,8 @@ public class SimplePeriodValue : ISymbolIndicator
 		get { return results; }
 	}
 
-	public SimplePeriodValue() : this(512)
+	public SimplePeriodValue()
+		: this(512)
 	{
 	}
 
@@ -35,7 +36,7 @@ public class SimplePeriodValue : ISymbolIndicator
 	{
 		var current = periods.Last();
 		var pv = current.PeriodValue(PeriodValue);
-		
+
 		var result = (IndicatorResult)Results[Results.Count - 1];
 		result.Values.Clear();
 		result.Values.Add(pv);
@@ -65,5 +66,25 @@ public class SimplePeriodValue : ISymbolIndicator
 	public void AfterNewPeriod()
 	{
 		Results.Add(new IndicatorResult());
+	}
+
+	public void Clear()
+	{
+		results.Clear();
+	}
+
+	public void FreeResources()
+	{
+		var list = new List<ISymbolIndicatorResult>();
+
+		for (int index = results.Count - 5; index < results.Count; index++)
+		{
+			if (index < 0) continue;
+
+			list.Add(results[index]);
+		}
+
+		results.Clear();
+		results = list;
 	}
 }

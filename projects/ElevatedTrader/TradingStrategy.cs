@@ -14,7 +14,7 @@ namespace ElevatedTrader
 	{
 		protected ITradingSession session;
 		protected ITradingPeriodAggregator aggregator;
-		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int, IList<IIndicator>>();
+		protected Dictionary<int, IList<ISymbolIndicator>> indicators = new Dictionary<int, IList<ISymbolIndicator>>();
 		protected T settings = new T();
 		protected Dictionary<int, bool> periodTriggered = new Dictionary<int, bool>();
 
@@ -23,7 +23,7 @@ namespace ElevatedTrader
 			get { return aggregator; }
 		}
 
-		public IDictionary<int, IList<IIndicator>> Indicators
+		public IDictionary<int, IList<ISymbolIndicator>> Indicators
 		{
 			get { return indicators; }
 		}
@@ -73,7 +73,7 @@ namespace ElevatedTrader
 			aggregator.BeforeNewPeriod += BeforeNewPeriod;
 		}
 
-		public virtual void AddQuote(IQuote quote)
+		public virtual void AddQuote(ITradeQuote quote)
 		{
 			aggregator.AddQuote(quote);
 		}

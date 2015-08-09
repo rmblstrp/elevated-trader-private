@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface IIndicatorSettings
+	public interface ISymbolIndicatorSettings
 	{
 		object Settings { get; set; }
 	}
 
-	public interface IIndicatorSettings<T> : IIndicatorSettings
+	public interface IIndicatorSettings<T> : ISymbolIndicatorSettings
 	{
 		new T Settings { get; set; }
 	}

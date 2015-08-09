@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class Quote : IQuote
+	public interface ISymbolIndicatorResult
 	{
-		public virtual double Bid
+		TrendDirection Direction
 		{
 			get;
-			set;
 		}
 
-		public virtual double Ask
+		bool Signaled
 		{
 			get;
-			set;
+		}
+
+		IList<double> Values
+		{
+			get;
 		}
 	}
 }

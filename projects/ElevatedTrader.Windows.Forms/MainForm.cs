@@ -18,7 +18,6 @@
 	using Newtonsoft.Json;
 	using System.Windows.Forms.DataVisualization.Charting;
 	using MathNet.Numerics.Distributions;
-	using Microsoft.Framework.Configuration;
 
 	public partial class MainForm : Form
 	{
@@ -44,7 +43,7 @@
 		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
-		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
+		private Dictionary<ISymbolIndicator, Series> indicatorSeries = new Dictionary<ISymbolIndicator, Series>();
 		#endregion
 
 		#region -- Constants --
@@ -612,7 +611,7 @@
 			return item;
 		}
 
-		private DataPoint CreateIndicatorDataPoint(int index, IIndicatorResult result)
+		private DataPoint CreateIndicatorDataPoint(int index, ISymbolIndicatorResult result)
 		{
 			if (result.Values.Count == 0)
 			{

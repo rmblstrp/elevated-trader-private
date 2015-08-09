@@ -26,7 +26,7 @@ namespace ElevatedTrader
 
 		double EfficiencyRatio { get; }
 
-		void AddQuote(IQuote quote);
+		void AddQuote(ITradeQuote quote);
 
 		void AddTick(ITick tick);		
 

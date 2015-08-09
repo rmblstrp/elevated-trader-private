@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class IndicatorResult : IIndicatorResult
+	public class IndicatorResult : ISymbolIndicatorResult
 	{
 		private List<double> values = new List<double>();
 

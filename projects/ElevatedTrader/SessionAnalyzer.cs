@@ -31,8 +31,7 @@ namespace ElevatedTrader
 			get;
 			protected set;
 		}
-
-		public double HighestTradeGain
+public double HighestTradeGain
 		{
 			get;
 			protected set;

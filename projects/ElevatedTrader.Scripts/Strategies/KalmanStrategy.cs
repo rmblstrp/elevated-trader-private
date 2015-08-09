@@ -78,11 +78,11 @@ namespace Kalman
 
 	public class Indicator : IIndicator<Settings>
 	{
-		private List<IIndicatorResult> results;
+		private List<ISymbolIndicatorResult> results;
 		private DiscreteKalmanFilter kalman;
 		private Matrix<double> F, G, Q, H, R;
 
-		public IList<IIndicatorResult> Results
+		public IList<ISymbolIndicatorResult> Results
 		{
 			get { return results; }
 		}
@@ -94,12 +94,12 @@ namespace Kalman
 
 		public Indicator(int capacity)
 		{
-			results = new List<IIndicatorResult>(capacity);
+			results = new List<ISymbolIndicatorResult>(capacity);
 
 			AfterNewPeriod();
 		}
 
-		public IInstrument Symbol
+		public IFinancialInstrument Symbol
 		{
 			get;
 			set;
@@ -293,6 +293,19 @@ namespace Kalman
 		{
 			Results.Add(new IndicatorResult());
 		}
+
+		public void Clear(int keep = 0)
+		{
+			var list = new List<ISymbolIndicatorResult>();
+
+			for (int index = results.Count - keep - 1; index < results.Count; index++)
+			{
+				list.Add(results[index]);
+			}
+
+			results.Clear();
+			results = list;
+		}
 	}
 
 	public class Strategy : TradingStrategy<Settings>
@@ -396,10 +409,10 @@ namespace Kalman
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))
 			{
-				indicators.Add(size, new List<IIndicator>());
+				indicators.Add(size, new List<ISymbolIndicator>());
 			}
 
-			indicators[size].Add(kalman as IIndicator);
+			indicators[size].Add(kalman as ISymbolIndicator);
 		}
 	}
 }

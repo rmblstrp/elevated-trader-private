@@ -124,7 +124,7 @@ namespace Hull
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))
 			{
-				indicators.Add(size, new List<IIndicator>());
+				indicators.Add(size, new List<ISymbolIndicator>());
 			}
 
 			indicators[size].Add(hma);

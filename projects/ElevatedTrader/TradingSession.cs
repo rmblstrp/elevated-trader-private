@@ -17,7 +17,7 @@ namespace ElevatedTrader
 			protected set;
 		}
 
-		public IInstrument Symbol
+		public IFinancialInstrument Symbol
 		{
 			get;
 			set;

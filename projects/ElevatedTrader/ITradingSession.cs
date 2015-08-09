@@ -10,7 +10,7 @@ namespace ElevatedTrader
 	{
 		double Equity { get; }
 
-		IInstrument Symbol { get; set; }
+		IFinancialInstrument Symbol { get; set; }
 
 		int Position { get; }
 

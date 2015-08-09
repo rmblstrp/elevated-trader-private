@@ -18,7 +18,7 @@ namespace ElevatedTrader
 
 		void AddSize(int size, int capacity);
 
-		void AddQuote(IQuote quote);
+		void AddQuote(ITradeQuote quote);
 
 		void AddTick(ITick tick);
 
@@ -27,5 +27,7 @@ namespace ElevatedTrader
 		IDictionary<int, int> Indexes();
 
 		void Clear();
+
+		void FreeResources(int keep = 0);
 	}
 }

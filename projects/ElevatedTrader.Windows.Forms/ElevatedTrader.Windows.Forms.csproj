@@ -93,18 +93,6 @@
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\solutions\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Framework.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\solutions\packages\Microsoft.Framework.Configuration.1.0.0-beta5\lib\net45\Microsoft.Framework.Configuration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Framework.Configuration.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\solutions\packages\Microsoft.Framework.Configuration.Abstractions.1.0.0-beta5\lib\net45\Microsoft.Framework.Configuration.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Framework.Configuration.Json, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\solutions\packages\Microsoft.Framework.Configuration.Json.1.0.0-beta5\lib\net45\Microsoft.Framework.Configuration.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Mono.CSharp">
       <HintPath>..\..\solutions\packages\CS-Script.3.9.10.0\lib\net45\Mono.CSharp.dll</HintPath>

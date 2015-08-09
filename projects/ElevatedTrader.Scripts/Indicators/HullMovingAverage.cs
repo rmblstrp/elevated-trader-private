@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ElevatedTrader;
 
-public class HullMovingAverage : IIndicator
+public class HullMovingAverage : ISymbolIndicator
 {
-	protected List<IIndicatorResult> results;
+	protected List<ISymbolIndicatorResult> results;
 
 	public bool IsStockPriceRelated
 	{
@@ -22,7 +22,7 @@ public class HullMovingAverage : IIndicator
 
 	public PeriodValueType PeriodValue { get; set; }
 
-	public IList<IIndicatorResult> Results
+	public IList<ISymbolIndicatorResult> Results
 	{
 		get { return results; }
 	}
@@ -33,7 +33,7 @@ public class HullMovingAverage : IIndicator
 
 	public HullMovingAverage(int capacity)
 	{
-		results = new List<IIndicatorResult>(capacity);
+		results = new List<ISymbolIndicatorResult>(capacity);
 		AfterNewPeriod();
 	}
 
@@ -81,5 +81,18 @@ public class HullMovingAverage : IIndicator
 	public void AfterNewPeriod()
 	{
 		Results.Add(new IndicatorResult());
+	}
+
+	public void Clear(int keep = 0)
+	{
+		var list = new List<ISymbolIndicatorResult>();
+
+		for (int index = results.Count - keep - 1; index < results.Count; index++)
+		{
+			list.Add(results[index]);
+		}
+
+		results.Clear();
+		results = list;
 	}
 }

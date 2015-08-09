@@ -33,7 +33,7 @@ namespace ElevatedTrader
 			AddNewPeriod(size);
 		}
 
-		public void AddQuote(IQuote quote)
+		public void AddQuote(ITradeQuote quote)
 		{
 			foreach (var item in periods)
 			{
@@ -54,7 +54,7 @@ namespace ElevatedTrader
 				if (period.TickCount == item.Key)
 				{
 					DoBeforeNewPeriod(item.Key);
-					
+
 					AddNewPeriod(item.Key);
 					period.AddTick(tick);
 
@@ -111,6 +111,23 @@ namespace ElevatedTrader
 		{
 			periods.Clear();
 			sizes.Clear();
+		}
+
+		public void FreeResources(int keep = 0)
+		{
+			foreach (var key in periods.Keys)
+			{
+				var list = new List<ITradingPeriod>();
+				var old = periods[key];
+
+				for (int index = old.Count - keep - 1; index < old.Count; index++)
+				{
+					list.Add(old[index]);
+				}
+
+				old.Clear();
+				periods[key] = list;
+			}
 		}
 	}
 }

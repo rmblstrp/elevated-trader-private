@@ -7,18 +7,20 @@ using System.Dynamic;
 
 namespace ElevatedTrader
 {
-	public interface IIndicator
+	public interface ISymbolIndicator
 	{
-		IList<IIndicatorResult> Results { get; }
+		IList<ISymbolIndicatorResult> Results { get; }
 
 		bool IsStockPriceRelated { get; }
 
 		void Calculate(IList<ITradingPeriod> periods);
 
 		void AfterNewPeriod();
+
+		void Clear(int keep = 0);
 	}
 
-	public interface IIndicator<T> : IIndicator where T : TradingStrategySettings, new()
+	public interface IIndicator<T> : ISymbolIndicator where T : TradingStrategySettings, new()
 	{
 		T Settings { get; set; }
 	}

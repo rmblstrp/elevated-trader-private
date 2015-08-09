@@ -117,7 +117,7 @@ namespace ElevatedTrader.DataSources
 
 		private void InternalLoad(string symbol, int? count = null, Func<ITick, bool> added = null)
 		{
-			using (var session = factory.OpenSession())
+			using (var session = this.factory.OpenSession())
 			{
 				var criteria = session.CreateCriteria<HistoryEntry>()
 					.Add(Expression.Gt("Id", lastId))

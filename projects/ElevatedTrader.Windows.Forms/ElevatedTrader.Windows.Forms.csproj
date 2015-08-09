@@ -126,6 +126,18 @@
   <ItemGroup>
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Instrument.cs" />
+    <Compile Include="MultipleSimulations.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MultipleSimulations.Designer.cs">
+      <DependentUpon>MultipleSimulations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SingleSimulation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SingleSimulation.Designer.cs">
+      <DependentUpon>SingleSimulation.cs</DependentUpon>
+    </Compile>
     <Compile Include="TradingStrategyScripts.cs" />
     <Compile Include="TickDataSource.cs" />
     <Compile Include="SolutionSettings.cs" />
@@ -135,6 +147,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ToolstripResources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SingleSimulation.resx">
+      <DependentUpon>SingleSimulation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ToolstripResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ToolstripResources.Designer.cs</LastGenOutput>

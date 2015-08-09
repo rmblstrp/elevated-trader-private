@@ -38,12 +38,6 @@
 
 		private OpenFileDialog openDialog;
 		private SaveFileDialog saveDialog;
-
-		private BindingList<ITrade> trades;
-		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
-		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
-		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
-		private Dictionary<ISymbolIndicator, Series> indicatorSeries = new Dictionary<ISymbolIndicator, Series>();
 		#endregion
 
 		#region -- Constants --
@@ -102,7 +96,12 @@
 			FormClosing += delegate { ApplicationSettings.Save(); };
 
 			MathNet.Numerics.Control.UseMultiThreading();
-			MathNet.Numerics.Control.UseNativeMKL();
+
+			try
+			{
+				MathNet.Numerics.Control.UseNativeMKL();
+			}
+			catch { }
 
 			DataSourceComboBox.Items.AddRange(TickDataSource.Sources.ToArray());
 			DataSourceComboBox.SelectedIndex = 0;
@@ -111,6 +110,8 @@
 			TickProviderComboBox.SelectedIndex = 0;
 
 			MaxTicksTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
+
+			SingleSimulationControl.Tick += StrategyRunnerTick;
 		}
 
 		#region -- Strategies --
@@ -376,94 +377,55 @@
 
 		const int ProgressStepValue = 100000;
 
-		private async void RunSimulationMenuItem_Click(object sender, EventArgs e)
+		private async Task RunSimulation()
 		{
 			if (busy) return;
 			busy = true;
 
-			TradeChart.Series.Clear();
-			periodSeries.Clear();
-			tradeSeries.Clear();
-			indicatorSeries.Clear();
-			tradeBuffer.Clear();
+			strategy.Session.Symbol = Instrument.Get(SelectedSymbol).Item;
+			var data_source = SelectedDataSource;
+			var provider = TickProviderComboBox.Text;
+			var tick_count = MaximumTicks;
+			var tick_provider = TickProvider.Create(provider);
+			tick_provider.DataSource = Instrument.Get(SelectedSymbol).DataSources[data_source];
 
-			if (trades != null)
-			{
-				trades.Clear();
-				TradesBindingSource.DataSource = null;
-			}
+			SimulationProgress.Value = 0;
+			SimulationProgress.Step = ProgressStepValue;
+			SimulationProgress.Maximum = tick_count;
 
-			TradeChart.Visible = false;
+			SetState(ApplicationState.Running);
+			await SingleSimulationControl.RunSimulation(strategy, tick_provider, tick_count);
+			SetState(ApplicationState.Idle);
 
-			try
-			{
-				var symbol = SelectedSymbol;
-				var data_source = SelectedDataSource;
-				var provider = TickProviderComboBox.Text;
-				var tick_count = MaximumTicks;
+			SimulationProgress.Value = 0;
 
-				SimulationProgress.Value = 0;
-				//SimulationProgress.Maximum = settings.GenerateTickData ? settings.TickDataCount : history_list.TickCount;
-				SimulationProgress.Step = ProgressStepValue;
-				SimulationProgress.Maximum = tick_count;
-
-				SetState(ApplicationState.Running);				
-				await Task.Run(() => RunSimulation(symbol, data_source, provider, tick_count));
-				SetState(ApplicationState.Idle);
-
-				SimulationProgress.Value = 0;
-
-				trades = new BindingList<ITrade>(strategy.Session.Trades.ToList());
-				TradesBindingSource.DataSource = trades;
-
-				PopulateTickSeries();
-
-				PopulateIndicatorSeries();
-
-				PopulateTradeSeries();
-			}
-			finally
-			{
-				strategy.Clear();
-
-				GC.Collect();
-				GC.WaitForPendingFinalizers();
-
-				busy = false;
-				TradeChart.Visible = true;
-			}
+			busy = false;
 		}
 
-		private void RunSimulation(string symbol, string dataSource, string provider, int tickCount)
+		private void RunSimulation_Click(object sender, EventArgs e)
 		{
-			var runner = new TradingStrategyRunner();
+			RunSimulation();
+		}
 
-			var tick_provider = TickProvider.Create(provider);
-
-			runner.Tick += (sender, index) =>
+		private void StrategyRunnerTick(object sender, int index)
+		{
+			Action step = () =>
 			{
-				Action step = () =>
-				{
-					SimulationProgress.PerformStep();
-				};
-
-				if ((index + 1) % ProgressStepValue == 0)
-				{
-					this.Invoke(step);
-				}
-
-				if (!busy)
-				{
-					((ITradingStrategyRunner)sender).Stop();
-				}
+				SimulationProgress.PerformStep();
 			};
 
-			tick_provider.DataSource = Instrument.Get(symbol).DataSources[dataSource];
+			if ((index + 1) % ProgressStepValue == 0)
+			{
+				this.Invoke(step);
+			}
 
-			runner.Run(strategy, tick_provider, tickCount);
+			if (!busy)
+			{
+				((ITradingStrategyRunner)sender).Stop();
+			}
 		}
 
-		private void StopSimulationMenuItem_Click(object sender, EventArgs e)
+		private void StopSimulation_Click(object sender, EventArgs e)
 		{
 			busy = false;
 		}
@@ -477,179 +439,6 @@
 		{
 		}
 		#endregion
-
-		#region -- Chart Setup --
-		private void PopulateTradeSeries()
-		{
-			var ts = CreateTradeSeries();
-
-			foreach (var kv in periodSeries)
-			{
-				tradeSeries.Add(kv.Key, ts);
-				TradeChart.Series.Add(ts);
-
-				for (int index = 0; index < strategy.Session.Trades.Count; index++)
-				{
-					tradeSeries[kv.Key].Points.Add(CreateTradeDataPoint(kv.Key, strategy.Session.Trades[index]));
-				}
-			}
-
-			TickCountStatusLabel.Text = strategy.Session.Trades.Count.ToString();
-		}
-
-		private void PopulateIndicatorSeries()
-		{
-			foreach (var size in strategy.Indicators.Keys)
-			{
-				var item = strategy.Indicators[size];
-
-				for (int index = 0; index < item.Count; index++)
-				{
-					var series = CreateIndicatorSeries();
-
-					var indicator = item[index];
-
-					for (int idx = 0; idx < indicator.Results.Count; idx++)
-					{
-						var point = CreateIndicatorDataPoint(idx, indicator.Results[idx]);
-
-						if (point != null)
-						{
-							series.Points.Add(point);
-						}
-					}
-
-					indicatorSeries.Add(indicator, series);
-
-					TradeChart.Series.Add(series);
-				}
-			}
-		}
-
-		private void PopulateTickSeries()
-		{
-			foreach (var size in strategy.Aggregator.Periods.Keys)
-			{
-				var series = CreatePeriodSeries();
-
-				var item = strategy.Aggregator.Periods[size];
-
-				for (var index = 0; index < item.Count; index++)
-				{
-					series.Points.Add(CreatePeriodDataPoint(index, item[index]));
-				}
-
-				periodSeries.Add(size, series);
-
-				TradeChart.Series.Add(series);
-			}
-		}
-
-		private Series CreatePeriodSeries()
-		{
-			var item = new Series()
-			{
-				ChartArea = "TradeChart",
-				ChartType = SeriesChartType.Stock,
-				IsXValueIndexed = false,
-				YValuesPerPoint = 4,
-				Color = Color.DimGray
-			};
-
-			return item;
-		}
-
-		private Series CreateTradeSeries()
-		{
-			var item = new Series()
-			{
-				ChartArea = "TradeChart",
-				ChartType = SeriesChartType.Point,
-				IsXValueIndexed = false,
-				YValuesPerPoint = 1,
-				Color = Color.Gold
-			};
-
-			return item;
-		}
-
-		private Series CreateIndicatorSeries()
-		{
-			var item = new Series()
-			{
-				ChartArea = "TradeChart",
-				ChartType = SeriesChartType.Line,
-				IsXValueIndexed = false,
-				YValuesPerPoint = 1,
-				Palette = ChartColorPalette.Pastel,
-				YAxisType = AxisType.Primary
-			};
-
-			return item;
-		}
-
-		private DataPoint CreatePeriodDataPoint(int index, ITradingPeriod period)
-		{
-			var item = new DataPoint()
-			{
-				XValue = index + 1,
-				YValues = new double[] { period.High, period.Low, period.Open, period.Close }
-			};
-
-			return item;
-		}
-
-		private DataPoint CreateTradeDataPoint(int size, ITrade trade)
-		{
-			var item = new DataPoint()
-			{
-				XValue = trade.Indexes[size] + 1,
-				YValues = new double[] { trade.Price },
-				Color = trade.Type == TradeType.Buy ? Color.LightGreen : Color.LightPink
-			};
-
-			return item;
-		}
-
-		private DataPoint CreateIndicatorDataPoint(int index, ISymbolIndicatorResult result)
-		{
-			if (result.Values.Count == 0)
-			{
-				return null;
-			}
-
-			var item = new DataPoint()
-			{
-				XValue = index + 1,
-				YValues = new double[] { result.Values[0] },
-				Color = result.Direction == TrendDirection.Rising ? Color.LightGreen : Color.LightPink
-			};
-
-			return item;
-		}
-		#endregion
-
-		private void ShowGraphMenuItem_Click(object sender, EventArgs e)
-		{
-			TradeInfoSplitContainer.Panel1Collapsed = !TradeInfoSplitContainer.Panel1Collapsed;
-			SetShowGraphCheckedState();
-		}
-
-		private void SetShowGraphCheckedState()
-		{
-			ShowGraphMenuItem.Checked = !TradeInfoSplitContainer.Panel1Collapsed;
-			ShowGraphMenuItem.CheckState = ShowGraphMenuItem.Checked ? CheckState.Checked : CheckState.Unchecked;
-		}
-
-		private void RunSimulationButton_Click(object sender, EventArgs e)
-		{
-			//
-		}
-
-		private void StopSimulationButton_Click(object sender, EventArgs e)
-		{
-			//
-		}
 
 		private void MaxTickTextBox_TextChanged(object sender, EventArgs e)
 		{
@@ -669,6 +458,6 @@
 				MaxTicksTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
 				MessageBox.Show("The maximum tick count may only be values greater than 0");
 			}
-		}
+		}	
 	}
 }

@@ -49,7 +49,7 @@ namespace ElevatedTrader
 			protected set;
 		}
 
-		public double LargestRunUp
+		public double LargestRunup
 		{
 			get;
 			protected set;
@@ -61,7 +61,7 @@ namespace ElevatedTrader
 			protected set;
 		}
 
-		public int LongestRunUpDuration
+		public int LongestRunupDuration
 		{
 			get;
 			protected set;
@@ -121,6 +121,8 @@ namespace ElevatedTrader
 
 			var trades = session.Trades;
 
+			if (trades.Count == 0) return;
+
 			ProfitLoss = Math.Round(trades.Last().Equity, 2);
 			TotalGain = Math.Round(trades.Sum(x => x.Profit > 0 ? x.Profit : 0), 2);
 			TotalLoss = Math.Round(trades.Sum(x => x.Profit < 0 ? x.Profit : 0), 2);
@@ -149,8 +151,8 @@ namespace ElevatedTrader
 				}
 				else if (trade.Profit < 0)
 				{
-					LargestRunUp = Math.Round(Math.Max(LargestRunUp, runup), 2);
-					LongestRunUpDuration = Math.Max(LongestRunUpDuration, runup_duration);
+					LargestRunup = Math.Round(Math.Max(LargestRunup, runup), 2);
+					LongestRunupDuration = Math.Max(LongestRunupDuration, runup_duration);
 					runup_duration = 0;
 					runup = 0;
 
@@ -161,7 +163,7 @@ namespace ElevatedTrader
 
 			WinRatio = TradeWins / (double)TradeCount;
 			LossRatio = TradeLosses / (double)TradeCount;
-			RiskRewardRatio = (TotalGain / (double)TradeWins) / (TotalLoss / (double)TradeLosses);
+			RiskRewardRatio = (TotalGain / (double)TradeWins) / Math.Abs(TotalLoss / (double)TradeLosses);
 			Expectancy = Math.Round(RiskRewardRatio * WinRatio - LossRatio, 2);
 
 			WinRatio = Math.Round(WinRatio, 2);
@@ -180,8 +182,8 @@ namespace ElevatedTrader
 			MinimumEquity = 0;
 			LargestDrawdown = 0;
 			LongestDrawdownDuration = 0;
-			LargestRunUp = 0;
-			LongestRunUpDuration = 0;
+			LargestRunup = 0;
+			LongestRunupDuration = 0;
 			TradeCount = 0;
 			TradeWins = 0;
 			TradeLosses = 0;

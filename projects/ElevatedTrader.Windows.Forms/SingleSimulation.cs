@@ -68,6 +68,10 @@ namespace ElevatedTrader.Windows.Forms
 
 				analyzer.Analyze(strategy.Session);
 			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 			finally
 			{
 				strategy.Clear();

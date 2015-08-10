@@ -24,11 +24,11 @@ namespace ElevatedTrader
 		// Max value below 0
 		double MinimumEquity { get; }
 
-		double LargestRunUp { get; }
+		double LargestRunup { get; }
 
 		double LargestDrawdown { get; }
 
-		int LongestRunUpDuration { get; }
+		int LongestRunupDuration { get; }
 
 		int LongestDrawdownDuration { get; }		
 

@@ -68,9 +68,9 @@
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
-			this.SingleSimulationControl = new ElevatedTrader.Windows.Forms.SingleSimulation();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.SimulationAnalysis = new System.Windows.Forms.PropertyGrid();
+			this.SingleSimulationControl = new ElevatedTrader.Windows.Forms.SingleSimulation();
 			this.MainMenu.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.traderToolStrip.SuspendLayout();
@@ -448,14 +448,6 @@
 			this.SymbolProperties.TabIndex = 0;
 			this.SymbolProperties.ToolbarVisible = false;
 			// 
-			// SingleSimulationControl
-			// 
-			this.SingleSimulationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.SingleSimulationControl.Location = new System.Drawing.Point(5, 0);
-			this.SingleSimulationControl.Name = "SingleSimulationControl";
-			this.SingleSimulationControl.Size = new System.Drawing.Size(678, 623);
-			this.SingleSimulationControl.TabIndex = 0;
-			// 
 			// groupBox3
 			// 
 			this.groupBox3.BackColor = System.Drawing.SystemColors.MenuBar;
@@ -477,10 +469,18 @@
 			this.SimulationAnalysis.HelpVisible = false;
 			this.SimulationAnalysis.Location = new System.Drawing.Point(6, 19);
 			this.SimulationAnalysis.Name = "SimulationAnalysis";
-			this.SimulationAnalysis.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+			this.SimulationAnalysis.PropertySort = System.Windows.Forms.PropertySort.NoSort;
 			this.SimulationAnalysis.Size = new System.Drawing.Size(231, 603);
 			this.SimulationAnalysis.TabIndex = 0;
 			this.SimulationAnalysis.ToolbarVisible = false;
+			// 
+			// SingleSimulationControl
+			// 
+			this.SingleSimulationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.SingleSimulationControl.Location = new System.Drawing.Point(5, 0);
+			this.SingleSimulationControl.Name = "SingleSimulationControl";
+			this.SingleSimulationControl.Size = new System.Drawing.Size(678, 623);
+			this.SingleSimulationControl.TabIndex = 0;
 			// 
 			// MainForm
 			// 

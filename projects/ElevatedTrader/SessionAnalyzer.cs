@@ -8,12 +8,6 @@ namespace ElevatedTrader
 {
 	public class SessionAnalyzer : ISessionAnalyzer
 	{
-		public IList<double> Equity
-		{
-			get;
-			protected set;
-		}
-
 		public double ProfitLoss
 		{
 			get;
@@ -31,37 +25,25 @@ namespace ElevatedTrader
 			get;
 			protected set;
 		}
-public double HighestTradeGain
+		public double LargestGain
 		{
 			get;
 			protected set;
 		}
 
-		public double HighestTradeLoss
+		public double LargestLoss
 		{
 			get;
 			protected set;
 		}
 
-		public double MaximumGain
+		public double MaximumEquity
 		{
 			get;
 			protected set;
 		}
 
-		public double MaximumLoss
-		{
-			get;
-			protected set;
-		}
-
-		public double LargestDrawdown
-		{
-			get;
-			protected set;
-		}
-
-		public int LongestDrawdownDuration
+		public double MinimumEquity
 		{
 			get;
 			protected set;
@@ -73,7 +55,19 @@ public double HighestTradeGain
 			protected set;
 		}
 
+		public double LargestDrawdown
+		{
+			get;
+			protected set;
+		}
+
 		public int LongestRunUpDuration
+		{
+			get;
+			protected set;
+		}
+
+		public int LongestDrawdownDuration
 		{
 			get;
 			protected set;
@@ -97,15 +91,28 @@ public double HighestTradeGain
 			protected set;
 		}
 
-		public double Expectancy
+		public double WinRatio
 		{
 			get;
 			protected set;
 		}
 
-		public SessionAnalyzer()
+		public double LossRatio
 		{
-			Equity = new List<double>();
+			get;
+			protected set;
+		}
+
+		public double RiskRewardRatio
+		{
+			get;
+			protected set;
+		}
+
+		public double Expectancy
+		{
+			get;
+			protected set;
 		}
 
 		public void Analyze(ITradingSession session)
@@ -114,14 +121,13 @@ public double HighestTradeGain
 
 			var trades = session.Trades;
 
-			Equity = trades.Select(x => x.Equity).ToList();
-			ProfitLoss = trades.Last().Equity;
-			TotalGain = trades.Sum(x => x.Profit > 0 ? x.Profit : 0);
-			TotalLoss = trades.Sum(x => x.Profit < 0 ? x.Profit : 0);
-			HighestTradeGain = trades.Max(x => x.Profit);
-			HighestTradeLoss = trades.Min(x => x.Profit);
-			MaximumGain = trades.Max(x => x.Equity);
-			MaximumLoss = trades.Min(x => x.Equity);
+			ProfitLoss = Math.Round(trades.Last().Equity, 2);
+			TotalGain = Math.Round(trades.Sum(x => x.Profit > 0 ? x.Profit : 0), 2);
+			TotalLoss = Math.Round(trades.Sum(x => x.Profit < 0 ? x.Profit : 0), 2);
+			LargestGain = Math.Round(trades.Max(x => x.Profit), 2);
+			LargestLoss = Math.Round(trades.Min(x => x.Profit), 2);
+			MaximumEquity = Math.Round(trades.Max(x => x.Equity), 2);
+			MinimumEquity = Math.Round(trades.Min(x => x.Equity), 2);
 			TradeCount = trades.Count;
 			TradeWins = trades.Sum(x => x.Profit > 0 ? 1 : 0);
 			TradeLosses = trades.Sum(x => x.Profit < 0 ? 1 : 0);
@@ -133,7 +139,7 @@ public double HighestTradeGain
 			{
 				if (trade.Profit > 0)
 				{
-					LargestDrawdown = Math.Max(LargestDrawdown, drawdown);
+					LargestDrawdown = Math.Round(Math.Min(LargestDrawdown, drawdown), 2);
 					LongestDrawdownDuration = Math.Max(LongestDrawdownDuration, drawdown_duration);
 					drawdown_duration = 0;
 					drawdown = 0;
@@ -143,7 +149,7 @@ public double HighestTradeGain
 				}
 				else if (trade.Profit < 0)
 				{
-					LargestRunUp = Math.Max(LargestRunUp, runup);
+					LargestRunUp = Math.Round(Math.Max(LargestRunUp, runup), 2);
 					LongestRunUpDuration = Math.Max(LongestRunUpDuration, runup_duration);
 					runup_duration = 0;
 					runup = 0;
@@ -153,10 +159,14 @@ public double HighestTradeGain
 				}
 			}
 
-			Expectancy =
-				(TotalGain / TradeWins) * (TradeWins / (double)TradeCount) +
-				(TotalLoss / TradeLosses) * (TradeLosses / (double)TradeCount) /
-				(TradeLosses / (double)TradeCount);
+			WinRatio = TradeWins / (double)TradeCount;
+			LossRatio = TradeLosses / (double)TradeCount;
+			RiskRewardRatio = (TotalGain / (double)TradeWins) / (TotalLoss / (double)TradeLosses);
+			Expectancy = Math.Round(RiskRewardRatio * WinRatio - LossRatio, 2);
+
+			WinRatio = Math.Round(WinRatio, 2);
+			LossRatio = Math.Round(LossRatio, 2);
+			RiskRewardRatio = Math.Round(RiskRewardRatio, 2);
 		}
 
 		protected void Reset()
@@ -164,10 +174,10 @@ public double HighestTradeGain
 			ProfitLoss = 0;
 			TotalGain = 0;
 			TotalLoss = 0;
-			HighestTradeGain = 0;
-			HighestTradeLoss = 0;
-			MaximumGain = 0;
-			MaximumLoss = 0;
+			LargestGain = 0;
+			LargestLoss = 0;
+			MaximumEquity = 0;
+			MinimumEquity = 0;
 			LargestDrawdown = 0;
 			LongestDrawdownDuration = 0;
 			LargestRunUp = 0;

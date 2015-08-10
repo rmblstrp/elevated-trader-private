@@ -397,6 +397,8 @@
 			await SingleSimulationControl.RunSimulation(strategy, tick_provider, tick_count);
 			SetState(ApplicationState.Idle);
 
+			SimulationAnalysis.SelectedObject = SingleSimulationControl.Analyzer;
+
 			SimulationProgress.Value = 0;
 
 			busy = false;

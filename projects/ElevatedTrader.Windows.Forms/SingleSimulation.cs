@@ -18,8 +18,14 @@ namespace ElevatedTrader.Windows.Forms
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
 		private Dictionary<ISymbolIndicator, Series> indicatorSeries = new Dictionary<ISymbolIndicator, Series>();
+		private SessionAnalyzer analyzer = new SessionAnalyzer();
 
 		public event EventHandler<int> Tick;
+
+		public ISessionAnalyzer Analyzer
+		{
+			get { return analyzer; }
+		}
 
 		public SingleSimulation()
 		{
@@ -59,6 +65,8 @@ namespace ElevatedTrader.Windows.Forms
 				PopulateIndicatorSeries(strategy);
 
 				PopulateTradeSeries(strategy);
+
+				analyzer.Analyze(strategy.Session);
 			}
 			finally
 			{

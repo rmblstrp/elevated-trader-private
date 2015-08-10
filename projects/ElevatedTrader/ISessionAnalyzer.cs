@@ -8,37 +8,41 @@ namespace ElevatedTrader
 {
 	public interface ISessionAnalyzer
 	{
-		IList<double> Equity { get; }
-
 		double ProfitLoss { get; }
 
 		double TotalGain { get; }
 
 		double TotalLoss { get; }
 
-		double HighestTradeGain { get; }
+		double LargestGain { get; }
 
-		double HighestTradeLoss { get; }
+		double LargestLoss { get; }
 
 		// Max value above 0
-		double MaximumGain { get; }
+		double MaximumEquity { get; }
 
 		// Max value below 0
-		double MaximumLoss { get; }
-
-		double LargestDrawdown { get; }
-
-		int LongestDrawdownDuration { get; }
+		double MinimumEquity { get; }
 
 		double LargestRunUp { get; }
 
+		double LargestDrawdown { get; }
+
 		int LongestRunUpDuration { get; }
+
+		int LongestDrawdownDuration { get; }		
 
 		int TradeCount { get; }
 
 		int TradeWins { get; }
 
 		int TradeLosses { get; }
+
+		double WinRatio { get; }
+
+		double LossRatio { get; }
+
+		double RiskRewardRatio { get; }
 
 		// average $ winners * win % + average $ losers * lose %
 		// (average $ winners * win % + average $ losers * lose %) / -(average $ losers)

@@ -57,6 +57,14 @@ namespace ElevatedTrader
 			AddTrade(type, Position * -2, aggregator);
 		}
 
+		public void ClosePosition(ITradingPeriodAggregator aggregator)
+		{
+			if (Position == 0) return;
+
+			var type = Position > 0 ? TradeType.Sell : TradeType.Buy;
+			AddTrade(type, Position, aggregator);
+		}
+
 		public void Reset()
 		{
 			Position = 0;

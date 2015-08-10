@@ -61,13 +61,13 @@ namespace ElevatedTrader
 			protected set;
 		}
 
-		public int LongestRunupDuration
+		public int LongestRunup
 		{
 			get;
 			protected set;
 		}
 
-		public int LongestDrawdownDuration
+		public int LongestDrawdown
 		{
 			get;
 			protected set;
@@ -142,7 +142,7 @@ namespace ElevatedTrader
 				if (trade.Profit > 0)
 				{
 					LargestDrawdown = Math.Round(Math.Min(LargestDrawdown, drawdown), 2);
-					LongestDrawdownDuration = Math.Max(LongestDrawdownDuration, drawdown_duration);
+					LongestDrawdown = Math.Max(LongestDrawdown, drawdown_duration);
 					drawdown_duration = 0;
 					drawdown = 0;
 
@@ -152,7 +152,7 @@ namespace ElevatedTrader
 				else if (trade.Profit < 0)
 				{
 					LargestRunup = Math.Round(Math.Max(LargestRunup, runup), 2);
-					LongestRunupDuration = Math.Max(LongestRunupDuration, runup_duration);
+					LongestRunup = Math.Max(LongestRunup, runup_duration);
 					runup_duration = 0;
 					runup = 0;
 
@@ -181,9 +181,9 @@ namespace ElevatedTrader
 			MaximumEquity = 0;
 			MinimumEquity = 0;
 			LargestDrawdown = 0;
-			LongestDrawdownDuration = 0;
+			LongestDrawdown = 0;
 			LargestRunup = 0;
-			LongestRunupDuration = 0;
+			LongestRunup = 0;
 			TradeCount = 0;
 			TradeWins = 0;
 			TradeLosses = 0;

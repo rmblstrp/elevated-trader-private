@@ -28,9 +28,9 @@ namespace ElevatedTrader
 
 		double LargestDrawdown { get; }
 
-		int LongestRunupDuration { get; }
+		int LongestRunup { get; }
 
-		int LongestDrawdownDuration { get; }		
+		int LongestDrawdown { get; }		
 
 		int TradeCount { get; }
 

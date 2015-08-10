@@ -18,12 +18,12 @@ namespace ElevatedTrader
 		protected T settings = new T();
 		protected Dictionary<int, bool> periodTriggered = new Dictionary<int, bool>();
 
-		public ITradingPeriodAggregator Aggregator
+		public virtual ITradingPeriodAggregator Aggregator
 		{
 			get { return aggregator; }
 		}
 
-		public IDictionary<int, IList<ISymbolIndicator>> Indicators
+		public virtual IDictionary<int, IList<ISymbolIndicator>> Indicators
 		{
 			get { return indicators; }
 		}
@@ -144,7 +144,7 @@ namespace ElevatedTrader
 			}
 		}
 
-		protected void Reverse(TradeType type)
+		protected virtual void Reverse(TradeType type)
 		{
 			if (session.Position == 0)
 			{
@@ -161,6 +161,11 @@ namespace ElevatedTrader
 			{
 				session.Reverse(aggregator);
 			}
+		}
+
+		public virtual void End()
+		{
+			session.ClosePosition(aggregator);
 		}
 	}
 }

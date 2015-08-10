@@ -26,6 +26,8 @@ namespace ElevatedTrader
 
 		void FreeResources();		
 
-		void Initialize();	
+		void Initialize();
+
+		void End();
 	}
 }

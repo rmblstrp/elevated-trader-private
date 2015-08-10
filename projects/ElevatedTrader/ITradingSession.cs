@@ -22,6 +22,8 @@ namespace ElevatedTrader
 		void Sell(ITradingPeriodAggregator aggregator, int quantity = 1);
 		void Reverse(ITradingPeriodAggregator aggregator);
 
+		void ClosePosition(ITradingPeriodAggregator aggregator);
+
 		void Reset();
 	}
 }

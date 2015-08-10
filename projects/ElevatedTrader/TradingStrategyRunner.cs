@@ -41,6 +41,8 @@ namespace ElevatedTrader
 					Stop();
 				}
 			}
+
+			strategy.End();
 		}
 
 		public void Stop()

@@ -69,6 +69,8 @@
 			this.SymbolComboBox = new System.Windows.Forms.ComboBox();
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
 			this.SingleSimulationControl = new ElevatedTrader.Windows.Forms.SingleSimulation();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.SimulationAnalysis = new System.Windows.Forms.PropertyGrid();
 			this.MainMenu.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.traderToolStrip.SuspendLayout();
@@ -77,6 +79,7 @@
 			this.PropertiesPanel.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// MainMenu
@@ -185,7 +188,7 @@
 			// 
 			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
 			this.RunSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.RunSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.RunSimulationMenuItem.Text = "Run";
 			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulation_Click);
 			// 
@@ -193,7 +196,7 @@
 			// 
 			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
 			this.StopSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.StopSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.StopSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.StopSimulationMenuItem.Text = "Stop";
 			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulation_Click);
 			// 
@@ -338,6 +341,7 @@
 			// 
 			this.MainPanel.Controls.Add(this.ResultsPanel);
 			this.MainPanel.Controls.Add(this.PropertiesPanel);
+			this.MainPanel.Controls.Add(this.groupBox3);
 			this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.MainPanel.Location = new System.Drawing.Point(0, 49);
 			this.MainPanel.Name = "MainPanel";
@@ -348,10 +352,10 @@
 			// 
 			this.ResultsPanel.Controls.Add(this.SingleSimulationControl);
 			this.ResultsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ResultsPanel.Location = new System.Drawing.Point(0, 0);
+			this.ResultsPanel.Location = new System.Drawing.Point(245, 0);
 			this.ResultsPanel.Name = "ResultsPanel";
 			this.ResultsPanel.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-			this.ResultsPanel.Size = new System.Drawing.Size(933, 628);
+			this.ResultsPanel.Size = new System.Drawing.Size(688, 628);
 			this.ResultsPanel.TabIndex = 4;
 			// 
 			// PropertiesPanel
@@ -449,8 +453,34 @@
 			this.SingleSimulationControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.SingleSimulationControl.Location = new System.Drawing.Point(5, 0);
 			this.SingleSimulationControl.Name = "SingleSimulationControl";
-			this.SingleSimulationControl.Size = new System.Drawing.Size(923, 623);
+			this.SingleSimulationControl.Size = new System.Drawing.Size(678, 623);
 			this.SingleSimulationControl.TabIndex = 0;
+			// 
+			// groupBox3
+			// 
+			this.groupBox3.BackColor = System.Drawing.SystemColors.MenuBar;
+			this.groupBox3.Controls.Add(this.SimulationAnalysis);
+			this.groupBox3.Dock = System.Windows.Forms.DockStyle.Left;
+			this.groupBox3.Location = new System.Drawing.Point(0, 0);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(245, 628);
+			this.groupBox3.TabIndex = 6;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Simulation Analysis";
+			// 
+			// SimulationAnalysis
+			// 
+			this.SimulationAnalysis.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.SimulationAnalysis.CategoryForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+			this.SimulationAnalysis.HelpVisible = false;
+			this.SimulationAnalysis.Location = new System.Drawing.Point(6, 19);
+			this.SimulationAnalysis.Name = "SimulationAnalysis";
+			this.SimulationAnalysis.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+			this.SimulationAnalysis.Size = new System.Drawing.Size(231, 603);
+			this.SimulationAnalysis.TabIndex = 0;
+			this.SimulationAnalysis.ToolbarVisible = false;
 			// 
 			// MainForm
 			// 
@@ -477,6 +507,7 @@
 			this.PropertiesPanel.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
+			this.groupBox3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -525,6 +556,8 @@
 		private System.Windows.Forms.ToolStripButton RunSimulationButton;
 		private System.Windows.Forms.ToolStripButton StopSimulationButton;
 		private SingleSimulation SingleSimulationControl;
+		private System.Windows.Forms.GroupBox groupBox3;
+		public System.Windows.Forms.PropertyGrid SimulationAnalysis;
 	}
 }
 

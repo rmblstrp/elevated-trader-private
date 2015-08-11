@@ -377,7 +377,7 @@
 
 		const int ProgressStepValue = 100000;
 
-		private async Task RunSimulation()
+		private async Task RunSingleSimulation()
 		{
 			if (busy) return;
 			busy = true;
@@ -404,9 +404,9 @@
 			busy = false;
 		}
 
-		private void RunSimulation_Click(object sender, EventArgs e)
+		private async void RunSimulation_Click(object sender, EventArgs e)
 		{
-			RunSimulation();
+			await RunSingleSimulation();
 		}
 
 		private void StrategyRunnerTick(object sender, int index)

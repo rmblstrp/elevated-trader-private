@@ -8,7 +8,7 @@ namespace ElevatedTrader.Windows.Forms
 {
 	public static class TickProvider
 	{
-		private static Dictionary<string, Type> providers = new Dictionary<string, Type>();
+		private static readonly Dictionary<string, Type> providers = new Dictionary<string, Type>();
 
 		public static IList<string> Providers
 		{

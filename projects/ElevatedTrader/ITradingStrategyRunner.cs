@@ -8,6 +8,8 @@ namespace ElevatedTrader
 {
 	public interface ITradingStrategyRunner
 	{
+		bool LimitResources { get; set; }
+
 		event EventHandler<int> Tick;
 
 		void Run(ITradingStrategy strategy, ITickProvider ticks, int? iterations = null);

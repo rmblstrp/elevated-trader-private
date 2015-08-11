@@ -15,7 +15,7 @@ namespace ElevatedTrader.Windows.Forms
 	{
 		public class InstrumentContainer
 		{
-			private Dictionary<string, ITickDataSource> dataSources = new Dictionary<string, ITickDataSource>();
+			private readonly Dictionary<string, ITickDataSource> dataSources = new Dictionary<string, ITickDataSource>();
 
 			public TradeInstrument Item
 			{
@@ -35,7 +35,7 @@ namespace ElevatedTrader.Windows.Forms
 		}
 
 		private const string Filename = "instruments.json";
-		private static Dictionary<string, InstrumentContainer> symbols = new Dictionary<string, InstrumentContainer>();
+		private static readonly Dictionary<string, InstrumentContainer> symbols = new Dictionary<string, InstrumentContainer>();
 
 		public static IList<string> Symbols
 		{

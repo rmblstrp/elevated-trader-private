@@ -10,6 +10,8 @@ namespace ElevatedTrader
 	{
 		protected bool running = false;
 
+		public bool LimitResources { get; set; }
+
 		public event EventHandler<int> Tick;
 
 		public void Run(ITradingStrategy strategy, ITickProvider ticks, int? iterations = null)
@@ -34,6 +36,11 @@ namespace ElevatedTrader
 					case TickProviderResult.Done:
 						Stop();
 						break;
+				}
+
+				if (LimitResources && count % 1000000 == 0)
+				{
+					strategy.FreeResources();
 				}
 
 				if (running && iterations.HasValue && count >= iterations)

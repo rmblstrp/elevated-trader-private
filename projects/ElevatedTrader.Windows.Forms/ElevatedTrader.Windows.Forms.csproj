@@ -126,12 +126,7 @@
   <ItemGroup>
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="Instrument.cs" />
-    <Compile Include="MultipleSimulations.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MultipleSimulations.Designer.cs">
-      <DependentUpon>MultipleSimulations.cs</DependentUpon>
-    </Compile>
+    <Compile Include="ParallelSimulation.cs" />
     <Compile Include="SingleSimulation.cs">
       <SubType>UserControl</SubType>
     </Compile>

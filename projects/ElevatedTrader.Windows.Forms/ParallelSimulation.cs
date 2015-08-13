@@ -8,8 +8,12 @@ namespace ElevatedTrader.Windows.Forms
 {
 	public static class ParallelSimulation
 	{
+		public static bool StopSimulation = false;
+
 		public static async Task<IMultiSessionAnalyzer> RunSimulation(string symbol, string strategy, string dataSource, string provider, object settings, int tickCount, int iterations)
 		{
+			StopSimulation = false;
+
 			var analyzer = new MultiSessionAnalyzer();
 
 			var processes = new List<Task<ISessionAnalyzer>>(4);
@@ -85,6 +89,14 @@ namespace ElevatedTrader.Windows.Forms
 		{
 			var runner = new TradingStrategyRunner();
 			runner.LimitResources = true;
+
+			runner.Tick += delegate
+			{
+				if (StopSimulation)
+				{
+					runner.Stop();
+				}
+			};
 
 			await Task.Run(() => { runner.Run(strategy, provider, tickCount); });
 

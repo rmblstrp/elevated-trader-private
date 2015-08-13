@@ -61,6 +61,7 @@
 			this.StopSimulationButton = new System.Windows.Forms.ToolStripButton();
 			this.MainPanel = new System.Windows.Forms.Panel();
 			this.ResultsPanel = new System.Windows.Forms.Panel();
+			this.SingleSimulationControl = new ElevatedTrader.Windows.Forms.SingleSimulation();
 			this.PropertiesPanel = new System.Windows.Forms.Panel();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.StrategiesComboBox = new System.Windows.Forms.ComboBox();
@@ -70,7 +71,8 @@
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.SimulationAnalysis = new System.Windows.Forms.PropertyGrid();
-			this.SingleSimulationControl = new ElevatedTrader.Windows.Forms.SingleSimulation();
+			this.SimulationIterations = new System.Windows.Forms.ToolStripTextBox();
+			this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
 			this.MainMenu.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.traderToolStrip.SuspendLayout();
@@ -266,8 +268,10 @@
             this.DataSourceComboBox,
             this.toolStripLabel2,
             this.TickProviderComboBox,
-            this.toolStripLabel3,
+            this.toolStripLabel4,
             this.MaxTicksTextBox,
+            this.toolStripLabel3,
+            this.SimulationIterations,
             this.RunSimulationButton,
             this.StopSimulationButton});
 			this.traderToolStrip.Location = new System.Drawing.Point(0, 24);
@@ -307,8 +311,8 @@
 			// 
 			this.toolStripLabel3.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
 			this.toolStripLabel3.Name = "toolStripLabel3";
-			this.toolStripLabel3.Size = new System.Drawing.Size(65, 22);
-			this.toolStripLabel3.Text = "Max Ticks: ";
+			this.toolStripLabel3.Size = new System.Drawing.Size(62, 22);
+			this.toolStripLabel3.Text = "Iterations: ";
 			// 
 			// MaxTicksTextBox
 			// 
@@ -357,6 +361,14 @@
 			this.ResultsPanel.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
 			this.ResultsPanel.Size = new System.Drawing.Size(688, 628);
 			this.ResultsPanel.TabIndex = 4;
+			// 
+			// SingleSimulationControl
+			// 
+			this.SingleSimulationControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.SingleSimulationControl.Location = new System.Drawing.Point(5, 0);
+			this.SingleSimulationControl.Name = "SingleSimulationControl";
+			this.SingleSimulationControl.Size = new System.Drawing.Size(678, 623);
+			this.SingleSimulationControl.TabIndex = 0;
 			// 
 			// PropertiesPanel
 			// 
@@ -474,13 +486,18 @@
 			this.SimulationAnalysis.TabIndex = 0;
 			this.SimulationAnalysis.ToolbarVisible = false;
 			// 
-			// SingleSimulationControl
+			// SimulationIterations
 			// 
-			this.SingleSimulationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.SingleSimulationControl.Location = new System.Drawing.Point(5, 0);
-			this.SingleSimulationControl.Name = "SingleSimulationControl";
-			this.SingleSimulationControl.Size = new System.Drawing.Size(678, 623);
-			this.SingleSimulationControl.TabIndex = 0;
+			this.SimulationIterations.Name = "SimulationIterations";
+			this.SimulationIterations.Size = new System.Drawing.Size(100, 25);
+			this.SimulationIterations.TextChanged += new System.EventHandler(this.SimulationIterations_TextChanged);
+			// 
+			// toolStripLabel4
+			// 
+			this.toolStripLabel4.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
+			this.toolStripLabel4.Name = "toolStripLabel4";
+			this.toolStripLabel4.Size = new System.Drawing.Size(65, 22);
+			this.toolStripLabel4.Text = "Max Ticks: ";
 			// 
 			// MainForm
 			// 
@@ -558,6 +575,8 @@
 		private SingleSimulation SingleSimulationControl;
 		private System.Windows.Forms.GroupBox groupBox3;
 		public System.Windows.Forms.PropertyGrid SimulationAnalysis;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel4;
+		private System.Windows.Forms.ToolStripTextBox SimulationIterations;
 	}
 }
 

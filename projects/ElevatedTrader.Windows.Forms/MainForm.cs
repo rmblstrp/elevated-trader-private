@@ -460,6 +460,11 @@
 				MaxTicksTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
 				MessageBox.Show("The maximum tick count may only be values greater than 0");
 			}
+		}
+
+		private void SimulationIterations_TextChanged(object sender, EventArgs e)
+		{
+
 		}	
 	}
 }

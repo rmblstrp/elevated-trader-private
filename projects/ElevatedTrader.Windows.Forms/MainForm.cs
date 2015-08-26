@@ -110,8 +110,12 @@
 			TickProviderComboBox.SelectedIndex = 0;
 
 			MaxTicksTextBox.Text = ApplicationSettings.MaxTickCount.ToString();
+			SimulationIterations.Text = ApplicationSettings.SimulationIterations.ToString();
 
 			SingleSimulationControl.Tick += StrategyRunnerTick;
+
+			ParallelSimulation.Tick += ParallelSimulationTick;
+			ParallelSimulation.SimulationComplete += ParallelSimulationComplete;
 		}
 
 		#region -- Strategies --
@@ -404,6 +408,31 @@
 			busy = false;
 		}
 
+		private async Task RunParallelSimulation()
+		{
+			if (busy) return;
+			busy = true;
+
+			var symbol = Instrument.Get(SelectedSymbol).Item.Symbol;
+			var strategy = SelectedStrategy;
+			var data_source = SelectedDataSource;
+			var provider = TickProviderComboBox.Text;
+			var tick_count = MaximumTicks;
+
+			simulationTicks = 0;
+			SimulationProgress.Value = 0;
+			SimulationProgress.Step = 1;
+			SimulationProgress.Maximum = ApplicationSettings.SimulationIterations;
+
+			SetState(ApplicationState.Running);
+			SimulationAnalysis.SelectedObject = await ParallelSimulation.RunSimulation(symbol, strategy, data_source, provider, StrategySettings.SelectedObject, tick_count, ApplicationSettings.SimulationIterations);
+			SetState(ApplicationState.Idle);
+
+			SimulationProgress.Value = 0;
+
+			busy = false;
+		}
+
 		private async void RunSimulation_Click(object sender, EventArgs e)
 		{
 			await RunSingleSimulation();
@@ -425,6 +454,36 @@
 			{
 				((ITradingStrategyRunner)sender).Stop();
 			}
+		}
+
+		private int simulationTicks = 0;
+
+		private void ParallelSimulationTick()
+		{
+			Action step = () =>
+			{
+				TickCountStatusLabel.Text = simulationTicks.ToString();
+			};
+
+			if (simulationTicks++ % ProgressStepValue == 0)
+			{
+				this.Invoke(step);
+			}
+
+			if (!busy)
+			{
+				ParallelSimulation.StopSimulation = true;
+			}
+		}
+
+		private void ParallelSimulationComplete()
+		{
+			Action step = () =>
+			{
+				SimulationProgress.PerformStep();
+			};
+
+			this.Invoke(step);
 		}
 
 		private void StopSimulation_Click(object sender, EventArgs e)
@@ -464,7 +523,22 @@
 
 		private void SimulationIterations_TextChanged(object sender, EventArgs e)
 		{
+			try
+			{
+				var value = int.Parse(SimulationIterations.Text);
 
+				if (value < 1)
+				{
+					throw new ArgumentOutOfRangeException();
+				}
+
+				ApplicationSettings.SimulationIterations = value;
+			}
+			catch
+			{
+				SimulationIterations.Text = ApplicationSettings.MaxTickCount.ToString();
+				MessageBox.Show("The maximum tick count may only be values greater than 0");
+			}
 		}	
 	}
 }

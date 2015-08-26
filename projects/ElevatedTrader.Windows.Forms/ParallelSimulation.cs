@@ -10,6 +10,9 @@ namespace ElevatedTrader.Windows.Forms
 	{
 		public static bool StopSimulation = false;
 
+		public static event Action Tick;
+		public static event Action SimulationComplete;
+
 		public static async Task<IMultiSessionAnalyzer> RunSimulation(string symbol, string strategy, string dataSource, string provider, object settings, int tickCount, int iterations)
 		{
 			StopSimulation = false;
@@ -30,6 +33,8 @@ namespace ElevatedTrader.Windows.Forms
 				while (count < iterations)
 				{
 					var task = await Task.WhenAny(processes);
+
+					DoSimulationComplete();
 
 					var index = processes.IndexOf(task);
 
@@ -96,6 +101,8 @@ namespace ElevatedTrader.Windows.Forms
 				{
 					runner.Stop();
 				}
+
+				DoTick();
 			};
 
 			await Task.Run(() => { runner.Run(strategy, provider, tickCount); });
@@ -105,6 +112,24 @@ namespace ElevatedTrader.Windows.Forms
 			analyzer.Analyze(strategy.Session);
 
 			return analyzer;
+		}
+
+		private static readonly object lockTick = new object();
+
+		private static void DoTick()
+		{
+			if (Tick != null)
+			{
+				lock (lockTick) { Tick(); }
+			}
+		}
+
+		private static void DoSimulationComplete()
+		{
+			if (SimulationComplete != null)
+			{
+				SimulationComplete();
+			}
 		}
 	}
 }

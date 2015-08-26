@@ -16,10 +16,18 @@ namespace ElevatedTrader.Windows.Forms
 
 		private class Settings
 		{
+			private int simulationIterations = 1;
+
 			public int MaxTickCount
 			{
 				get;
 				set;
+			}
+
+			public int SimulationIterations
+			{
+				get { return simulationIterations; }
+				set { simulationIterations = value; }
 			}
 		}
 
@@ -33,6 +41,12 @@ namespace ElevatedTrader.Windows.Forms
 			{
 				settings.MaxTickCount = value;
 			}
+		}
+
+		public static int SimulationIterations
+		{
+			get { return settings.SimulationIterations; }
+			set { settings.SimulationIterations = value; }
 		}
 
 		static ApplicationSettings()

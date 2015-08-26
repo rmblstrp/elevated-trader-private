@@ -120,6 +120,8 @@ namespace ElevatedTrader
 				var list = new List<ITradingPeriod>();
 				var old = periods[key];
 
+				if (old.Count < keep) continue;
+
 				for (int index = old.Count - keep - 1; index < old.Count; index++)
 				{
 					list.Add(old[index]);

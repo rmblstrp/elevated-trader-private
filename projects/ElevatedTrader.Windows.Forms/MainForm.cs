@@ -435,7 +435,11 @@
 
 		private async void RunSimulation_Click(object sender, EventArgs e)
 		{
-			await RunSingleSimulation();
+			if (ApplicationSettings.SimulationIterations == 1)
+			{
+				await RunSingleSimulation();
+			}
+			else await RunParallelSimulation();
 		}
 
 		private void StrategyRunnerTick(object sender, int index)
@@ -465,10 +469,12 @@
 				TickCountStatusLabel.Text = simulationTicks.ToString();
 			};
 
-			if (simulationTicks++ % ProgressStepValue == 0)
+			if (simulationTicks % ProgressStepValue == 0)
 			{
 				this.Invoke(step);
 			}
+
+			simulationTicks++;
 
 			if (!busy)
 			{

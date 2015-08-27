@@ -76,6 +76,8 @@ namespace ElevatedTrader.Windows.Forms
 
 		public static void Load()
 		{
+			strategies.Clear();
+
 			var indicator_files = Directory.EnumerateFiles(IndicatorsPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
 			var strategy_files = Directory.EnumerateFiles(StrategiesPath, ScriptsFilter, SearchOption.TopDirectoryOnly);
 			var files = indicator_files.Union(strategy_files).ToArray();

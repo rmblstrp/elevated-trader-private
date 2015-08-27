@@ -8,74 +8,149 @@ namespace ElevatedTrader
 {
 	public class MultiSessionAnalyzer : IMultiSessionAnalyzer
 	{
-		public double AverageEquity
+		private int sessionAnalysisCount;
+
+		public double AverageProfitLoss
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
 		public double AverageTotalGain
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
 		public double AverageTotalLoss
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
-		public double AverageHighestTradeGain
+		public double AverageLargestGain
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
-		public double AverageHighestTradeLoss
+		public double AverageLargestLoss
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
 		public double AverageMaximumGain
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
 		public double AverageMaximumLoss
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
 		public double AverageLargestDrawdown
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
-		public double AverageLongestDrawdownDuration
+		public double AverageLongestDrawdown
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
-		public double AverageLargestStreak
+		public double AverageLargestRunup
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
-		public double AverageLongestStreakDuration
+		public double AverageLongestRunup
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
 		public double AverageTradeCount
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
+		}
+
+		public double AverageTradeProfitLoss
+		{
+			get;
+			protected set;
+		}
+
+		public double AverageWinRatio
+		{
+			get;
+			protected set;
+		}
+
+		public double AverageLossRatio
+		{
+			get;
+			protected set;
+		}
+
+		public double AverageRiskRewardRatio
+		{
+			get;
+			protected set;
 		}
 
 		public double AverageExpectancy
 		{
-			get { throw new NotImplementedException(); }
+			get;
+			protected set;
 		}
 
 		public void Analyze(ISessionAnalyzer analyzer)
 		{
-			throw new NotImplementedException();
+			sessionAnalysisCount++;
+
+			var divisor = sessionAnalysisCount == 1 ? 1 : 2;
+
+			AverageProfitLoss = Math.Round((AverageProfitLoss + analyzer.ProfitLoss) / divisor, 2);
+
+			AverageTotalGain = Math.Round((AverageTotalGain + analyzer.TotalGain) / divisor, 2);
+
+			AverageTotalLoss = Math.Round((AverageTotalLoss + analyzer.TotalLoss) / divisor, 2);
+
+			AverageLargestGain = Math.Round((AverageLargestGain + analyzer.LargestGain) / divisor, 2);
+
+			AverageLargestLoss = Math.Round((AverageLargestLoss + analyzer.LargestLoss) / divisor, 2);
+
+			AverageMaximumGain = Math.Round((AverageMaximumGain + analyzer.MaximumEquity) / divisor, 2);
+
+			AverageMaximumLoss = Math.Round((AverageMaximumLoss + analyzer.MinimumEquity) / divisor, 2);
+
+			AverageLargestDrawdown = Math.Round((AverageLargestDrawdown + analyzer.LargestDrawdown) / divisor, 2);
+
+			AverageLongestDrawdown = Math.Round((AverageLongestDrawdown + analyzer.LongestDrawdown) / divisor, 2);
+
+			AverageLargestRunup = Math.Round((AverageLargestRunup + analyzer.LargestRunup) / divisor, 2);
+
+			AverageLongestRunup = Math.Round((AverageLongestRunup + analyzer.LongestRunup) / divisor, 2);
+
+			AverageTradeCount = Math.Round((AverageTradeCount + analyzer.TradeCount) / divisor, 2);
+
+			AverageTradeProfitLoss = Math.Round((AverageTradeProfitLoss + analyzer.TradeProfitLoss) / divisor, 2);
+
+			AverageWinRatio = Math.Round((AverageWinRatio + analyzer.WinRatio) / divisor, 2);
+
+			AverageLossRatio = Math.Round((AverageLossRatio + analyzer.LossRatio) / divisor, 2);
+
+			AverageRiskRewardRatio = Math.Round((AverageRiskRewardRatio + analyzer.RiskRewardRatio) / divisor, 2);
+
+			AverageExpectancy = Math.Round((AverageExpectancy + analyzer.Expectancy) / divisor, 2);
 		}
 	}
 }

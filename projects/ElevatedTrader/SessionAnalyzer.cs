@@ -91,6 +91,11 @@ namespace ElevatedTrader
 			protected set;
 		}
 
+		public double TradeProfitLoss
+		{
+			get { return ProfitLoss / TradeCount; }
+		}
+
 		public double WinRatio
 		{
 			get;

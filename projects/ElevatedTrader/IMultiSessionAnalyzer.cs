@@ -8,15 +8,15 @@ namespace ElevatedTrader
 {
 	public interface IMultiSessionAnalyzer
 	{
-		double AverageEquity { get; }
+		double AverageProfitLoss { get; }
 
 		double AverageTotalGain { get; }
 
 		double AverageTotalLoss { get; }
 
-		double AverageHighestTradeGain { get; }
+		double AverageLargestGain { get; }
 
-		double AverageHighestTradeLoss { get; }
+		double AverageLargestLoss { get; }
 
 		double AverageMaximumGain { get; }
 
@@ -24,16 +24,22 @@ namespace ElevatedTrader
 
 		double AverageLargestDrawdown { get; }
 
-		double AverageLongestDrawdownDuration { get; }
+		double AverageLongestDrawdown { get; }
 
-		double AverageLargestStreak { get; }
+		double AverageLargestRunup { get; }
 
-		double AverageLongestStreakDuration { get; }
+		double AverageLongestRunup { get; }
 
 		double AverageTradeCount { get; }
 
-		// average $ winners * win % + average $ losers * lose %
-		// (average $ winners * win % + average $ losers * lose %) / -(average $ losers)
+		double AverageTradeProfitLoss { get; }
+
+		double AverageWinRatio { get; }
+
+		double AverageLossRatio { get; }
+
+		double AverageRiskRewardRatio { get; }
+		
 		double AverageExpectancy { get; }
 
 		void Analyze(ISessionAnalyzer analyzer);

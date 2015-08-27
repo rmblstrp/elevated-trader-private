@@ -115,16 +115,20 @@ namespace ElevatedTrader
 
 		public void FreeResources(int keep = 0)
 		{
-			foreach (var key in periods.Keys)
+			var key_list = periods.Keys.ToList();
+
+			for (int index = 0; index < periods.Count; index++)
 			{
+				var key = key_list[index];
+
 				var list = new List<ITradingPeriod>();
 				var old = periods[key];
 
 				if (old.Count < keep) continue;
 
-				for (int index = old.Count - keep - 1; index < old.Count; index++)
+				for (int idx = old.Count - keep - 1; idx < old.Count; idx++)
 				{
-					list.Add(old[index]);
+					list.Add(old[idx]);
 				}
 
 				old.Clear();

@@ -41,7 +41,7 @@ namespace ElevatedTrader.Windows.Forms
 
 					var index = processes.IndexOf(task);
 
-					//analyzer.Analyze(task.Result);
+					analyzer.Analyze(task.Result);
 
 					completed++;
 

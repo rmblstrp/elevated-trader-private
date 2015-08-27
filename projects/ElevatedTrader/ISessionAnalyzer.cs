@@ -38,14 +38,14 @@ namespace ElevatedTrader
 
 		int TradeLosses { get; }
 
+		double TradeProfitLoss { get; }
+
 		double WinRatio { get; }
 
 		double LossRatio { get; }
 
 		double RiskRewardRatio { get; }
 
-		// average $ winners * win % + average $ losers * lose %
-		// (average $ winners * win % + average $ losers * lose %) / -(average $ losers)
 		double Expectancy { get; }
 
 		void Analyze(ITradingSession session);

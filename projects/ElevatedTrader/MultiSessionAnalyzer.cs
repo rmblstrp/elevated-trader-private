@@ -10,6 +10,11 @@ namespace ElevatedTrader
 	{
 		private int sessionAnalysisCount;
 
+		public int SessionCount
+		{
+			get { return sessionAnalysisCount; }
+		}
+
 		public double AverageProfitLoss
 		{
 			get;

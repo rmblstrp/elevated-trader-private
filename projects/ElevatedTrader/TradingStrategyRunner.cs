@@ -38,9 +38,12 @@ namespace ElevatedTrader
 						break;
 				}
 
-				if (LimitResources && count % 1000000 == 0)
+				if (LimitResources && count % 5000000 == 0)
 				{
 					strategy.FreeResources();
+
+					//GC.Collect();
+					//GC.WaitForPendingFinalizers();
 				}
 
 				if (running && iterations.HasValue && count >= iterations)

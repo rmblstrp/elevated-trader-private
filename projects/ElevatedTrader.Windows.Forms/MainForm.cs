@@ -38,18 +38,22 @@
 
 		private OpenFileDialog openDialog;
 		private SaveFileDialog saveDialog;
+		private SaveFileDialog resultsDialog;
 		#endregion
 
 		#region -- Constants --
-		const string SymbolsPath = @"symbols\";
-
-		const string SolutionsPath = @"solutions\";
+		const string SymbolsPath = @"\symbols\";
+		const string SolutionsPath = @"\solutions\";
+		const string ResultsPath = @"\results\";
 
 		const string SymbolsExtension = ".json";
 		const string SymbolsFilter = "*" + SymbolsExtension;
 
 		const string SolutionExtension = ".json";
 		const string SolutionFilter = "JSON Solution|*" + SolutionExtension;
+
+		const string ResultsExtension = ".json";
+		const string ResultsFilter = "JSON Solution|*" + ResultsExtension;
 		#endregion
 
 
@@ -225,6 +229,14 @@
 				Filter = SolutionFilter,
 				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + SolutionsPath
 			};
+
+			resultsDialog = new SaveFileDialog()
+			{
+				DefaultExt = ResultsExtension,
+				FileName = string.Empty,
+				Filter = ResultsFilter,
+				InitialDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + ResultsPath
+			};
 		}
 
 		private void AddSymbolMenuItem_Click(object sender, EventArgs e)
@@ -280,6 +292,13 @@
 			File.WriteAllText(filename, JsonConvert.SerializeObject(solution));
 		}
 
+		private void SaveResults()
+		{
+			if (resultsDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+			File.WriteAllText(resultsDialog.FileName, JsonConvert.SerializeObject(SimulationAnalysis.SelectedObject));
+		}
+
 		private void SetTitle(string solution)
 		{
 			Text = string.Format("Elevated Trader ({0})", solution);
@@ -302,9 +321,9 @@
 
 			var obj = JsonConvert.DeserializeObject<SolutionSettings>(File.ReadAllText(filename));
 
-			var strategyIndex = StrategiesComboBox.Items.IndexOf(obj.Strategy);
+			var strategy_index = StrategiesComboBox.Items.IndexOf(obj.Strategy);
 
-			if (strategyIndex < 0)
+			if (strategy_index < 0)
 			{
 				MessageBox.Show("The selected strategy is not currently available");
 				return;
@@ -314,7 +333,7 @@
 
 			SetSymbol(obj.Symbol);
 
-			StrategiesComboBox.SelectedIndex = strategyIndex;
+			StrategiesComboBox.SelectedIndex = strategy_index;
 
 			strategy.Settings = JsonConvert.DeserializeObject(obj.Settings, strategy.SettingsType);
 			StrategySettings.SelectedObject = strategy.Settings;
@@ -468,7 +487,7 @@
 			}
 		}
 
-		private int simulationTicks = 0;
+		private long simulationTicks = 0;
 
 		private void ParallelSimulationTick()
 		{
@@ -490,14 +509,15 @@
 			}
 		}
 
-		private void ParallelSimulationComplete()
+		private void ParallelSimulationComplete(IMultiSessionAnalyzer analyzer)
 		{
-			Action step = () =>
+			Action<IMultiSessionAnalyzer> step = (results) =>
 			{
+				SimulationAnalysis.SelectedObject = results;
 				SimulationProgress.PerformStep();
 			};
 
-			this.Invoke(step);
+			this.Invoke(step, analyzer);
 		}
 
 		private void StopSimulation_Click(object sender, EventArgs e)
@@ -553,6 +573,11 @@
 				SimulationIterations.Text = ApplicationSettings.MaxTickCount.ToString();
 				MessageBox.Show("The maximum tick count may only be values greater than 0");
 			}
+		}
+
+		private void SaveResultsMenuItem_Click(object sender, EventArgs e)
+		{
+			SaveResults();
 		}	
 	}
 }

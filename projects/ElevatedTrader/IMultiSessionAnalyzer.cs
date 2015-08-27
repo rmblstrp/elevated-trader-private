@@ -8,6 +8,8 @@ namespace ElevatedTrader
 {
 	public interface IMultiSessionAnalyzer
 	{
+		int SessionCount { get; }
+
 		double AverageProfitLoss { get; }
 
 		double AverageTotalGain { get; }

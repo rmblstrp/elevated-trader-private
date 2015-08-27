@@ -73,6 +73,8 @@
 			this.SymbolProperties = new System.Windows.Forms.PropertyGrid();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.SimulationAnalysis = new System.Windows.Forms.PropertyGrid();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.SaveResultsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MainMenu.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.traderToolStrip.SuspendLayout();
@@ -181,7 +183,9 @@
 			// 
 			this.SimulationMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RunSimulationMenuItem,
-            this.StopSimulationMenuItem});
+            this.StopSimulationMenuItem,
+            this.toolStripSeparator2,
+            this.SaveResultsMenuItem});
 			this.SimulationMenuItem.Name = "SimulationMenuItem";
 			this.SimulationMenuItem.Size = new System.Drawing.Size(76, 20);
 			this.SimulationMenuItem.Text = "Simulation";
@@ -190,7 +194,7 @@
 			// 
 			this.RunSimulationMenuItem.Name = "RunSimulationMenuItem";
 			this.RunSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.RunSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.RunSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.RunSimulationMenuItem.Text = "Run";
 			this.RunSimulationMenuItem.Click += new System.EventHandler(this.RunSimulation_Click);
 			// 
@@ -198,7 +202,7 @@
 			// 
 			this.StopSimulationMenuItem.Name = "StopSimulationMenuItem";
 			this.StopSimulationMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.StopSimulationMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.StopSimulationMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.StopSimulationMenuItem.Text = "Stop";
 			this.StopSimulationMenuItem.Click += new System.EventHandler(this.StopSimulation_Click);
 			// 
@@ -499,6 +503,18 @@
 			this.SimulationAnalysis.TabIndex = 0;
 			this.SimulationAnalysis.ToolbarVisible = false;
 			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+			// 
+			// SaveResultsMenuItem
+			// 
+			this.SaveResultsMenuItem.Name = "SaveResultsMenuItem";
+			this.SaveResultsMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.SaveResultsMenuItem.Text = "Save Results";
+			this.SaveResultsMenuItem.Click += new System.EventHandler(this.SaveResultsMenuItem_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -577,6 +593,8 @@
 		public System.Windows.Forms.PropertyGrid SimulationAnalysis;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel4;
 		private System.Windows.Forms.ToolStripTextBox SimulationIterations;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripMenuItem SaveResultsMenuItem;
 	}
 }
 

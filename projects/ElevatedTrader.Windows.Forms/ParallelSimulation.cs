@@ -11,7 +11,7 @@ namespace ElevatedTrader.Windows.Forms
 		public static bool StopSimulation = false;
 
 		public static event Action Tick;
-		public static event Action SimulationComplete;
+		public static event Action<IMultiSessionAnalyzer> SimulationComplete;
 
 		public static async Task<IMultiSessionAnalyzer> RunSimulation(string symbol, string strategy, string dataSource, string provider, object settings, int tickCount, int iterations)
 		{
@@ -35,15 +35,15 @@ namespace ElevatedTrader.Windows.Forms
 			{
 				while (completed < iterations)
 				{
-					var task = await Task.WhenAny(processes);
-
-					DoSimulationComplete();
+					var task = await Task.WhenAny(processes);					
 
 					var index = processes.IndexOf(task);
 
 					analyzer.Analyze(task.Result);
 
 					completed++;
+
+					DoSimulationComplete(analyzer);
 
 					if (count < iterations)
 					{
@@ -140,11 +140,11 @@ namespace ElevatedTrader.Windows.Forms
 			}
 		}
 
-		private static void DoSimulationComplete()
+		private static void DoSimulationComplete(IMultiSessionAnalyzer analyzer)
 		{
 			if (SimulationComplete != null)
 			{
-				SimulationComplete();
+				SimulationComplete(analyzer);
 			}
 		}
 	}

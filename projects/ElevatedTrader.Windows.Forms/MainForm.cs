@@ -428,6 +428,8 @@
 			SimulationAnalysis.SelectedObject = await ParallelSimulation.RunSimulation(symbol, strategy, data_source, provider, StrategySettings.SelectedObject, tick_count, ApplicationSettings.SimulationIterations);
 			SetState(ApplicationState.Idle);
 
+			TickCountStatusLabel.Text = simulationTicks.ToString();
+
 			SimulationProgress.Value = 0;
 
 			busy = false;
@@ -435,11 +437,17 @@
 
 		private async void RunSimulation_Click(object sender, EventArgs e)
 		{
+			RunSimulationButton.Visible = false;
+			StopSimulationButton.Visible = true;
+
 			if (ApplicationSettings.SimulationIterations == 1)
 			{
 				await RunSingleSimulation();
 			}
 			else await RunParallelSimulation();
+
+			RunSimulationButton.Visible = true;
+			StopSimulationButton.Visible = false;
 		}
 
 		private void StrategyRunnerTick(object sender, int index)

@@ -23,14 +23,17 @@ namespace ElevatedTrader.Windows.Forms
 
 			for (int index = 0; index < Math.Min(4, iterations); index++)
 			{
-				processes.Add(Run(symbol, strategy, dataSource, provider, settings, tickCount));
+				var task = Run(symbol, strategy, dataSource, provider, settings, tickCount);
+				
+				processes.Add(task);
 			}
 
-			var count = processes.Count - 1;
+			var count = processes.Count;
+			var completed = 0;
 
 			try
 			{
-				while (count < iterations)
+				while (completed < iterations)
 				{
 					var task = await Task.WhenAny(processes);
 
@@ -38,13 +41,19 @@ namespace ElevatedTrader.Windows.Forms
 
 					var index = processes.IndexOf(task);
 
-					analyzer.Analyze(task.Result);
+					//analyzer.Analyze(task.Result);
 
-					count++;
+					completed++;
 
 					if (count < iterations)
 					{
 						processes[index] = Run(symbol, strategy, dataSource, provider, settings, tickCount);
+
+						count++;
+					}
+					else
+					{
+						processes.Remove(task);
 					}
 				}				
 			}
@@ -105,7 +114,14 @@ namespace ElevatedTrader.Windows.Forms
 				DoTick();
 			};
 
-			await Task.Run(() => { runner.Run(strategy, provider, tickCount); });
+			try
+			{
+				await Task.Run(() => { runner.Run(strategy, provider, tickCount); });
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
 
 			var analyzer = new SessionAnalyzer();
 

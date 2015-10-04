@@ -14,7 +14,7 @@ namespace ElevatedTrader
 	{
 		protected ITradingSession session;
 		protected ITradingPeriodAggregator aggregator;
-		protected Dictionary<int, IList<ISymbolIndicator>> indicators = new Dictionary<int, IList<ISymbolIndicator>>();
+		protected Dictionary<int, IList<IIndicator>> indicators = new Dictionary<int, IList<IIndicator>>();
 		protected T settings = new T();
 		protected Dictionary<int, bool> periodTriggered = new Dictionary<int, bool>();
 
@@ -23,7 +23,7 @@ namespace ElevatedTrader
 			get { return aggregator; }
 		}
 
-		public virtual IDictionary<int, IList<ISymbolIndicator>> Indicators
+		public virtual IDictionary<int, IList<IIndicator>> Indicators
 		{
 			get { return indicators; }
 		}
@@ -65,12 +65,15 @@ namespace ElevatedTrader
 		}
 
 		public TradingStrategy()
-		{
-			session = new TradingSession();
+		{			
 			aggregator = new TradingPeriodAggregator();
-
 			aggregator.AfterNewPeriod += AfterNewPeriod;
 			aggregator.BeforeNewPeriod += BeforeNewPeriod;
+
+			session = new TradingSession()
+			{
+				PeriodAggregator = aggregator
+			};
 		}
 
 		public virtual void AddQuote(ITradeQuote quote)
@@ -150,22 +153,22 @@ namespace ElevatedTrader
 			{
 				if (type == TradeType.Buy || (type == TradeType.Sell && settings.ReversePositions))
 				{
-					session.Buy(aggregator);
+					session.Buy();
 				}
 				else
 				{
-					session.Sell(aggregator);
+					session.Sell();
 				}
 			}
 			else if (type == TradeType.Buy && session.Position < 0 || type == TradeType.Sell && session.Position > 0)
 			{
-				session.Reverse(aggregator);
+				session.Reverse();
 			}
 		}
 
 		public virtual void End()
 		{
-			session.ClosePosition(aggregator);
+			session.ClosePosition();
 		}
 	}
 }

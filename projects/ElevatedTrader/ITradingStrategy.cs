@@ -10,7 +10,7 @@ namespace ElevatedTrader
 	{
 		ITradingPeriodAggregator Aggregator { get; }
 
-		IDictionary<int, IList<ISymbolIndicator>> Indicators { get; }
+		IDictionary<int, IList<IIndicator>> Indicators { get; }
 
 		ITradingSession Session { get; }
 

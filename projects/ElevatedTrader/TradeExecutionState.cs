@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradingStrategyResult
+	public enum TradeExecutionState
 	{
-		IList<ITradeEntry> Trades
-		{
-			get;
-		}
+		Idle,
+		Executing,
+		Executed,
+		Cancelling,
+		Cancelled,
+		Failed
 	}
 }

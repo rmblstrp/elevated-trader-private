@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ElevatedTrader;
 
-public class SimplePeriodValue : ISymbolIndicator
+public class SimplePeriodValue : IIndicator
 {
-	protected List<ISymbolIndicatorResult> results;
+	protected List<IIndicatorResult> results;
 
 	public bool IsStockPriceRelated
 	{
@@ -16,7 +16,7 @@ public class SimplePeriodValue : ISymbolIndicator
 
 	public PeriodValueType PeriodValue { get; set; }
 
-	public IList<ISymbolIndicatorResult> Results
+	public IList<IIndicatorResult> Results
 	{
 		get { return results; }
 	}
@@ -28,7 +28,7 @@ public class SimplePeriodValue : ISymbolIndicator
 
 	public SimplePeriodValue(int capacity)
 	{
-		results = new List<ISymbolIndicatorResult>(capacity);
+		results = new List<IIndicatorResult>(capacity);
 		AfterNewPeriod();
 	}
 
@@ -75,7 +75,7 @@ public class SimplePeriodValue : ISymbolIndicator
 
 	public void FreeResources()
 	{
-		var list = new List<ISymbolIndicatorResult>();
+		var list = new List<IIndicatorResult>();
 
 		for (int index = results.Count - 5; index < results.Count; index++)
 		{

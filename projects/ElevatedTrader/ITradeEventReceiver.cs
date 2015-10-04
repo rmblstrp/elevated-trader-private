@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradingStrategyResult
+	public interface ITradeEventReceiver
 	{
-		IList<ITradeEntry> Trades
-		{
-			get;
-		}
+		void Trade(ITradeEntry trade);
 	}
 }

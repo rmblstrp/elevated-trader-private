@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradingStrategyResult
+	public interface ITradeOrder
 	{
-		IList<ITradeEntry> Trades
+		IFinancialInstrument Instrument
 		{
 			get;
+			set;
 		}
+
+		int Quantity
+		{
+			get;
+			set;
+		}
+
+		IList<ITradeResult> Results
+		{
+			get;
+			set;
+		}	
 	}
 }

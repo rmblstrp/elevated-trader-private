@@ -13,11 +13,11 @@ namespace ElevatedTrader.Windows.Forms
 {
 	public partial class SingleSimulation : UserControl
 	{
-		private BindingList<ITrade> trades;
-		private List<ITrade> tradeBuffer = new List<ITrade>(10000);
+		private BindingList<ITradeEntry> trades;
+		private List<ITradeEntry> tradeBuffer = new List<ITradeEntry>(10000);
 		private Dictionary<int, Series> periodSeries = new Dictionary<int, Series>();
 		private Dictionary<int, Series> tradeSeries = new Dictionary<int, Series>();
-		private Dictionary<ISymbolIndicator, Series> indicatorSeries = new Dictionary<ISymbolIndicator, Series>();
+		private Dictionary<IIndicator, Series> indicatorSeries = new Dictionary<IIndicator, Series>();
 		private SessionAnalyzer analyzer = new SessionAnalyzer();
 
 		public event EventHandler<int> Tick;
@@ -42,7 +42,7 @@ namespace ElevatedTrader.Windows.Forms
 				indicatorSeries.Clear();
 				tradeBuffer.Clear();
 
-				TradeResultGrid.Columns[2].DefaultCellStyle.Format = "C" + (strategy.Session.Symbol.TickRate.ToString().Length - 2);
+				TradeResultGrid.Columns[2].DefaultCellStyle.Format = "C" + (strategy.Session.Instrument.TickRate.ToString().Length - 2);
 
 				if (trades != null)
 				{
@@ -57,7 +57,7 @@ namespace ElevatedTrader.Windows.Forms
 
 				await Task.Run(() => { runner.Run(strategy, provider, tickCount); });
 
-				trades = new BindingList<ITrade>(strategy.Session.Trades.ToList());
+				trades = new BindingList<ITradeEntry>(strategy.Session.Trades.ToList());
 				TradesBindingSource.DataSource = trades;
 
 				PopulateTickSeries(strategy);
@@ -202,7 +202,7 @@ namespace ElevatedTrader.Windows.Forms
 			return item;
 		}
 
-		private DataPoint CreateTradeDataPoint(int size, ITrade trade)
+		private DataPoint CreateTradeDataPoint(int size, ITradeEntry trade)
 		{
 			var item = new DataPoint()
 			{
@@ -214,7 +214,7 @@ namespace ElevatedTrader.Windows.Forms
 			return item;
 		}
 
-		private DataPoint CreateIndicatorDataPoint(int index, ISymbolIndicatorResult result)
+		private DataPoint CreateIndicatorDataPoint(int index, IIndicatorResult result)
 		{
 			if (result.Values.Count == 0)
 			{

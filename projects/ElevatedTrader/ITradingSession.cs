@@ -8,21 +8,37 @@ namespace ElevatedTrader
 {
 	public interface ITradingSession
 	{
-		double Equity { get; }
+		ITradingPeriodAggregator PeriodAggregator
+		{
+			get;
+			set;
+		}
 
-		IFinancialInstrument Symbol { get; set; }
+		double Equity
+		{
+			get;
+		}
 
-		int Position { get; }
+		IFinancialInstrument Instrument
+		{
+			get;
+			set;
+		}
 
-		IList<ITrade> Trades { get; }
+		int Position
+		{
+			get;
+		}
 
-		event EventHandler<ITrade> Trade;
+		IList<ITradeEntry> Trades { get; }
 
-		void Buy(ITradingPeriodAggregator aggregator, int quantity = 1);
-		void Sell(ITradingPeriodAggregator aggregator, int quantity = 1);
-		void Reverse(ITradingPeriodAggregator aggregator);
+		event EventHandler<ITradeEntry> Trade;
 
-		void ClosePosition(ITradingPeriodAggregator aggregator);
+		void Buy(int quantity = 1);
+		void Sell(int quantity = 1);
+		void Reverse();
+
+		void ClosePosition();
 
 		void Reset();
 	}

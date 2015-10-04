@@ -150,7 +150,7 @@
 			// 
 			// TradesBindingSource
 			// 
-			this.TradesBindingSource.DataSource = typeof(ElevatedTrader.ITrade);
+			this.TradesBindingSource.DataSource = typeof(ElevatedTrader.ITradeEntry);
 			// 
 			// typeDataGridViewTextBoxColumn
 			// 

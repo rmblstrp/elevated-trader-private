@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradingStrategyResult
+	public interface ITradeLogWriter
 	{
-		IList<ITradeEntry> Trades
-		{
-			get;
-		}
+		void WriteTrade(ITradeEntry trade);
 	}
 }

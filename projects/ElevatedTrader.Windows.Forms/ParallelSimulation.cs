@@ -79,7 +79,7 @@ namespace ElevatedTrader.Windows.Forms
 		{
 			var strategy = TradingStrategyScripts.Create(name);
 
-			strategy.Session.Symbol = Instrument.Get(symbol).Item;
+			strategy.Session.Instrument = Instrument.Get(symbol).Item;
 			strategy.Settings = settings;
 
 			return strategy;

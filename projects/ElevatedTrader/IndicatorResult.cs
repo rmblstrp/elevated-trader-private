@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public class IndicatorResult : ISymbolIndicatorResult
+	public class IndicatorResult : IIndicatorResult
 	{
-		private List<double> values = new List<double>();
+		private readonly List<double> values = new List<double>();
 
 		public TrendDirection Direction
 		{

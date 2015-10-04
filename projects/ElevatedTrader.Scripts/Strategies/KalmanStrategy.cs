@@ -76,13 +76,13 @@ namespace Kalman
 		}
 	}
 
-	public class Indicator : ISymbolIndicator<Settings>
+	public class Indicator : IIndicator<Settings>
 	{
-		private List<ISymbolIndicatorResult> results;
+		private List<IIndicatorResult> results;
 		private DiscreteKalmanFilter kalman;
 		private Matrix<double> F, G, Q, H, R;
 
-		public IList<ISymbolIndicatorResult> Results
+		public IList<IIndicatorResult> Results
 		{
 			get { return results; }
 		}
@@ -94,7 +94,7 @@ namespace Kalman
 
 		public Indicator(int capacity)
 		{
-			results = new List<ISymbolIndicatorResult>(capacity);
+			results = new List<IIndicatorResult>(capacity);
 
 			AfterNewPeriod();
 		}
@@ -302,7 +302,7 @@ namespace Kalman
 
 		public void FreeResources()
 		{
-			var list = new List<ISymbolIndicatorResult>();
+			var list = new List<IIndicatorResult>();
 
 			for (int index = results.Count - 5; index < results.Count; index++)
 			{
@@ -412,15 +412,15 @@ namespace Kalman
 			kalman = new Indicator(settings.Capacity)
 			{
 				Settings = settings,
-				Symbol = session.Symbol
+				Symbol = session.Instrument
 			};
 
 			if (!indicators.ContainsKey(settings.PeriodTicks[0]))
 			{
-				indicators.Add(size, new List<ISymbolIndicator>());
+				indicators.Add(size, new List<IIndicator>());
 			}
 
-			indicators[size].Add(kalman as ISymbolIndicator);
+			indicators[size].Add(kalman as IIndicator);
 		}
 	}
 }

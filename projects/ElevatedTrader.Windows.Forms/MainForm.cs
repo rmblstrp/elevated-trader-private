@@ -171,7 +171,7 @@
 			var instrument = Instrument.Get(SelectedSymbol);
 
 			StrategySettings.SelectedObject = strategy.Settings;
-			strategy.Session.Symbol = instrument.Item;
+			strategy.Session.Instrument = instrument.Item;
 		}
 
 		private void StrategiesComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -405,7 +405,7 @@
 			if (busy) return;
 			busy = true;
 
-			strategy.Session.Symbol = Instrument.Get(SelectedSymbol).Item;
+			strategy.Session.Instrument = Instrument.Get(SelectedSymbol).Item;
 			var data_source = SelectedDataSource;
 			var provider = TickProviderComboBox.Text;
 			var tick_count = MaximumTicks;

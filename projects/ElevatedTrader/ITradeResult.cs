@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ISymbolIndicatorResult
+	public interface ITradeResult
 	{
-		TrendDirection Direction
+		int Quantity
 		{
 			get;
+			set;
 		}
 
-		bool Signaled
+		double Price
 		{
 			get;
+			set;
 		}
 
-		IList<double> Values
+		double Fees
 		{
 			get;
+			set;
 		}
 	}
 }

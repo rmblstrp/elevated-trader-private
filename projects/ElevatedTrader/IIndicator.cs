@@ -7,9 +7,9 @@ using System.Dynamic;
 
 namespace ElevatedTrader
 {
-	public interface ISymbolIndicator
+	public interface IIndicator
 	{
-		IList<ISymbolIndicatorResult> Results { get; }
+		IList<IIndicatorResult> Results { get; }
 
 		bool IsStockPriceRelated { get; }
 
@@ -22,7 +22,7 @@ namespace ElevatedTrader
 		void FreeResources();
 	}
 
-	public interface ISymbolIndicator<T> : ISymbolIndicator where T : TradingStrategySettings, new()
+	public interface IIndicator<T> : IIndicator where T : TradingStrategySettings, new()
 	{
 		T Settings { get; set; }
 	}

@@ -9,7 +9,6 @@ namespace ElevatedTrader
 	public enum TradeType
 	{
 		Buy,
-		Sell,
-		Reverse
+		Sell
 	}
 }

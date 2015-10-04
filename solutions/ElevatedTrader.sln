@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader", "..\projects\ElevatedTrader\ElevatedTrader.csproj", "{18A39E37-5244-418F-9FD9-B1D024E15421}"
 EndProject
@@ -15,6 +15,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.Scripts", "..\projects\ElevatedTrader.Scripts\ElevatedTrader.Scripts.csproj", "{04E95530-EE2E-4A8B-8366-E22C66A7F472}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.DataSources", "..\projects\ElevatedTrader.DataSources\ElevatedTrader.DataSources.csproj", "{F67446F0-831E-4969-9DF8-191E1474D5AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.LiveTrading.Service", "..\projects\ElevatedTrader.LiveTrading.Service\ElevatedTrader.LiveTrading.Service.csproj", "{493B5D85-7412-4DB9-BB12-74DDCF499BFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live Trading", "Live Trading", "{D5A9A2DE-570A-42DC-805C-009B04D367F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Strategy Development", "Strategy Development", "{2E710440-59A5-4E18-9A2E-A879317C71C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{CF9CC479-EE5A-446B-91CE-13759634CB81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatedTrader.LiveTrading", "..\projects\ElevatedTrader.LiveTrading\ElevatedTrader.LiveTrading.csproj", "{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,8 +94,35 @@ Global
 		{F67446F0-831E-4969-9DF8-191E1474D5AF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F67446F0-831E-4969-9DF8-191E1474D5AF}.Release|x64.ActiveCfg = Release|x64
 		{F67446F0-831E-4969-9DF8-191E1474D5AF}.Release|x64.Build.0 = Release|x64
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF}.Release|x64.ActiveCfg = Release|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0595CB18-0992-45D0-A45F-12516C23C558} = {2E710440-59A5-4E18-9A2E-A879317C71C6}
+		{5232F345-1C68-432A-8649-56EDA2351C9B} = {CF9CC479-EE5A-446B-91CE-13759634CB81}
+		{04E95530-EE2E-4A8B-8366-E22C66A7F472} = {2E710440-59A5-4E18-9A2E-A879317C71C6}
+		{493B5D85-7412-4DB9-BB12-74DDCF499BFF} = {D5A9A2DE-570A-42DC-805C-009B04D367F8}
+		{5AD2E423-11BD-404D-A1AC-E8677D3ACE72} = {D5A9A2DE-570A-42DC-805C-009B04D367F8}
 	EndGlobalSection
 EndGlobal

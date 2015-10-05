@@ -72,7 +72,8 @@ namespace ElevatedTrader
 
 			session = new TradingSession()
 			{
-				PeriodAggregator = aggregator
+				PeriodAggregator = aggregator,
+				Executor = new SimpleTradeExecutor()
 			};
 		}
 

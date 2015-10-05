@@ -20,7 +20,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		double TickRate
+		double TickIncrement
 		{
 			get;
 			set;

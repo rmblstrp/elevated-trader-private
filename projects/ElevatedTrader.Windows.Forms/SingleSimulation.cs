@@ -42,7 +42,7 @@ namespace ElevatedTrader.Windows.Forms
 				indicatorSeries.Clear();
 				tradeBuffer.Clear();
 
-				TradeResultGrid.Columns[2].DefaultCellStyle.Format = "C" + (strategy.Session.Instrument.TickRate.ToString().Length - 2);
+				TradeResultGrid.Columns[2].DefaultCellStyle.Format = "C" + (strategy.Session.Instrument.TickIncrement.ToString().Length - 2);
 
 				if (trades != null)
 				{

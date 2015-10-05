@@ -27,7 +27,7 @@ namespace ElevatedTrader
 			if (order.Quantity == 0) return false;
 
 			var fees = Math.Abs(order.Quantity * order.Instrument.PerQuantityCost) - order.Instrument.PerTradeCost;
-			var slippage = order.Instrument.TickValue * random.Next(0, order.Instrument.Slippage);
+			var slippage = order.Instrument.TickIncrement * random.Next(0, order.Instrument.Slippage);
 			var result = new TradeResult()
 			{
 				Executed = DateTime.UtcNow,

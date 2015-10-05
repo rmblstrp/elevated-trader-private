@@ -217,7 +217,7 @@ namespace Kalman
 				{
 					var difference = Math.Abs(result.Values[0] - last.Values[0]);
 
-					if ((difference / Symbol.TickRate) < Settings.SidewaysTicks)
+					if ((difference / Symbol.TickIncrement) < Settings.SidewaysTicks)
 					{
 						result.Direction = TrendDirection.Sideways;
 					}
@@ -237,7 +237,7 @@ namespace Kalman
 		private double GetMeasurementNoise(ITradingPeriod current)
 		{
 			// the farther away from 1 the the worse the reading
-			var noise = (current.High - current.Low) / Symbol.TickRate * Settings.MeasurementNoiseMultiplier;
+			var noise = (current.High - current.Low) / Symbol.TickIncrement * Settings.MeasurementNoiseMultiplier;
 
 			if (double.IsInfinity(noise) || double.IsNaN(noise))
 			{
@@ -250,7 +250,7 @@ namespace Kalman
 		private double GetPlantNoise(ITradingPeriod current)
 		{
 			// the closer the value gets to 1 the better the reading
-			var noise = 1 / ((current.High - current.Low) / Symbol.TickRate) * Settings.PlantNoiseMultiplier;
+			var noise = 1 / ((current.High - current.Low) / Symbol.TickIncrement) * Settings.PlantNoiseMultiplier;
 
 			if (double.IsInfinity(noise) || double.IsNaN(noise))
 			{

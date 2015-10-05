@@ -61,12 +61,12 @@ namespace ElevatedTrader
 
 		public void Buy(int quantity = 1)
 		{
-			AddTrade(TradeType.Buy, quantity);
+			ExecuteTrade(quantity);
 		}
 
 		public void Sell(int quantity = 1)
 		{
-			AddTrade(TradeType.Sell, -quantity);
+			ExecuteTrade(-quantity);
 		}
 
 		public void Reverse()
@@ -76,16 +76,14 @@ namespace ElevatedTrader
 				throw new ArgumentOutOfRangeException("Only open positions may be reversed");
 			}
 
-			var type = Position > 0 ? TradeType.Sell : TradeType.Buy;
-			AddTrade(type, Position * -2);
+			ExecuteTrade(Position * -2);
 		}
 
 		public void ClosePosition()
 		{
 			if (Position == 0) return;
 
-			var type = Position > 0 ? TradeType.Sell : TradeType.Buy;
-			AddTrade(type, Position);
+			ExecuteTrade(-Position);
 		}
 
 		public void Reset()
@@ -95,45 +93,17 @@ namespace ElevatedTrader
 			trades.Clear();
 		}
 
-		protected void AddTrade(TradeType type, int quantity)
+		protected void ExecuteTrade(int quantity)
 		{
-			var price = type == TradeType.Buy ? PeriodAggregator.Last.Ask : PeriodAggregator.Last.Bid;
-			var open_cost = Instrument.HasOpenCost ? 1 : 0;
-
-			double trade_cost = 0;
-
-			if (Position == 0)
+			var order = new TradeOrder()
 			{
-				Position += quantity;
-				trade_cost = Math.Abs(Position * Instrument.PerQuantityCost) - Instrument.PerTradeCost;
-				Equity += (price * Position * open_cost) - trade_cost - CalculateSlippage(Position);
+				Instrument = Instrument,
+				Quantity = quantity,
+				Bid = PeriodAggregator.Last.Bid,
+				Ask = PeriodAggregator.Last.Ask
+			};
 
-				var trade = new TradeEntry(type, quantity, price, Equity, 0, trade_cost, PeriodAggregator.Indexes());
-				trades.Add(trade);
-				DoOnTrade(trade);
-				return;
-			}
-
-			var last = trades[trades.Count - 1];
-			var price_difference = price - last.Price;
-			var tick_change = price_difference / Instrument.TickRate;
-			var value = tick_change * Instrument.TickValue;
-			var profit = (value * Position) - Math.Abs(Position * Instrument.PerQuantityCost) - CalculateSlippage(Position);
-
-			Position += quantity;
-			trade_cost = Math.Abs(Position * Instrument.PerQuantityCost) - Instrument.PerTradeCost;
-			Equity += profit + Math.Abs(price * Position * open_cost) - trade_cost - CalculateSlippage(Position);
-
-			var order = new TradeEntry(type, quantity, price, Equity, profit, trade_cost, PeriodAggregator.Indexes());
-
-			trades.Add(order);
-
-			DoOnTrade(order);
-		}
-
-		protected double CalculateSlippage(int position)
-		{
-			return Math.Abs(position * Instrument.TickValue * random.Next(Instrument.Slippage));
+			executor.ExecuteTrade(order);			
 		}
 
 		protected void DoOnTrade(ITradeEntry trade)
@@ -160,7 +130,29 @@ namespace ElevatedTrader
 
 		protected void TradeExecuted(object sender, ITradeOrder order)
 		{
+			var price = order.Results[0].Price;
+			var open_cost = Instrument.HasOpenCost ? 1 : 0;
 
+			double price_difference = 0;
+
+			if (Position != 0)
+			{
+				price_difference = price - trades[trades.Count - 1].Price;
+			}
+
+			// TODO: improve this so it accounts for adding to positions instead of just opening and reversing
+			var tick_change = price_difference / Instrument.TickIncrement;
+			var value = tick_change * Instrument.TickValue;
+			var profit = (value * Position) - order.Results[0].Fees;
+
+			Position += order.Quantity;
+			Equity += profit - Math.Abs(price * Position * open_cost);
+
+			var entry = new TradeEntry(order.Quantity > 0 ? TradeType.Buy : TradeType.Sell, order.Quantity, price, Equity, profit, order.Results[0].Fees, PeriodAggregator.Indexes());
+
+			trades.Add(entry);
+
+			DoOnTrade(entry);
 		}
 
 		protected void TradeCancelled(object sender, ITradeOrder order)

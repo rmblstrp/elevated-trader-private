@@ -22,7 +22,7 @@ namespace ElevatedTrader
 			set;
 		}
 
-		public double TickRate
+		public double TickIncrement
 		{
 			get;
 			set;

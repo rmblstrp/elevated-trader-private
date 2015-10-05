@@ -2,7 +2,7 @@
 	{
 		"Symbol": "/6A",
 		"Description": "Australian Dollar FX",
-		"TickRate": 0.0001,
+		"TickIncrement": 0.0001,
 		"TickValue": 10.0,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -12,7 +12,7 @@
 	{
 		"Symbol": "/6B",
 		"Description": "British Pound fX",
-		"TickRate": 0.0001,
+		"TickIncrement": 0.0001,
 		"TickValue": 6.25,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -22,7 +22,7 @@
 	{
 		"Symbol": "/6C",
 		"Description": "Canadian Dollar FX",
-		"TickRate": 0.0001,
+		"TickIncrement": 0.0001,
 		"TickValue": 10.0,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -32,7 +32,7 @@
 	{
 		"Symbol": "/6E",
 		"Description": "Euro FX",
-		"TickRate": 0.0001,
+		"TickIncrement": 0.0001,
 		"TickValue": 10.0,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -42,7 +42,7 @@
 	{
 		"Symbol": "/ES",
 		"Description": "S&P 500 E-Mini Future",
-		"TickRate": 0.25,
+		"TickIncrement": 0.25,
 		"TickValue": 12.50,
 		"HasOpenCost": false,
 		"PerTradeCost": 0,
@@ -52,7 +52,7 @@
 	{
 		"Symbol": "/M6E",
 		"Description": "Euro FX Micro",
-		"TickRate": 0.0001,
+		"TickIncrement": 0.0001,
 		"TickValue": 1.25,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -62,7 +62,7 @@
 	{
 		"Symbol": "/NQ",
 		"Description": "E-Mini Nasdaq 100",
-		"TickRate": 0.25,
+		"TickIncrement": 0.25,
 		"TickValue": 5.0,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -72,7 +72,7 @@
 	{
 		"Symbol": "/TF",
 		"Description": "Russell 2000 Mini",
-		"TickRate": 0.1,
+		"TickIncrement": 0.1,
 		"TickValue": 10.0,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -82,7 +82,7 @@
 	{
 		"Symbol": "/YM",
 		"Description": "Mini Dow Jones",
-		"TickRate": 1.0,
+		"TickIncrement": 1.0,
 		"TickValue": 5.0,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,
@@ -92,7 +92,7 @@
 	{
 		"Symbol": "/ZN",
 		"Description": "10-Year Treasury Note",
-		"TickRate": 0.015625,
+		"TickIncrement": 0.015625,
 		"TickValue": 15.63,
 		"HasOpenCost": false,
 		"PerTradeCost": 0.0,

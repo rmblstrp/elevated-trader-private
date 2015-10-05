@@ -20,10 +20,21 @@ namespace ElevatedTrader
 			set;
 		}
 
-		IList<ITradeResult> Results
+		double Bid
 		{
 			get;
 			set;
+		}
+
+		double Ask
+		{
+			get;
+			set;
+		}
+
+		IList<ITradeResult> Results
+		{
+			get;
 		}	
 	}
 }

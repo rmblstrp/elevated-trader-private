@@ -11,12 +11,7 @@ namespace ElevatedTrader
 	{
 		protected List<ITradeEntry> trades = new List<ITradeEntry>();
 		protected Random random = new Random();
-
-		public ITradingPeriodAggregator PeriodAggregator
-		{
-			get;
-			set;
-		}
+		protected ITradeExecutor executor;
 
 		public double Equity
 		{
@@ -24,7 +19,28 @@ namespace ElevatedTrader
 			protected set;
 		}
 
+		public ITradeExecutor Executor
+		{
+			get { return executor; }
+			set
+			{
+				if (executor != null)
+				{
+					UnlinkExecutorEvents(executor);
+				}
+
+				executor = value;
+				LinkExecutorEvents(executor);
+			}
+		}
+
 		public IFinancialInstrument Instrument
+		{
+			get;
+			set;
+		}
+
+		public ITradingPeriodAggregator PeriodAggregator
 		{
 			get;
 			set;
@@ -126,6 +142,35 @@ namespace ElevatedTrader
 			{
 				Trade(this, trade);
 			}
+		}
+
+		protected void LinkExecutorEvents(ITradeExecutor executor)
+		{
+			executor.TradeExecuted += TradeExecuted;
+			executor.TradeCancelled += TradeCancelled;
+			executor.TradeFailed += TradeFailed;
+		}
+
+		protected void UnlinkExecutorEvents(ITradeExecutor executor)
+		{
+			executor.TradeExecuted -= TradeExecuted;
+			executor.TradeCancelled -= TradeCancelled;
+			executor.TradeFailed -= TradeFailed;
+		}
+
+		protected void TradeExecuted(object sender, ITradeOrder order)
+		{
+
+		}
+
+		protected void TradeCancelled(object sender, ITradeOrder order)
+		{
+
+		}
+
+		protected void TradeFailed(object sender, ITradeOrder order)
+		{
+
 		}
 	}
 }

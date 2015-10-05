@@ -6,27 +6,27 @@ using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
-	public interface ITradeResult
+	public class TradeResult : ITradeResult
 	{
-		DateTime Executed
+		public DateTime Executed
 		{
 			get;
 			set;
 		}
 
-		int Quantity
+		public int Quantity
 		{
 			get;
 			set;
 		}
 
-		double Price
+		public double Price
 		{
 			get;
 			set;
 		}
 
-		double Fees
+		public double Fees
 		{
 			get;
 			set;

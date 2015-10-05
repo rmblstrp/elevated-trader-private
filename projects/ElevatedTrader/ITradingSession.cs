@@ -8,18 +8,24 @@ namespace ElevatedTrader
 {
 	public interface ITradingSession
 	{
-		ITradingPeriodAggregator PeriodAggregator
-		{
-			get;
-			set;
-		}
-
 		double Equity
 		{
 			get;
 		}
 
+		ITradeExecutor Executor
+		{
+			get;
+			set;
+		}
+
 		IFinancialInstrument Instrument
+		{
+			get;
+			set;
+		}
+
+		ITradingPeriodAggregator PeriodAggregator
 		{
 			get;
 			set;
@@ -30,7 +36,10 @@ namespace ElevatedTrader
 			get;
 		}
 
-		IList<ITradeEntry> Trades { get; }
+		IList<ITradeEntry> Trades
+		{
+			get;
+		}
 
 		event EventHandler<ITradeEntry> Trade;
 

@@ -14,7 +14,7 @@ namespace ElevatedTrader
 
 		TradeExecutionState State { get; }
 
-		void ExecuteTrade(ITradeOrder order);
+		bool ExecuteTrade(ITradeOrder order);
 		void CancelTrade();
 	}
 }

@@ -68,10 +68,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HistoricalTickProvider.cs" />
+    <Compile Include="IConfigurable.cs" />
     <Compile Include="IMultiSessionAnalyzer.cs" />
     <Compile Include="ISessionAnalyzer.cs" />
+    <Compile Include="ITickBroadcaster.cs" />
     <Compile Include="ITickDataSource.cs" />
     <Compile Include="ITickProvider.cs" />
+    <Compile Include="ITickReceiver.cs" />
+    <Compile Include="ITradeDataLink.cs" />
     <Compile Include="ITradeExecutor.cs" />
     <Compile Include="ITradeLogWriter.cs" />
     <Compile Include="ITradeOrder.cs" />
@@ -81,6 +85,7 @@
     <Compile Include="ITradingStrategyExaminer.cs" />
     <Compile Include="ITradingStrategyResult.cs" />
     <Compile Include="ITradingStrategyRunner.cs" />
+    <Compile Include="LiveTickProvider.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="MonteCarloTickProvider.cs" />
     <Compile Include="MultiSessionAnalyzer.cs" />

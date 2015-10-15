@@ -20,6 +20,7 @@ namespace ElevatedTrader.LiveTrading.Service
 
 		private readonly Dictionary<string, TradeInstrument> instruments = new Dictionary<string, TradeInstrument>();
 		private readonly List<StrategyManager> managerList = new List<StrategyManager>();
+		private readonly Dictionary<int, ITradeEventReceiver> loggerList = new Dictionary<int, ITradeEventReceiver>();
 		private Settings settings;
 		private ITradeDataLink dataLink;
 
@@ -52,6 +53,7 @@ namespace ElevatedTrader.LiveTrading.Service
 			}
 
 			AttachReceivers();
+			AttachLoggers();
 
 			logger.Info("Connecting data link");
 			dataLink.Connect();
@@ -63,6 +65,7 @@ namespace ElevatedTrader.LiveTrading.Service
 			dataLink.Disconnect();
 
 			DetachReceivers();
+			DetachLoggers();
 
 			logger.Info("Stopping strategies");
 			for (int index = 0; index < managerList.Count; index++)
@@ -115,6 +118,20 @@ namespace ElevatedTrader.LiveTrading.Service
 			}
 		}
 
+		private void AttachLoggers()
+		{
+			for (int index = 0; index < managerList.Count; index++)
+			{
+				var logger = new TradeLogger();
+
+				logger.Attach(new ConsoleLogWriter() { Index = index });
+				logger.Attach(new FileLogWriter() { Index = index });
+
+				managerList[index].Broadcaster.Attach(logger);
+				loggerList.Add(index, logger);
+			}
+		}
+
 		private void DetachReceivers()
 		{
 			logger.Info("Detaching receivers");
@@ -123,6 +140,14 @@ namespace ElevatedTrader.LiveTrading.Service
 			for (int index = 0; index < managerList.Count; index++)
 			{
 				broadcaster.Detach(managerList[index]);
+			}
+		}
+
+		private void DetachLoggers()
+		{
+			for (int index = 0; index < loggerList.Count; index++)
+			{
+				managerList[index].Broadcaster.Detach(loggerList[index]);
 			}
 		}
 

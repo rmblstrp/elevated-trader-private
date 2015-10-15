@@ -8,14 +8,13 @@ namespace ElevatedTrader
 {
 	public class TradeEventBroadcaster : IDisposable
 	{
-		protected HashSet<ITradeEventReceiver> subscribers = new HashSet<ITradeEventReceiver>();
-		protected HashSet<ITradingSession> sessions = new HashSet<ITradingSession>();
+		private HashSet<ITradeEventReceiver> subscribers = new HashSet<ITradeEventReceiver>();
+		private HashSet<ITradingSession> sessions = new HashSet<ITradingSession>();
 
-		protected delegate void TradeEvent(ITradeEntry trade);
-		protected event TradeEvent Trade;
-		protected ITradingSession session;
+		private delegate void TradeEvent(ITradeEntry trade);
+		private event TradeEvent Trade;
 
-		public virtual void Attach(ITradeEventReceiver receiver)
+		public void Attach(ITradeEventReceiver receiver)
 		{
 			if (!subscribers.Contains(receiver))
 			{
@@ -24,16 +23,16 @@ namespace ElevatedTrader
 			}
 		}
 
-		public virtual void Attach(ITradingSession session)
+		public void Attach(ITradingSession session)
 		{
 			if (!sessions.Contains(session))
 			{
-				session.Trade += Session_Trade;
+				session.Trade += SessionTrade;
 				sessions.Add(session);
 			}
 		}
 
-		void Session_Trade(object sender, ITradeEntry trade)
+		void SessionTrade(object sender, ITradeEntry trade)
 		{
 			if (Trade != null)
 			{
@@ -41,7 +40,7 @@ namespace ElevatedTrader
 			}
 		}
 
-		public virtual void Detach(ITradeEventReceiver receiver)
+		public void Detach(ITradeEventReceiver receiver)
 		{
 			if (subscribers.Contains(receiver))
 			{
@@ -50,36 +49,36 @@ namespace ElevatedTrader
 			}
 		}
 
-		public virtual void Detach(ITradingSession session)
+		public void Detach(ITradingSession session)
 		{
 			if (sessions.Contains(session))
 			{
-				session.Trade += Session_Trade;
+				session.Trade += SessionTrade;
 				sessions.Remove(session);
 			}
 		}
 
-		protected virtual void AttachEvents(ITradeEventReceiver receiver)
+		protected void AttachEvents(ITradeEventReceiver receiver)
 		{
 			Trade += receiver.Trade;
 		}
 
-		protected virtual void AttachEvents(ITradingSession session)
+		protected void AttachEvents(ITradingSession session)
 		{
-			session.Trade += Session_Trade;
+			session.Trade += SessionTrade;
 		}
 
-		protected virtual void DetachEvents(ITradeEventReceiver receiver)
+		protected void DetachEvents(ITradeEventReceiver receiver)
 		{
 			Trade -= receiver.Trade;
 		}
 
-		protected virtual void DetachEvents(ITradingSession session)
+		protected void DetachEvents(ITradingSession session)
 		{
-			session.Trade -= Session_Trade;
+			session.Trade -= SessionTrade;
 		}
 
-		public virtual void Dispose()
+		public void Dispose()
 		{
 			foreach (var item in subscribers)
 			{

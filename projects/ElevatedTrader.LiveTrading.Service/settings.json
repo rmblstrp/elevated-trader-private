@@ -10,6 +10,10 @@
 		{
 			"Type": "Kalman.Strategy, ElevatedTrader.Scripts",
 			"Settings": "C:\\development\\elevated-trader\\projects\\ElevatedTrader.Windows.Forms\\bin\\Debug\\Solutions\\ES.prod-1.json"
+		},
+		{
+			"Type": "Kalman.Strategy, ElevatedTrader.Scripts",
+			"Settings": "C:\\development\\elevated-trader\\projects\\ElevatedTrader.Windows.Forms\\bin\\Debug\\Solutions\\ES.prod-2.json"
 		}
 	]
 }

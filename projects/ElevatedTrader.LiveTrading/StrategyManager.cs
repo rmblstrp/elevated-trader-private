@@ -16,34 +16,45 @@ namespace ElevatedTrader.LiveTrading
 			set;
 		}
 
-		public virtual bool Running
+		public bool Running
 		{
 			get;
 			protected set;
 		}
 
-		public virtual LiveTickDataSource DataSource
+		public LiveTickDataSource DataSource
 		{
 			get;
 			protected set;
 		}
 
-		public virtual LiveTickProvider TickProvider
+		public LiveTickProvider TickProvider
 		{
 			get;
 			protected set;
 		}
 
-		public virtual ITradingStrategy Strategy
+		public ITradingStrategy Strategy
 		{
 			get;
 			protected set;
 		}
 
-		public virtual TradingStrategyRunner StrategyRunner
+		public TradingStrategyRunner StrategyRunner
 		{
 			get;
 			protected set;
+		}
+
+		public TradeEventBroadcaster Broadcaster
+		{
+			get;
+			protected set;
+		}
+
+		public StrategyManager()
+		{
+			Broadcaster = new TradeEventBroadcaster();
 		}
 
 		public void Initialize(Type strategy)
@@ -54,12 +65,14 @@ namespace ElevatedTrader.LiveTrading
 			TickProvider = new LiveTickProvider()
 			{
 				DataSource = DataSource
-			};
+			};			
 		}
 
 		public virtual void Start()
 		{
 			if (Running) return;
+
+			Broadcaster.Attach(Strategy.Session);
 
 			Process = new Thread(new ThreadStart(() => StrategyRunner.Run(Strategy, TickProvider)));
 			Process.Start();
@@ -73,6 +86,8 @@ namespace ElevatedTrader.LiveTrading
 
 			StrategyRunner.Stop();
 			Process.Join();
+
+			Broadcaster.Detach(Strategy.Session);
 
 			Running = false;
 			

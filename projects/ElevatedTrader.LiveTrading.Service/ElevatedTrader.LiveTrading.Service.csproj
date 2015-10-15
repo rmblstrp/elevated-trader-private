@@ -84,6 +84,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleLogWriter.cs" />
+    <Compile Include="FileLogWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceManager.cs" />

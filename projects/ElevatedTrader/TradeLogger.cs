@@ -8,11 +8,14 @@ namespace ElevatedTrader
 {
 	public class TradeLogger : ITradeEventReceiver
 	{
-		private HashSet<ITradeLogWriter> writers = new HashSet<ITradeLogWriter>();
+		private readonly HashSet<ITradeLogWriter> writers = new HashSet<ITradeLogWriter>();
 
 		public void Trade(ITradeEntry trade)
 		{
-			
+			foreach (var item in writers)
+			{
+				item.WriteTrade(trade);
+			}
 		}
 
 		public void Attach(ITradeLogWriter writer)

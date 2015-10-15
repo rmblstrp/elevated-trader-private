@@ -11,6 +11,8 @@ namespace ElevatedTrader.DevExperts
 {
 	public class EventListener : IDxFeedListener
 	{
+		public event EventHandler<TradeHistoryTimeAndSale> TimeAndSale;
+
 		public void OnFundamental<TB, TE>(TB buf)
 			where TB : IDxEventBuf<TE>
 			where TE : IDxSummary
@@ -71,21 +73,26 @@ namespace ElevatedTrader.DevExperts
 			where TB : IDxEventBuf<TE>
 			where TE : IDxTimeAndSale
 		{
-			foreach (var item in buf)
+			if (TimeAndSale != null)
 			{
-				var obj = new TradeHistoryTimeAndSale()
+				foreach (var item in buf)
 				{
-					AskPrice = item.AskPrice,
-					BidPrice = item.BidPrice,
-					EventId = item.EventId,
-					ExchangeCode = item.ExchangeCode,
-					ExchangeSaleConditions = item.ExchangeSaleConditions.ToString(),
-					IsTrade = item.IsTrade,
-					Price = item.Price,
-					Size = item.Size,
-					Time = item.Time,
-					Type = (int)item.Type
-				};
+					var obj = new TradeHistoryTimeAndSale()
+					{
+						AskPrice = item.AskPrice,
+						BidPrice = item.BidPrice,
+						EventId = item.EventId,
+						ExchangeCode = item.ExchangeCode,
+						ExchangeSaleConditions = item.ExchangeSaleConditions.ToString(),
+						IsTrade = item.IsTrade,
+						Price = item.Price,
+						Size = item.Size,
+						Time = item.Time,
+						Type = (int)item.Type
+					};
+
+					TimeAndSale(this, obj);
+				}
 			}
 		}
 

@@ -8,21 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace ElevatedTrader.LiveTrading.Service
 {
 	public class ServiceManager
 	{
+		private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 		private const string InstrumentsFilename = "instruments.json";
 		private const string SettingsFilename = "settings.json";
 
-		private readonly Dictionary<string, TradeInstrument> instruments = new Dictionary<string, TradeInstrument>();		
+		private readonly Dictionary<string, TradeInstrument> instruments = new Dictionary<string, TradeInstrument>();
 		private readonly List<StrategyManager> managerList = new List<StrategyManager>();
 		private Settings settings;
 		private ITradeDataLink dataLink;
 
 		public void Start()
-		{
+		{			
 			Initialize();
 			RunStrategies();
 		}
@@ -45,18 +47,24 @@ namespace ElevatedTrader.LiveTrading.Service
 		{
 			for (int index = 0; index < managerList.Count; index++)
 			{
+				logger.Info("Starting strategies");
 				managerList[index].Start();
 			}
 
 			AttachReceivers();
+
+			logger.Info("Connecting data link");
 			dataLink.Connect();
 		}
 
 		private void StopStrategies()
 		{
+			logger.Info("Disconnecting data link");
 			dataLink.Disconnect();
+
 			DetachReceivers();
-			
+
+			logger.Info("Stopping strategies");
 			for (int index = 0; index < managerList.Count; index++)
 			{
 				managerList[index].Stop();
@@ -65,25 +73,31 @@ namespace ElevatedTrader.LiveTrading.Service
 
 		private void LoadDataLink()
 		{
+			logger.Info("Loading data link");
 			var type = Type.GetType(settings.DataLink.Type);
 			dataLink = (ITradeDataLink)Activator.CreateInstance(type);
 
 			if (dataLink as IConfigurable != null)
 			{
+				logger.Info("Configuring data link");
 				((IConfigurable)dataLink).Configure(settings.DataLink.Settings);
 			}
 		}
 
 		private void LoadStrategies()
 		{
+			logger.Info("Loading strategies");
 			for (int index = 0; index < settings.Strategies.Count; index++)
 			{
+				logger.Info("Getting strategy type");
 				var type = Type.GetType(settings.Strategies[index].Type);
-				var manager = new StrategyManager();
 
+				logger.Info("Initializing a strategy manager");
+				var manager = new StrategyManager();
 				manager.Initialize(type);
 				managerList.Add(manager);
 
+				logger.Info("Loading strategy settings");
 				dynamic strategy_settings = JsonConvert.DeserializeObject<ExpandoObject>(File.ReadAllText(settings.Strategies[index].Settings));
 				manager.Strategy.Settings = JsonConvert.DeserializeObject(strategy_settings.Settings, manager.Strategy.SettingsType);
 				manager.Strategy.Session.Instrument = instruments[strategy_settings.Symbol];
@@ -92,6 +106,7 @@ namespace ElevatedTrader.LiveTrading.Service
 
 		private void AttachReceivers()
 		{
+			logger.Info("Attaching receivers");
 			var broadcaster = dataLink as ITickBroadcaster;
 
 			for (int index = 0; index < managerList.Count; index++)
@@ -102,6 +117,7 @@ namespace ElevatedTrader.LiveTrading.Service
 
 		private void DetachReceivers()
 		{
+			logger.Info("Detaching receivers");
 			var broadcaster = dataLink as ITickBroadcaster;
 
 			for (int index = 0; index < managerList.Count; index++)
@@ -112,6 +128,7 @@ namespace ElevatedTrader.LiveTrading.Service
 
 		private void LoadInstruments()
 		{
+			logger.Info("Loading instruments");
 			var filename = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\" + InstrumentsFilename;
 
 			if (!File.Exists(filename)) return;
@@ -124,6 +141,7 @@ namespace ElevatedTrader.LiveTrading.Service
 
 		private void LoadSettings()
 		{
+			logger.Info("Loading settings");
 			var filename = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\" + SettingsFilename;
 
 			if (!File.Exists(filename)) return;

@@ -33,7 +33,10 @@ namespace ElevatedTrader
 				LoadTicks();
 			}
 
-			Tick = TickQueue.Dequeue();
+			if (TickQueue.Count != 0)
+			{
+				Tick = TickQueue.Dequeue();
+			}
 
 			return Tick == null ? TickProviderResult.None : TickProviderResult.Ticked;
 		}

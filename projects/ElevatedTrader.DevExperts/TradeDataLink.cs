@@ -14,6 +14,7 @@ namespace ElevatedTrader.DevExperts
 		private readonly HashSet<ITickReceiver> receivers = new HashSet<ITickReceiver>();
 		private EventHandler<ITick> tickReceived;
 		private readonly List<string> symbols = new List<string>();
+		private readonly EventListener listener;
 
 		protected virtual HashSet<ITickReceiver> Receivers
 		{
@@ -40,8 +41,7 @@ namespace ElevatedTrader.DevExperts
 
 		protected virtual IDxFeedListener Listener
 		{
-			get;
-			set;
+			get { return listener; }
 		}
 
 		protected virtual List<string> Symbols
@@ -57,7 +57,25 @@ namespace ElevatedTrader.DevExperts
 
 		public TradeDataLink()
 		{
-			Listener = new EventListener();
+			listener = new EventListener();
+			listener.TimeAndSale += ListenerTimeAndSale;
+		}
+
+		protected virtual void ListenerTimeAndSale(object sender, TradeHistoryTimeAndSale obj)
+		{
+			if (TickReceived != null)
+			{
+				var tick = new Tick()
+				{
+					Ask = obj.AskPrice,
+					Bid = obj.BidPrice,
+					Price = obj.Price,
+					Size = (int)obj.Size,
+					Time = obj.Time
+				};
+
+				TickReceived(this, tick);
+			}
 		}
 
 		public void Connect()
@@ -91,8 +109,10 @@ namespace ElevatedTrader.DevExperts
 
 		public void Configure(dynamic configuration)
 		{
+			var symbols = ((List<object>)configuration.Symbols).OfType<string>();
+
 			Host = configuration.Host;
-			Symbols.AddRange(configuration.Symbols);
+			Symbols.AddRange(symbols);
 		}
 
 		protected void CreateConnection()

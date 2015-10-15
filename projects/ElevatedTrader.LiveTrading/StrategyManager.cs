@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ElevatedTrader.DataSources;
 
@@ -9,6 +10,12 @@ namespace ElevatedTrader.LiveTrading
 {
 	public class StrategyManager : ITickReceiver
 	{
+		protected Thread Process
+		{
+			get;
+			set;
+		}
+
 		public virtual bool Running
 		{
 			get;
@@ -54,7 +61,9 @@ namespace ElevatedTrader.LiveTrading
 		{
 			if (Running) return;
 
-			StrategyRunner.Run(Strategy, TickProvider);
+			Process = new Thread(new ThreadStart(() => StrategyRunner.Run(Strategy, TickProvider)));
+			Process.Start();
+			
 			Running = true;
 		}
 
@@ -63,6 +72,8 @@ namespace ElevatedTrader.LiveTrading
 			if (!Running) return;
 
 			StrategyRunner.Stop();
+			Process.Join();
+
 			Running = false;
 			
 		}

@@ -1,0 +1,102 @@
+﻿[
+	{
+		"Symbol": "/6A",
+		"Description": "Australian Dollar FX",
+		"TickIncrement": 0.0001,
+		"TickValue": 10.0,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 3.86,
+		"Slippage": 0
+	},
+	{
+		"Symbol": "/6B",
+		"Description": "British Pound FX",
+		"TickIncrement": 0.0001,
+		"TickValue": 6.25,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 3.86,
+		"Slippage": 0
+	},
+	{
+		"Symbol": "/6C",
+		"Description": "Canadian Dollar FX",
+		"TickIncrement": 0.0001,
+		"TickValue": 10.0,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 3.86,
+		"Slippage": 0
+	},
+	{
+		"Symbol": "/6E",
+		"Description": "Euro FX",
+		"TickIncrement": 0.0001,
+		"TickValue": 10.0,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 3.86,
+		"Slippage": 3
+	},
+	{
+		"Symbol": "/ES",
+		"Description": "S&P 500 E-Mini Future",
+		"TickIncrement": 0.25,
+		"TickValue": 12.50,
+		"HasOpenCost": false,
+		"PerTradeCost": 0,
+		"PerQuantityCost": 3.42,
+		"Slippage": 2
+	},
+	{
+		"Symbol": "/M6E",
+		"Description": "Euro FX Micro",
+		"TickIncrement": 0.0001,
+		"TickValue": 1.25,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 2.42,
+		"Slippage": 2
+	},
+	{
+		"Symbol": "/NQ",
+		"Description": "E-Mini Nasdaq 100",
+		"TickIncrement": 0.25,
+		"TickValue": 5.0,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 3.42,
+		"Slippage": 2
+	},
+	{
+		"Symbol": "/TF",
+		"Description": "Russell 2000 Mini",
+		"TickIncrement": 0.1,
+		"TickValue": 10.0,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 3.46,
+		"Slippage": 2
+	},
+	{
+		"Symbol": "/YM",
+		"Description": "Mini Dow Jones",
+		"TickIncrement": 1.0,
+		"TickValue": 5.0,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 3.42,
+		"Slippage": 2
+	},
+	{
+		"Symbol": "/ZN",
+		"Description": "10-Year Treasury Note",
+		"TickIncrement": 0.015625,
+		"TickValue": 15.63,
+		"HasOpenCost": false,
+		"PerTradeCost": 0.0,
+		"PerQuantityCost": 2.91,
+		"Slippage": 1
+	}
+]

@@ -1,0 +1,14 @@
+﻿{
+	"DataLink": {
+		"Type": "ElevatedTrader.DevExperts.TradeDataLink, ElevatedTrader.DevExperts",
+		"Settings": { 
+			"Host":  "demo.dxfeed.com:7300"
+		}
+	},
+	"Strategies": [
+		{
+			"Type": "ElevatedTrader.Scripts.Kalman.Strategy, ElevatedTrader.Scripts",
+			"Settings": ""
+		}
+	]
+}

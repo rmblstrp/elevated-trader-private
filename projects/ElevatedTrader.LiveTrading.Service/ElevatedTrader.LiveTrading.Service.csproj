@@ -53,6 +53,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\solutions\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -68,15 +72,31 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceManager.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="instruments.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ElevatedTrader.DataSources\ElevatedTrader.DataSources.csproj">
+      <Project>{f67446f0-831e-4969-9df8-191e1474d5af}</Project>
+      <Name>ElevatedTrader.DataSources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ElevatedTrader.LiveTrading\ElevatedTrader.LiveTrading.csproj">
       <Project>{5ad2e423-11bd-404d-a1ac-e8677d3ace72}</Project>
       <Name>ElevatedTrader.LiveTrading</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ElevatedTrader\ElevatedTrader.csproj">
+      <Project>{18a39e37-5244-418f-9fd9-b1d024e15421}</Project>
+      <Name>ElevatedTrader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

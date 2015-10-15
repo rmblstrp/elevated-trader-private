@@ -2,28 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ElevatedTrader
 {
 	public class TradingStrategyRunner : ITradingStrategyRunner
 	{
-		protected bool running = false;
+		protected bool Running
+		{
+			get;
+			set;
+		}
 
 		public bool LimitResources { get; set; }
 
 		public event EventHandler<int> Tick;
 
 		public void Run(ITradingStrategy strategy, ITickProvider ticks, int? iterations = null)
-		{			
+		{
 			ticks.Initialize();
 			strategy.Initialize();
 
-			running = true;
+			Running = true;
 
 			int count = 0;
 
-			while (running)
+			while (Running)
 			{
 				var result = ticks.Next();
 
@@ -36,17 +41,17 @@ namespace ElevatedTrader
 					case TickProviderResult.Done:
 						Stop();
 						break;
+					case TickProviderResult.None:
+						Thread.Sleep(5);
+						break;
 				}
 
 				if (LimitResources && count % 5000000 == 0)
 				{
 					strategy.FreeResources();
-
-					//GC.Collect();
-					//GC.WaitForPendingFinalizers();
 				}
 
-				if (running && iterations.HasValue && count >= iterations)
+				if (Running && iterations.HasValue && count >= iterations)
 				{
 					Stop();
 				}
@@ -57,7 +62,7 @@ namespace ElevatedTrader
 
 		public void Stop()
 		{
-			running = false;
+			Running = false;
 		}
 
 		protected void DoOnTick(int count)

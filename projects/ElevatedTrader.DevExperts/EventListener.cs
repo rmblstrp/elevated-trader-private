@@ -9,7 +9,7 @@ using com.dxfeed.native;
 
 namespace ElevatedTrader.DevExperts
 {
-	public class EventListener : IDxFeedListener, IDisposable
+	public class EventListener : IDxFeedListener
 	{
 		public void OnFundamental<TB, TE>(TB buf)
 			where TB : IDxEventBuf<TE>

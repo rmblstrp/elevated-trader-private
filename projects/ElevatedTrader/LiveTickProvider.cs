@@ -8,45 +8,48 @@ namespace ElevatedTrader
 {
 	public class LiveTickProvider : ITickProvider
 	{
-		protected ITickDataSource dataSource;
-		protected readonly Queue<ITick> tickQueue = new Queue<ITick>();
-		protected ITick tick;
-
-		public ITick Tick
+		private readonly Queue<ITick> tickQueue = new Queue<ITick>();
+		protected virtual Queue<ITick> TickQueue
 		{
-			get { return tick; }
+			get { return tickQueue; }
 		}
 
-		public ITickDataSource DataSource
+		public virtual ITick Tick
 		{
-			get { return dataSource; }
-			set { dataSource = value; }
+			get;
+			protected set;
 		}
 
-		public TickProviderResult Next()
+		public virtual ITickDataSource DataSource
 		{
-			if (tickQueue.Count == 0)
+			get;
+			set;
+		}
+
+		public virtual TickProviderResult Next()
+		{
+			if (TickQueue.Count == 0)
 			{
 				LoadTicks();
 			}
 
-			tick = tickQueue.Dequeue();
+			Tick = TickQueue.Dequeue();
 
-			return tick == null ? TickProviderResult.None : TickProviderResult.Ticked;
+			return Tick == null ? TickProviderResult.None : TickProviderResult.Ticked;
 		}
 
-		public void Initialize()
+		public virtual void Initialize()
 		{
 
 		}
 
-		protected void LoadTicks()
+		protected virtual void LoadTicks()
 		{
-			var tick_list = dataSource.Ticks;
+			var tick_list = DataSource.Ticks;
 
 			foreach (var item in tick_list)
 			{
-				tickQueue.Enqueue(item);
+				TickQueue.Enqueue(item);
 			}
 
 			tick_list.Clear();

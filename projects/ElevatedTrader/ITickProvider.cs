@@ -19,8 +19,10 @@ namespace ElevatedTrader
 			set;
 		}
 
+		event Action TickAvailable;
+
 		TickProviderResult Next();
 
-		void Initialize();
+		void Initialize();		
 	}
 }

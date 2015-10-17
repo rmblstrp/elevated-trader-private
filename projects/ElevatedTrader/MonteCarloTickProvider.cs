@@ -16,6 +16,8 @@ namespace ElevatedTrader
 		private int index = 0, length = 0, count = 0;
 		private ITickDataSource source;
 
+		public event Action TickAvailable;
+
 		public ITickDataSource DataSource
 		{
 			get { return source; }

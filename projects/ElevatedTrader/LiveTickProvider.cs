@@ -8,6 +8,10 @@ namespace ElevatedTrader
 {
 	public class LiveTickProvider : ITickProvider
 	{
+		public event Action TickAvailable;
+
+		private bool waitingForTicks;
+
 		private readonly Queue<ITick> tickQueue = new Queue<ITick>();
 		protected virtual Queue<ITick> TickQueue
 		{
@@ -33,7 +37,11 @@ namespace ElevatedTrader
 				LoadTicks();
 			}
 
-			if (TickQueue.Count != 0)
+			if (TickQueue.Count == 0)
+			{
+				Tick = null;
+			}
+			else
 			{
 				Tick = TickQueue.Dequeue();
 			}
@@ -43,11 +51,13 @@ namespace ElevatedTrader
 
 		public virtual void Initialize()
 		{
-
+			DataSource.TicksAdded += DoTicksAvailable;
 		}
 
 		protected virtual void LoadTicks()
 		{
+			waitingForTicks = false;
+
 			var tick_list = DataSource.Ticks;
 
 			foreach (var item in tick_list)
@@ -56,6 +66,22 @@ namespace ElevatedTrader
 			}
 
 			tick_list.Clear();
+
+			if (TickQueue.Count == 0)
+			{
+				waitingForTicks = true;
+			}
+		}
+
+		protected void DoTicksAvailable()
+		{
+			if (waitingForTicks)
+			{
+				if (TickAvailable != null)
+				{
+					TickAvailable();
+				}
+			}
 		}
 	}
 }

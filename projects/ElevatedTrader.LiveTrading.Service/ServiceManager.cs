@@ -12,7 +12,7 @@ using NLog;
 
 namespace ElevatedTrader.LiveTrading.Service
 {
-	public class ServiceManager
+	public class ServiceManager : ITickReceiver
 	{
 		private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 		private const string InstrumentsFilename = "instruments.json";
@@ -116,6 +116,8 @@ namespace ElevatedTrader.LiveTrading.Service
 			{
 				broadcaster.Attach(managerList[index]);
 			}
+
+			broadcaster.Attach(this);
 		}
 
 		private void AttachLoggers()
@@ -141,6 +143,8 @@ namespace ElevatedTrader.LiveTrading.Service
 			{
 				broadcaster.Detach(managerList[index]);
 			}
+
+			broadcaster.Detach(this);
 		}
 
 		private void DetachLoggers()
@@ -172,6 +176,16 @@ namespace ElevatedTrader.LiveTrading.Service
 			if (!File.Exists(filename)) return;
 
 			settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(filename));
+		}
+
+		private ulong tickCount = 0;
+
+		public void TickReceived(object sender, ITick tick)
+		{
+			if (++tickCount % 10000 == 0)
+			{
+				logger.Info("Tick count: " + tickCount);
+			}
 		}
 	}
 }

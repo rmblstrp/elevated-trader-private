@@ -57,6 +57,8 @@ namespace ElevatedTrader.DataSources
 		private ISessionFactory factory;
 		private int lastId = 0;
 
+		public event Action TicksAdded;
+
 		public IList<ITick> Ticks
 		{
 			get { return ticks; }

@@ -9,9 +9,11 @@ namespace ElevatedTrader.DataSources
 {
 	public class LiveTickDataSource : ITickDataSource, ITickReceiver
 	{
-		protected readonly ConcurrentQueue<ITick> tickQueue = new ConcurrentQueue<ITick>();
+		private readonly ConcurrentQueue<ITick> tickQueue = new ConcurrentQueue<ITick>();		
 
 		#region -- ITickDataSource --
+		public event Action TicksAdded;
+
 		public IList<ITick> Ticks
 		{
 			get { return GetTicks(); }
@@ -36,7 +38,15 @@ namespace ElevatedTrader.DataSources
 		#region -- ITickReceiver --
 		public void TickReceived(object sender, ITick tick)
 		{
-			tickQueue.Enqueue(tick);
+			try
+			{
+				tickQueue.Enqueue(tick);
+				DoTicksAdded();
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
 		}
 		#endregion
 
@@ -52,6 +62,14 @@ namespace ElevatedTrader.DataSources
 			}
 
 			return list;
+		}
+
+		protected void DoTicksAdded()
+		{
+			if (TicksAdded != null)
+			{
+				TicksAdded();
+			}
 		}
 	}
 }

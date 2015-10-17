@@ -13,6 +13,7 @@ namespace ElevatedTrader.DataSources
 		private List<ITick> ticks = new List<ITick>();
 		private Regex expression = new Regex(@"\w+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+		public event Action TicksAdded;
 
 		public IList<ITick> Ticks
 		{

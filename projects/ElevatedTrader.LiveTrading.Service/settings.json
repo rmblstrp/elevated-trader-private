@@ -3,10 +3,14 @@
 		"Type": "ElevatedTrader.DevExperts.TradeDataLink, ElevatedTrader.DevExperts",
 		"Settings": {
 			"Host": "demo.dxfeed.com:7300",
-			"Symbols": ["/ES"]
+			"Symbols": [ "/ES.TEST" ]
 		}
 	},
 	"Strategies": [
+		{
+			"Type": "Kalman.Strategy, ElevatedTrader.Scripts",
+			"Settings": "C:\\development\\elevated-trader\\projects\\ElevatedTrader.Windows.Forms\\bin\\Debug\\Solutions\\ES.service-test.json"
+		},
 		{
 			"Type": "Kalman.Strategy, ElevatedTrader.Scripts",
 			"Settings": "C:\\development\\elevated-trader\\projects\\ElevatedTrader.Windows.Forms\\bin\\Debug\\Solutions\\ES.prod-1.json"

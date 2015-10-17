@@ -13,6 +13,8 @@ namespace ElevatedTrader
 			get;
 		}
 
+		event Action TicksAdded;
+
 		void Clear();
 
 		void Configure(dynamic configuration);

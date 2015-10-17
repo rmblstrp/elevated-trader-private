@@ -124,7 +124,7 @@ namespace ElevatedTrader.DevExperts
 
 		protected IDxSubscription CreateSubscription(IDxConnection connection, string[] symbols)
 		{
-			var subscription = Feed.CreateSubscription(EventType.Quote | EventType.Trade | EventType.TimeAndSale, Listener);
+			var subscription = Feed.CreateSubscription(EventType.TimeAndSale, Listener);
 			subscription.SetSymbols(symbols);
 
 			return subscription;

@@ -60,7 +60,10 @@ namespace ElevatedTrader.LiveTrading
 		public void Initialize(Type strategy)
 		{
 			Strategy = (ITradingStrategy)Activator.CreateInstance(strategy);
-			StrategyRunner = new TradingStrategyRunner();
+			StrategyRunner = new TradingStrategyRunner()
+			{
+				LimitResources = true
+			};
 			DataSource = new LiveTickDataSource();
 			TickProvider = new LiveTickProvider()
 			{

@@ -52,6 +52,8 @@ namespace ElevatedTrader.LiveTrading
 			protected set;
 		}
 
+		public event Action<Exception> ExceptionThrown;
+
 		public StrategyManager()
 		{
 			Broadcaster = new TradeEventBroadcaster();
@@ -77,7 +79,7 @@ namespace ElevatedTrader.LiveTrading
 
 			Broadcaster.Attach(Strategy.Session);
 
-			Process = new Thread(new ThreadStart(() => StrategyRunner.Run(Strategy, TickProvider)));
+			Process = new Thread(new ThreadStart(RunStrategy));
 			Process.Start();
 			
 			Running = true;
@@ -101,6 +103,23 @@ namespace ElevatedTrader.LiveTrading
 			if (!Running) return;
 
 			DataSource.TickReceived(sender, tick);
+		}
+
+		protected void RunStrategy()
+		{
+			try
+			{
+				StrategyRunner.Run(Strategy, TickProvider);
+			}
+			catch (Exception ex)
+			{
+				Stop();
+
+				if (ExceptionThrown != null)
+				{
+					ExceptionThrown(ex);
+				}				
+			}
 		}
 	}
 }

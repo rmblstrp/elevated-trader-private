@@ -99,7 +99,7 @@ namespace ElevatedTrader.LiveTrading.Service
 				var manager = new StrategyManager();
 				manager.Initialize(type);
 				managerList.Add(manager);
-				manager.ExceptionThrown += ex => logger.Fatal<Exception>("A strategy has thrown a fatal exception", ex);
+				manager.ExceptionThrown += ex => logger.Error<Exception>(ex);
 
 				logger.Info("Loading strategy settings");
 				dynamic strategy_settings = JsonConvert.DeserializeObject<ExpandoObject>(File.ReadAllText(settings.Strategies[index].Settings));

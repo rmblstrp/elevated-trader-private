@@ -1,6 +1,6 @@
 ﻿{
 	"DataLink": {
-		"Type": "ElevatedTrader.DevExperts.TradeDataLink, ElevatedTrader.DevExperts",
+		"Type": "ElevatedTrader.LiveTrading.Service.TradeDataLink",
 		"Settings": {
 			"Host": "demo.dxfeed.com:7300",
 			"Symbols": [ "/ES.TEST" ]
